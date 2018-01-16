@@ -62,3 +62,27 @@ String("repospace");
 
 ```js
 ```
+
+### Requirements
+
+* 1:many repo locations without using submodules
+* Easy-to-update layout without moving massive files
+* Consistency for entire time with option for individual layouts
+* Monolith convenience with micro lib modularity
+
+### layout
+
+**Example**
+
+```json
+{
+  "repospaceName": [
+    "index.js",
+    {
+      "docs": {
+        "images": ["api_brainstorm.jpg", "foobar.gif"]
+      }
+    }
+  ]
+}
+```
