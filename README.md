@@ -1,15 +1,19 @@
-# repospace
+# Repospace
 
-<!-- TOC START min:1 max:4 link:true update:true -->
+<!-- TOC START min:1 max:5 link:true update:true -->
 
-* [repospace](#repospace)
-
-- [repospace](#repospace)
+* [Repospace](#repospace)
   * [Functions in procedural order](#functions-in-procedural-order)
     * [Examples](#examples)
       * [`create(rootPath)`](#createrootpath)
       * [`clone([...repos])`](#clonerepos)
+      * [`hide()`](#hide)
+      * [`symlink()`](#symlink)
       * [`structure({layout})`](#structurelayout)
+    * [Requirements](#requirements)
+  * [Questions](#questions)
+
+<!-- TOC END -->
 
 ## Functions in procedural order
 
@@ -112,22 +116,49 @@ Hide all of the cloned repositories. This will also be added to .gitignore
 
 ---
 
-#### `structure({layout})`
+#### `symlink()`
 
 Generate symlinks to represent each cloned repository.
 
 **Input**
 
 > ```js
-> let {
->   "repospaceXYZ": [
->     "index.js",
->     "docs": {
->       "images": ["api_brainstorm.jpg", "foobar.gif"]
->     }
->   ]
-> }
+> symlink("path/to/hidden/repos");
 > ```
+
+**Call**
+
+> ```js
+> repospace
+>   .create("repospaceXYZ")
+>   .clone(...repos)
+>   .hide();
+>   .symlink("path/to/hidden/repos");
+> ```
+
+**Return**
+
+> | Type    | Return         |
+> | :------ | :------------- |
+> | Success | Boolean(true)  |
+> | Fail    | Boolean(false) |
+
+#### `structure({layout})`
+
+**Input**
+
+> ```js
+> let layout = {
+>   repospaceXYZ: [
+>     "index.js",
+>     ("docs": {
+>       images: ["api_brainstorm.jpg", "foobar.gif"]
+>     })
+>   ]
+> };
+> ```
+
+> Note: Run structure through JSON.parse. Screws up markdown format to include JSON.parse(``);
 
 **Call**
 
@@ -136,7 +167,8 @@ Generate symlinks to represent each cloned repository.
 >   .create("repospace")
 >   .clone(...repos)
 >   .hide();
->   .structure({})
+>   .symlink();
+>   .structure(layout);
 > ```
 
 **Return**
