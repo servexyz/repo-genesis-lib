@@ -196,3 +196,4 @@ Generate symlinks to represent each cloned repository.
 ---
 
 1. What happens in the event that someone clones a repo in two locations ? Do branches persist across two locations?
+2. Will there be pathing issues with relative repos in Windows environment ? 
