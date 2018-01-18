@@ -21,7 +21,7 @@
 | [Create](#createrootpath) | String(`pathToSpace`) | Designate repospace root |
 | [Clone](#clone)           | Array(`repos`)        | Clone all github repos   |
 | [Hide](#hide)             | undefined             | Move repos to hidden dir |
-| [Symlink](#symlink)       | String(`pathToRepos`) |                          |
+| [Symlink](#symlink)       | String(`pathToRepos`) | Param implicit from hide |
 | [Structure](#structure)   | Object(`structure`)   | Move syms to dirs        |
 
 ---
@@ -150,9 +150,11 @@ Generate symlinks to represent each cloned repository inside hidden directory.
 > let layout = {
 >   repospaceXYZ: [
 >     "index.js",
->     ("docs": {
->       images: ["api_brainstorm.jpg", "foobar.gif"]
->     })
+>     {
+>       docs: {
+>         images: ["api_brainstorm.jpg", "foobar.gif"]
+>       }
+>     }
 >   ]
 > };
 > ```
