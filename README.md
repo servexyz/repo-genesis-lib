@@ -16,6 +16,14 @@
 
 ## Functions in procedural order
 
+```mermaid
+graph LR
+create --> clone
+clone --> hide
+hide --> symlink
+symlink --> structure
+```
+
 | Name                      | Params                | Description              |
 | :------------------------ | :-------------------- | :----------------------- |
 | [Create](#createrootpath) | String(`pathToSpace`) | Designate repospace root |
