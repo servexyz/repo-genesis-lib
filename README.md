@@ -8,22 +8,21 @@
       * [`create(rootPath)`](#createrootpath)
       * [`clone([...repos])`](#clonerepos)
       * [`hide()`](#hide)
-      * [`symlink()`](#symlink)
+      * [`symlink(pathToRepos)`](#symlinkpathtorepos)
       * [`structure({layout})`](#structurelayout)
     * [Requirements](#requirements)
-  * [Questions](#questions)
 
 <!-- TOC END -->
 
 ## Functions in procedural order
 
-| Name                      | Params       | Description              |
-| :------------------------ | :----------- | :----------------------- |
-| [Create](#createrootpath) | (rootPath)   | Designate repospace root |
-| [Clone](#clone)           | ([...repos]) | Clone all github repos   |
-| [Hide](#hide)             | N/A          | Move repos to hidden dir |
-| [Symlink](#symlink)       | N/A          |                          |
-| [Structure](#structure)   | ({layout})   | Move syms to dirs        |
+| Name                      | Params                | Description              |
+| :------------------------ | :-------------------- | :----------------------- |
+| [Create](#createrootpath) | String(`pathToSpace`) | Designate repospace root |
+| [Clone](#clone)           | Array(`repos`)        | Clone all github repos   |
+| [Hide](#hide)             | undefined             | Move repos to hidden dir |
+| [Symlink](#symlink)       | String(`pathToRepos`) |                          |
+| [Structure](#structure)   | Object(`structure`)   | Move syms to dirs        |
 
 ---
 
@@ -37,22 +36,22 @@ Use empty directory to store cloned repos and symlinks to those repos. Eventuall
 
 **Input**
 
-```js
-let rootPath = path.join(process.cwd(), "repospaceXYZ");
-```
+> ```js
+> let rootPath = path.join(process.cwd(), "repospaceXYZ");
+> ```
 
 **Call**
 
-```js
-repospace.create(rootPath);
-```
+> ```js
+> repospace.create(rootPath);
+> ```
 
 **Return**
 
-| Type    | Message                             |
-| :------ | :---------------------------------- |
-| Success | String("/path/to/repospaceXYZ")     |
-| Fail    | `Failed to create repospace ${err}` |
+> | Type    | Message                             |
+> | :------ | :---------------------------------- |
+> | Success | String("/path/to/repospaceXYZ")     |
+> | Fail    | `Failed to create repospace ${err}` |
 
 ---
 
@@ -116,9 +115,9 @@ Hide all of the cloned repositories. This will also be added to .gitignore
 
 ---
 
-#### `symlink()`
+#### `symlink(pathToRepos)`
 
-Generate symlinks to represent each cloned repository.
+Generate symlinks to represent each cloned repository inside hidden directory.
 
 **Input**
 
@@ -190,10 +189,3 @@ Generate symlinks to represent each cloned repository.
 * Monolith convenience with micro lib modularity
 
 ---
-
-## Questions
-
----
-
-1. What happens in the event that someone clones a repo in two locations ? Do branches persist across two locations?
-2. Will there be pathing issues with relative repos in Windows environment ? 

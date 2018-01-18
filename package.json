@@ -2,5 +2,10 @@
   "name": "repospace",
   "version": "0.1.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "chalk": "^2.3.0",
+    "jest": "^22.1.2"
+  }
 }
