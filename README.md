@@ -154,6 +154,8 @@ Generate symlinks to represent each cloned repository inside hidden directory.
 
 **Input**
 
+`Layout` - Concept
+
 > ```js
 > let layout = {
 >   repospaceXYZ: [
@@ -166,6 +168,38 @@ Generate symlinks to represent each cloned repository inside hidden directory.
 >   ]
 > };
 > ```
+
+`Layout` - Structure
+
+```js
+//input =>
+const sample_repospace = {
+  namespace: {
+    singleRepoDir: {
+      name: "baz",
+      url: "github.com/xyz/baz"
+    },
+    multiRepoDir: [
+      {
+        name: "foo",
+        url: "github.com/xyz/foo"
+      },
+      {
+        name: "bar",
+        url: "github.com/xyz/bar"
+      }
+    ]
+  }
+};
+
+//output =>
+${namespace}/
+  ${singleRepoDir}/
+    ${baz}/
+  ${multiRepoDir}/
+    ${foo}/
+    ${bar}/
+```
 
 > Note: Run structure through JSON.parse. Screws up markdown format to include JSON.parse(``);
 

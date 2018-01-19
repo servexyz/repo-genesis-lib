@@ -3,12 +3,41 @@
  * @Date:   2018-01-18T14:58:10-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-18T15:12:47-08:00
+ * @Last modified time: 2018-01-18T16:12:00-08:00
  */
 
 //this sample is based on real use case, but it's purposes are for testing
 
 let server = "https://github.com/servexyz";
+//input =>
+const sample_repospace = {
+  namespace: {
+    singleRepoDir: {
+      name: "baz",
+      url: "github.com/xyz/baz"
+    },
+    multiRepoDir: [
+      {
+        name: "foo",
+        url: "github.com/xyz/foo"
+      },
+      {
+        name: "bar",
+        url: "github.com/xyz/bar"
+      }
+    ]
+  }
+};
+
+//output =>
+/*
+  ${namespace}/
+    ${singleRepoDir}/
+      ${baz}/
+    ${multiRepoDir}/
+      ${foo}/
+      ${bar}/
+*/
 const genesis_repospace = {
   genesis: {
     file: [
