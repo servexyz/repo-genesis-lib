@@ -3,20 +3,20 @@
  * @Date:   2018-01-17T17:39:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-19T17:22:33-08:00
+ * @Last modified time: 2018-01-19T17:32:04-08:00
  */
 (function() {
-  "use strict";
   const Promise = require("bluebird");
   const chalk = require("chalk");
   const log = console.log;
   const path = require("path");
   const fs = require("fs-extra");
-  const git = require("simple-git");
+  const git = require("simple-git")();
 
   function Repospace(repospacePath, hiddenReposPath) {
     log(`repospacePath: ${chalk.yellow(repospacePath)}`);
     log(`hiddenReposPath: ${chalk.yellow(hiddenReposPath)}`);
+    log(`This: ${this}`);
     this.respace = repospacePath;
     this.respaceRepos = hiddenReposPath;
   }
