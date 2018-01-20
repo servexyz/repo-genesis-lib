@@ -28,6 +28,7 @@
 
 * [ ] Configure environment variables to work with git-js
 * [ ] Gracefully handle failures on repo-by-repo basis (currently all-or-nothing res/rej)
+* [ ] SymlinkLayoutFactory (right now symlinks all just dump into repospace)
 
 ---
 
@@ -46,6 +47,8 @@
 6. Should the environment variables be based on a general admin account ? Or map to personal ENV file which is gitignored ? Probably latter
 
 7. Is this best way to parse gitignore ? https://www.npmjs.com/package/parse-gitignore
+
+8. Do I need to add dotenv to test files as well or is it sufficient to leave it in index.js ?
 
 ---
 
