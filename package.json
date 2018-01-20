@@ -11,6 +11,9 @@
     "jest": "^22.1.2",
     "simple-git": "^1.85.0"
   },
+  "scripts": {
+    "test": "jest"
+  },
   "jest": {
     "verbose": true,
     "bail": false,

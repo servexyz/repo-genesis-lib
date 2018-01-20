@@ -3,8 +3,10 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-19T16:17:34-08:00
+ * @Last modified time: 2018-01-19T16:24:12-08:00
  */
+
+require("dotenv").config();
 const path = require("path");
 const { create } = require(path.join(__dirname, "../src/api.js"));
 

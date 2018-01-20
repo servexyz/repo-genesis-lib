@@ -21,8 +21,19 @@
 
 ### v.0.5.0
 
-* [ ] API Docs
-* [ ] Questions, references and trail for v.0.5.0
+* [x] API Docs
+* [ ] Update API docs
+* [x] Questions, references and trail for v.0.5.0
+* [x] Add jest config & tests directory
+* [ ] Get api.test.js working
+* [ ] Convert to prototypes to enable API like this:
+
+```
+repospace()
+  .createDirectories(repospacePath)
+  .cloneFactory(repos, hiddenPath)
+  .symlinkFactory()
+```
 
 ### v.1.0.0
 
