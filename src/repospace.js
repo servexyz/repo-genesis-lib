@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-21T11:46:30-08:00
+ * @Last modified time: 2018-01-21T15:18:30-08:00
  */
 
 const Promise = require("bluebird");
@@ -71,7 +71,8 @@ export default class Repospace {
       }
     }
   }
-  async symlinkFactory(pathsToClonedRepos) {
+  async symlinkFactory() {
+    this.log(`symlinkFactory: ${chalk.blue(String(this.cloned))}`);
     //need to create array of paths of every repo that was created here
     for (let repo in pathsToClonedRepos) {
       try {

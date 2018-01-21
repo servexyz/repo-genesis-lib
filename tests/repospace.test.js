@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-21T11:11:13-08:00
+ * @Last modified time: 2018-01-21T15:32:10-08:00
  */
 
 require("dotenv").config();
@@ -15,6 +15,7 @@ async function instantiateRepospace(repos, respacePath, reposPath) {
   try {
     let directories = await r.createDirectories();
     let repositories = await r.cloneFactory(repos);
+    let symlinks = await r.symlinkFactory();
     return true;
   } catch (err) {
     log(
@@ -41,6 +42,6 @@ test("Repospace is created", () => {
   let respaceName = ".sandbox";
   let respacePath = path.join(__dirname, respaceName);
   let reposPath = path.join(__dirname, respaceName, ".repos");
-  let attempt = instantiateRepos(repos, respacePath, reposPath);
+  let attempt = instantiateRepospace(repos, respacePath, reposPath);
   expect(attempt).toBe(true);
 });
