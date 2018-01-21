@@ -10,6 +10,7 @@
     * [v.1.0.0](#v100)
   * [Questions](#questions)
   * [Reference](#reference)
+    * [Nodegit-clone](#nodegit-clone)
     * [Git-JS (simple-git)](#git-js-simple-git)
     * [fs-extra](#fs-extra)
 
@@ -64,6 +65,12 @@ repospace()
 ---
 
 ## Reference
+
+### Nodegit-clone
+
+i checked out: //TODO: Consider using this nodegit lib instead: https://www.npmjs.com/package/nodegit-clone
+
+but it looks like it's a massive dep
 
 ### Git-JS (simple-git)
 
