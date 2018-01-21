@@ -3,12 +3,14 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-21T15:32:10-08:00
+ * @Last modified time: 2018-01-21T15:48:44-08:00
  */
 
 require("dotenv").config();
 const path = require("path");
-const repospace = require(path.join(__dirname, "../src/repospace.js"));
+const chalk = require("chalk");
+const log = console.log;
+import Repospace from "../src/repospace.js";
 
 async function instantiateRepospace(repos, respacePath, reposPath) {
   let r = new Repospace(respacePath, reposPath);
@@ -43,5 +45,5 @@ test("Repospace is created", () => {
   let respacePath = path.join(__dirname, respaceName);
   let reposPath = path.join(__dirname, respaceName, ".repos");
   let attempt = instantiateRepospace(repos, respacePath, reposPath);
-  expect(attempt).toBe(true);
+  expect(Boolean(attempt)).toBe(true);
 });

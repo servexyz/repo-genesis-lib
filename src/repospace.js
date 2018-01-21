@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-21T15:18:30-08:00
+ * @Last modified time: 2018-01-21T15:50:50-08:00
  */
 
 const Promise = require("bluebird");
@@ -59,7 +59,7 @@ export default class Repospace {
   }
   async cloneFactory(repositoriesToClone) {
     for (let repo of repositoriesToClone) {
-      let remote = getAuthenticatedRemoteStringFromRepo(repo);
+      let remote = this.getRemoteSSH(repo);
       try {
         let cloned = await gitPullOrClone(repo);
         this.cloned.push(cloned);

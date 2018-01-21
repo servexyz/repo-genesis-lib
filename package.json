@@ -21,7 +21,7 @@
   "jest": {
     "verbose": true,
     "bail": false,
-    "collectCoverage": true,
+    "collectCoverage": false,
     "modulePathIgnorePatterns": [".sandbox", "node_modules"]
   },
   "devDependencies": {
