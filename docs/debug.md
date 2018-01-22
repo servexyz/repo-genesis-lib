@@ -34,3 +34,6 @@ Ran all test suites.
 
   * Split repo into repo.acct and repo.repo... Still not cloning properly. Going to swap out git-clone method next.
     * Note: This is the source of node-git-clone being investigated right now: https://github.com/aichbauer/node-git-clone-repo/blob/master/lib/index.js
+
+* Current state of affairs:
+  ![debugAHP001](./images/debugAHP001.png)
