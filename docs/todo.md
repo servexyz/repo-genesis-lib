@@ -20,23 +20,16 @@
 ### v.0.5.0
 
 * [x] API Docs
-* [ ] Update API docs
+  * [x] Seperate docs by concern
+  * [ ] Update API docs
+    * [x] Remove old
+    * [ ] Add new
 * [x] Questions, references and trail for v.0.5.0
 * [x] Add jest config & tests directory
-* [ ] Get api.test.js working
-* [ ] Convert to prototypes to enable API like this:
-
-```
-repospace()
-  .createDirectories(repospacePath)
-  .cloneFactory(repos, hiddenPath)
-  .symlinkFactory()
-```
+* [ ] Get repospace.test.js working
 
 ### v.1.0.0
 
-* [ ] Configure environment variables to work with git-js
-* [ ] Gracefully handle failures on repo-by-repo basis (currently all-or-nothing res/rej)
 * [ ] SymlinkLayoutFactory (right now symlinks all just dump into repospace)
 * [ ] Replace dotenv require with https://www.npmjs.com/package/babel-plugin-dotenv
 
