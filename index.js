@@ -3,9 +3,8 @@
  * @Date:   2018-01-17T15:59:49-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-19T10:29:02-08:00
+ * @Last modified time: 2018-01-22T09:25:00-08:00
  */
-require("dotenv").config();
 
 async function init() {
   try {
