@@ -28,4 +28,7 @@ Ran all test suites.
 ```
 
 * `Fixed` this.log (should just be log)
-* Split repo into repo.acct and repo.repo... Still not cloning properly. Going to swap out git-clone method next.
+* `Working on` git cloning issue
+
+  * Split repo into repo.acct and repo.repo... Still not cloning properly. Going to swap out git-clone method next.
+    * Note: This is the source of node-git-clone being investigated right now: https://github.com/aichbauer/node-git-clone-repo/blob/master/lib/index.js
