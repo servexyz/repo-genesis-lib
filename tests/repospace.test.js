@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T09:33:57-08:00
+ * @Last modified time: 2018-01-22T09:56:48-08:00
  */
 
 const path = require("path");
@@ -29,6 +29,7 @@ async function instantiateRepospace(repos, respacePath, reposPath) {
     return false;
   }
 }
+
 test("babel-plugin-inline-dotenv is loading", () => {
   let user = process.env.GIT_USER;
   log(`User: ${chalk.yellow(user)}`);
@@ -45,14 +46,6 @@ test("SSH remote created", () => {
   expect(remoteGenerated).toBe(remoteExpected);
 });
 
-test("HTTPS remote created", () => {
-  let r = new Repospace(respacePath, reposPath);
-  let acct = "servexyz";
-  let repo = "kisoro";
-  let remoteGenerated = r.getRemoteHTTPS(acct, repo);
-  log(`Remote gen: ${remoteGenerated}`);
-  let remoteExpected = "https://github.com/${acct}/${repo}";
-});
 test("Repospace is created", () => {
   // "https://github.com/servexyz/kisoro",
   // "https://github.com/alechp/bash"
@@ -66,7 +59,16 @@ test("Repospace is created", () => {
       repo: "bash"
     }
   ];
-
-  let attempt = instantiateRepospace(repos, respacePath, reposPath);
+  let retFlag;
+  let attempt = instantiateRepospace(repos, respacePath, reposPath)
+    .then(ret => {
+      log(`inside instantiateRepospace: ${chalk.green(ret)}`);
+      return ret;
+    })
+    .catch(err => {
+      log(`instantiateRepospace failed. \n ${chalk.red(err)}`);
+      return err;
+    });
+  log(`Attempt: ${chalk.yellow(attempt)}`);
   expect(Boolean(attempt)).toBe(true);
 });

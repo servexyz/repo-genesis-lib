@@ -37,3 +37,6 @@ Ran all test suites.
 
 * Current state of affairs:
   ![debugAHP001](./images/debugAHP001.png)
+
+* instantiateRepospace is returning true (which is why test is passing) even though the clone isn't happening effectively... Which raises another question: why isn't this being thrown as an exception ?
+  ![debugAHP001](./images/debugAHP002.png)
