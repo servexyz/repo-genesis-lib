@@ -26,6 +26,8 @@
     * [ ] Add new
 * [x] Questions, references and trail for v.0.5.0
 * [x] Add jest config & tests directory
+* [x] Choose git-clone library (try a few different options)
+  * [ ] Promisify git-clone library if needed
 * [ ] Get repospace.test.js working
 
 ### v.1.0.0

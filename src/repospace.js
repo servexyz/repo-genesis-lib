@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-21T15:56:23-08:00
+ * @Last modified time: 2018-01-21T16:23:11-08:00
  */
 
 const Promise = require("bluebird");
@@ -11,6 +11,7 @@ const chalk = require("chalk");
 const log = console.log;
 const path = require("path");
 const fs = require("fs-extra");
+const clone = require("git-clone");
 //TODO: Checkout https://github.com/aichbauer/node-git-clone-repo
 
 export default class Repospace {
@@ -34,15 +35,7 @@ export default class Repospace {
     );
   }
   gitClone(remoteRepository) {
-    return new Promise((resolve, reject) => {
-      gitPOC(remoteRepository, this.repositories, err => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(remoteRepository);
-        }
-      });
-    });
+    return new Promise((resolve, reject) => {});
   }
   /////////////////////////////////////////////////////////////////////
   // Core
