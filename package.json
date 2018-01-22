@@ -23,10 +23,7 @@
     "verbose": true,
     "bail": false,
     "collectCoverage": false,
-    "modulePathIgnorePatterns": [
-      ".sandbox",
-      "node_modules"
-    ]
+    "modulePathIgnorePatterns": [".sandbox", "node_modules"]
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -41,6 +38,14 @@
           "targets": {
             "node": "9.3.0"
           }
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "inline-dotenv",
+        {
+          "path": "./.env"
         }
       ]
     ]
