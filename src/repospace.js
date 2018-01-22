@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-21T16:23:11-08:00
+ * @Last modified time: 2018-01-22T07:34:26-08:00
  */
 
 const Promise = require("bluebird");
@@ -12,7 +12,6 @@ const log = console.log;
 const path = require("path");
 const fs = require("fs-extra");
 const clone = require("git-clone");
-//TODO: Checkout https://github.com/aichbauer/node-git-clone-repo
 
 export default class Repospace {
   constructor(repospace, repositories) {
@@ -35,7 +34,15 @@ export default class Repospace {
     );
   }
   gitClone(remoteRepository) {
-    return new Promise((resolve, reject) => {});
+    return new Promise((resolve, reject) => {
+      clone(remoteRepository, this.repositories, err => {
+        if (err) {
+          reject(`failed to clone ${remoteRepository}. \n ${chalk.red(err)}`);
+        } else {
+          resolve(remoteRepository);
+        }
+      });
+    });
   }
   /////////////////////////////////////////////////////////////////////
   // Core
@@ -54,7 +61,7 @@ export default class Repospace {
     for (let repo of repositoriesToClone) {
       let remote = this.getRemoteSSH(repo.acct, repo.repo);
       try {
-        let cloned = await gitPullOrClone(repo);
+        let cloned = await gitClone(remote);
         this.cloned.push(cloned);
         log(`Added ${chalk.yellow(cloned)} to [this.cloned]`);
       } catch (err) {
