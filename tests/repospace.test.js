@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T10:45:43-08:00
+ * @Last modified time: 2018-01-22T13:41:48-08:00
  */
 
 const path = require("path");
@@ -46,6 +46,7 @@ test("SSH remote created", () => {
   expect(remoteGenerated).toBe(remoteExpected);
 });
 
+//TODO: Create NPM script to handle cleanup of tests/.sandbox/repos directory.
 test("Repospace is created", () => {
   // "https://github.com/alechp/bash"
   let repos = [
@@ -65,4 +66,8 @@ test("Repospace is created", () => {
     });
   log(`Attempt: ${chalk.yellow(attempt)}`);
   expect(Boolean(attempt)).toBe(true);
+});
+
+afterAll(async () => {
+  await fs.remove(reposPath);
 });

@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T10:46:43-08:00
+ * @Last modified time: 2018-01-22T13:44:39-08:00
  */
 
 const Promise = require("bluebird");
@@ -30,6 +30,9 @@ export default class Repospace {
   }
   gitClone(remoteRepository) {
     return new Promise((resolve, reject) => {
+      let clonePathRe = /[^/]+$/;
+      let clonePath = clonePathRe.exec(remoteRepository);
+      log(`clonePath: ${chalk.yellow(clonePath)}`);
       clone(remoteRepository, this.repositories, err => {
         if (err) {
           log(`Failed. ${err}`);
@@ -55,16 +58,12 @@ export default class Repospace {
     }
   }
   async cloneFactory(repositoriesToClone) {
-    log(`repositoriesToClone: ${repositoriesToClone}`);
     for (let repo of repositoriesToClone) {
-      log(`Repo.acct: ${chalk.blue(repo.acct)}`);
-      log(`Repo.repo: ${chalk.blue(repo.repo)}`);
       let remote = this.getRemoteSSH(repo.acct, repo.repo);
-      log(`Remote: ${remote}`);
-      //Maybe the reason this is failing is because it's not passing through to my  local git config
       try {
-        log(`Inside cloneFactory try block`);
-        //ensureDir, change to directory and THEN git Clone
+        let cloneDirectory = `${this.repositories}/${repo.repo}`;
+        log(`Clone directory: ${cloneDirectory}`);
+        await fs.ensureDir(cloneDirectory);
         let clone = await this.gitClone(remote);
         this.cloned.push(clone);
         log(`Added ${chalk.yellow(cloned)} to [this.cloned]`);
