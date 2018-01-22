@@ -12,7 +12,7 @@
     "chalk": "^2.3.0",
     "dotenv": "^4.0.0",
     "fs-extra": "^5.0.0",
-    "git-pull-or-clone": "^1.1.0",
+    "git-clone": "^0.1.0",
     "jest": "^22.1.2"
   },
   "scripts": {
@@ -22,7 +22,10 @@
     "verbose": true,
     "bail": false,
     "collectCoverage": false,
-    "modulePathIgnorePatterns": [".sandbox", "node_modules"]
+    "modulePathIgnorePatterns": [
+      ".sandbox",
+      "node_modules"
+    ]
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
