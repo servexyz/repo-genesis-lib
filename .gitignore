@@ -1,4 +1,4 @@
-tests/.sandbox/*
+tests/sandbox/*
 # Logs
 logs
 *.log

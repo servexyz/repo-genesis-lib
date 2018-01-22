@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T13:41:48-08:00
+ * @Last modified time: 2018-01-22T13:59:50-08:00
  */
 
 const path = require("path");
@@ -11,20 +11,22 @@ const chalk = require("chalk");
 const log = console.log;
 import Repospace from "../src/repospace.js";
 
-const respaceName = ".sandbox";
+const respaceName = "sandbox";
 const respacePath = path.join(__dirname, respaceName);
 const reposPath = path.join(__dirname, respaceName, "repos");
 
 async function instantiateRepospace(repos, respacePath, reposPath) {
   let r = new Repospace(respacePath, reposPath);
   try {
-    let directories = await r.createDirectories();
+    let directories = await r.createRootDirectories();
     let repositories = await r.cloneFactory(repos);
     let symlinks = await r.symlinkFactory();
     return true;
   } catch (err) {
     log(
-      `Failed to createDirectories or cloneRepositories. \n ${chalk.red(err)}`
+      `Failed to createRootDirectories or cloneRepositories. \n ${chalk.red(
+        err
+      )}`
     );
     return false;
   }
@@ -46,13 +48,16 @@ test("SSH remote created", () => {
   expect(remoteGenerated).toBe(remoteExpected);
 });
 
-//TODO: Create NPM script to handle cleanup of tests/.sandbox/repos directory.
 test("Repospace is created", () => {
   // "https://github.com/alechp/bash"
   let repos = [
     {
       acct: "alechp",
       repo: "bash"
+    },
+    {
+      acct: "servexyz",
+      repo: "file-genesis"
     }
   ];
   let attempt = instantiateRepospace(repos, respacePath, reposPath)
@@ -68,6 +73,6 @@ test("Repospace is created", () => {
   expect(Boolean(attempt)).toBe(true);
 });
 
-afterAll(async () => {
-  await fs.remove(reposPath);
-});
+// afterAll(async () => {
+//   await fs.remove(reposPath);
+// });

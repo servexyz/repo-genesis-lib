@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T13:44:39-08:00
+ * @Last modified time: 2018-01-22T14:01:39-08:00
  */
 
 const Promise = require("bluebird");
@@ -30,10 +30,13 @@ export default class Repospace {
   }
   gitClone(remoteRepository) {
     return new Promise((resolve, reject) => {
-      let clonePathRe = /[^/]+$/;
-      let clonePath = clonePathRe.exec(remoteRepository);
+      let cloneRepoPathRe = /[^/]+$/;
+      let cloneRepoPath = String(cloneRepoPathRe.exec(remoteRepository));
+      log(`cloneRepoPath: ${cloneRepoPath}`);
+      log(`typeof cloneRepoPath: ${typeof cloneRepoPath}`);
+      let clonePath = path.join(this.repositories, cloneRepoPath);
       log(`clonePath: ${chalk.yellow(clonePath)}`);
-      clone(remoteRepository, this.repositories, err => {
+      clone(remoteRepository, clonePath, err => {
         if (err) {
           log(`Failed. ${err}`);
           reject(`failed to clone ${remoteRepository}. \n ${chalk.red(err)}`);
@@ -47,7 +50,7 @@ export default class Repospace {
   /////////////////////////////////////////////////////////////////////
   // Core
   /////////////////////////////////////////////////////////////////////
-  async createDirectories() {
+  async createRootDirectories() {
     try {
       await fs.ensureDir(this.repospace);
       await fs.ensureDir(this.repositories);
@@ -57,16 +60,14 @@ export default class Repospace {
       return false;
     }
   }
+
   async cloneFactory(repositoriesToClone) {
     for (let repo of repositoriesToClone) {
       let remote = this.getRemoteSSH(repo.acct, repo.repo);
       try {
         let cloneDirectory = `${this.repositories}/${repo.repo}`;
-        log(`Clone directory: ${cloneDirectory}`);
-        await fs.ensureDir(cloneDirectory);
         let clone = await this.gitClone(remote);
         this.cloned.push(clone);
-        log(`Added ${chalk.yellow(cloned)} to [this.cloned]`);
       } catch (err) {
         log(
           `Failed to clone repositories. ${chalk.yellow(
