@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T09:27:39-08:00
+ * @Last modified time: 2018-01-22T09:33:57-08:00
  */
 
 const path = require("path");
@@ -37,15 +37,22 @@ test("babel-plugin-inline-dotenv is loading", () => {
 
 test("SSH remote created", () => {
   let r = new Repospace(respacePath, reposPath);
-  let organization = "servexyz";
+  let acct = "servexyz";
   let repo = "kisoro";
-  let remoteGenerated = r.getRemoteSSH(organization, repo);
+  let remoteGenerated = r.getRemoteSSH(acct, repo);
   log(`Remote gen: ${remoteGenerated}`);
   let remoteExpected = "git@alechp:servexyz/kisoro";
   expect(remoteGenerated).toBe(remoteExpected);
 });
 
-test("HTTPS remote created", () => {});
+test("HTTPS remote created", () => {
+  let r = new Repospace(respacePath, reposPath);
+  let acct = "servexyz";
+  let repo = "kisoro";
+  let remoteGenerated = r.getRemoteHTTPS(acct, repo);
+  log(`Remote gen: ${remoteGenerated}`);
+  let remoteExpected = "https://github.com/${acct}/${repo}";
+});
 test("Repospace is created", () => {
   // "https://github.com/servexyz/kisoro",
   // "https://github.com/alechp/bash"

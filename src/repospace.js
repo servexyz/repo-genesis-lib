@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T09:28:47-08:00
+ * @Last modified time: 2018-01-22T09:36:48-08:00
  */
 
 const Promise = require("bluebird");
@@ -26,11 +26,13 @@ export default class Repospace {
 
   //TODO: Create test for getRemoteHTTPS
   getRemoteHTTPS(repository) {
-    `https://${process.env.GIT_USER}:${process.env.GIT_PASS}@${repo}`;
+    return `https://github.com/${process.env.GIT_USER}/${
+      process.env.GIT_PASS
+    }@${repository}`;
   }
   //TODO: Create test for getRemoteSSH
-  getRemoteSSH(organization, repository) {
-    return `git@${process.env.GIT_PROVIDER}:${organization}/${repository}`;
+  getRemoteSSH(account, repository) {
+    return `git@${process.env.GIT_PROVIDER}:${account}/${repository}`;
   }
   gitClone(remoteRepository) {
     return new Promise((resolve, reject) => {
