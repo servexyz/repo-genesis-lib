@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T07:34:26-08:00
+ * @Last modified time: 2018-01-22T07:41:26-08:00
  */
 
 const Promise = require("bluebird");
@@ -12,6 +12,7 @@ const log = console.log;
 const path = require("path");
 const fs = require("fs-extra");
 const clone = require("git-clone");
+const empty = require("is-empty");
 
 export default class Repospace {
   constructor(repospace, repositories) {
@@ -72,9 +73,15 @@ export default class Repospace {
     }
   }
   async symlinkFactory() {
-    log(`symlinkFactory: ${chalk.blue(String(this.cloned))}`);
+    if (empty(this.cloned)) {
+      log(
+        `this.cloned is empty when passed to symlinkFactory. Check cloneFactory function.`
+      );
+      return false;
+    }
     //need to create array of paths of every repo that was created here
-    for (let repo in pathsToClonedRepos) {
+    for (let repo in this.cloned) {
+      log(`Repo: ${chalk.yellow(repo)}`);
       try {
         await fs.ensureSymlink(repo, this.repospace);
       } catch (err) {
