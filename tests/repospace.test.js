@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T09:56:48-08:00
+ * @Last modified time: 2018-01-22T10:36:06-08:00
  */
 
 const path = require("path");
@@ -42,18 +42,13 @@ test("SSH remote created", () => {
   let repo = "kisoro";
   let remoteGenerated = r.getRemoteSSH(acct, repo);
   log(`Remote gen: ${remoteGenerated}`);
-  let remoteExpected = "git@alechp:servexyz/kisoro";
+  let remoteExpected = "git@alechp:alechp/bash";
   expect(remoteGenerated).toBe(remoteExpected);
 });
 
 test("Repospace is created", () => {
-  // "https://github.com/servexyz/kisoro",
   // "https://github.com/alechp/bash"
   let repos = [
-    {
-      acct: "servexyz",
-      repo: "kisoro"
-    },
     {
       acct: "alechp",
       repo: "bash"

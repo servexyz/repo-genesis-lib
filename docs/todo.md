@@ -47,5 +47,6 @@
 
 6. Is this best way to parse gitignore ? https://www.npmjs.com/package/parse-gitignore
 7. Is there a babel-plugin for dotenv ? Yes: https://www.npmjs.com/package/babel-plugin-dotenv
+8. Is there a library which concatenates env for you ? Would be nice to be able to have one "checked-in" env which wouldn't commit anything private to public repo but still have baseline. In other words you could have .env.private & .env.public where .env.public has paths and things like that.... .env.private would have SSH keys. And something like babel-plugin-inline-dotenv would load both, but git would only check in .env.public
 
 ---
