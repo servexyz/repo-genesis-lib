@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T10:36:06-08:00
+ * @Last modified time: 2018-01-22T10:45:43-08:00
  */
 
 const path = require("path");
@@ -13,7 +13,7 @@ import Repospace from "../src/repospace.js";
 
 const respaceName = ".sandbox";
 const respacePath = path.join(__dirname, respaceName);
-const reposPath = path.join(__dirname, respaceName, ".repos");
+const reposPath = path.join(__dirname, respaceName, "repos");
 
 async function instantiateRepospace(repos, respacePath, reposPath) {
   let r = new Repospace(respacePath, reposPath);
@@ -38,8 +38,8 @@ test("babel-plugin-inline-dotenv is loading", () => {
 
 test("SSH remote created", () => {
   let r = new Repospace(respacePath, reposPath);
-  let acct = "servexyz";
-  let repo = "kisoro";
+  let acct = "alechp";
+  let repo = "bash";
   let remoteGenerated = r.getRemoteSSH(acct, repo);
   log(`Remote gen: ${remoteGenerated}`);
   let remoteExpected = "git@alechp:alechp/bash";
@@ -54,7 +54,6 @@ test("Repospace is created", () => {
       repo: "bash"
     }
   ];
-  let retFlag;
   let attempt = instantiateRepospace(repos, respacePath, reposPath)
     .then(ret => {
       log(`inside instantiateRepospace: ${chalk.green(ret)}`);

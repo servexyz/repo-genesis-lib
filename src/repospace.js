@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T10:33:32-08:00
+ * @Last modified time: 2018-01-22T10:46:43-08:00
  */
 
 const Promise = require("bluebird");
@@ -64,6 +64,7 @@ export default class Repospace {
       //Maybe the reason this is failing is because it's not passing through to my  local git config
       try {
         log(`Inside cloneFactory try block`);
+        //ensureDir, change to directory and THEN git Clone
         let clone = await this.gitClone(remote);
         this.cloned.push(clone);
         log(`Added ${chalk.yellow(cloned)} to [this.cloned]`);
