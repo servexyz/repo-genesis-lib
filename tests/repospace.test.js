@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T09:24:54-08:00
+ * @Last modified time: 2018-01-22T09:27:39-08:00
  */
 
 const path = require("path");
@@ -40,6 +40,7 @@ test("SSH remote created", () => {
   let organization = "servexyz";
   let repo = "kisoro";
   let remoteGenerated = r.getRemoteSSH(organization, repo);
+  log(`Remote gen: ${remoteGenerated}`);
   let remoteExpected = "git@alechp:servexyz/kisoro";
   expect(remoteGenerated).toBe(remoteExpected);
 });
