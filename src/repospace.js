@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T11:36:40-08:00
+ * @Last modified time: 2018-01-23T11:43:15-08:00
  */
 
 const Promise = require("bluebird");
@@ -47,11 +47,7 @@ export default class Repospace {
       });
     });
   }
-  static deleteDirectoriesSync(directories) {
-    for (let dir in directories) {
-      fs.removeSync(dir);
-    }
-  }
+
   /////////////////////////////////////////////////////////////////////
   // Core
   /////////////////////////////////////////////////////////////////////

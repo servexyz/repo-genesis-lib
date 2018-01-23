@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T11:33:21-08:00
+ * @Last modified time: 2018-01-23T11:44:07-08:00
  */
 
 const path = require("path");
@@ -21,7 +21,12 @@ beforeAll(() => {
   // log(`reposPath: ${chalk.yellow(reposPath)}`);
   // fs.removeSync(reposPath);
   // fs.removeSync(respacePath);
-  Repospace.deleteDirectoriesSync([reposPath, respacePath]);
+  log(`Going to delete directories`);
+  let directories = [reposPath, respacePath];
+  for (let dir of directories) {
+    log(`deleting: ${chalk.yellow(dir)}`);
+    fs.removeSync(dir);
+  }
 });
 
 test("babel-plugin-inline-dotenv is loading", () => {
@@ -38,11 +43,16 @@ test("SSH remote created", () => {
   expect(remoteGenerated).toBe(remoteExpected);
 });
 
-test("repositories are cloned into repospace", async () => {
-  // "git@alechp:alechp/bash"
-  // "git@alechp:servexyz/file-genesis"
-  let repos = { alechp: "bash", servexyz: "file-genesis" };
-  let ret = await init(respacePath, reposPath, repos);
-  log(`ret: ${chalk.blue(ret)}`);
-  expect(Boolean(ret)).toBe(true);
-});
+test(
+  "repositories are cloned into repospace",
+  async () => {
+    // "git@alechp:alechp/bash"
+    // "git@alechp:servexyz/file-genesis"
+    let repos = { alechp: "bash", servexyz: "file-genesis" };
+    let ret = await init(respacePath, reposPath, repos);
+    log(`ret: ${chalk.blue(ret)}`);
+    //TODO: setup legitimate event to test this
+    expect(Boolean(ret)).toBe(true);
+  },
+  30000
+);
