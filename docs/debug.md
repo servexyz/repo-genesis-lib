@@ -12,8 +12,9 @@
 
 Issues:
 
-1. gitClone doesn't clone both repos... Only cloning bash right now.
-2. ensureSymlink still isn't working. Log cloneDirectory and other paths more extensively to check.
+* [x] gitClone doesn't clone both repos... Only cloning bash right now.
+
+* []ensureSymlink still isn't working. Log cloneDirectory and other paths more extensively to check.
 
 ---
 
