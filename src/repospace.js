@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T17:03:18-08:00
+ * @Last modified time: 2018-01-22T17:42:48-08:00
  */
 
 const Promise = require("bluebird");
@@ -47,6 +47,11 @@ export default class Repospace {
       });
     });
   }
+  static deleteDirectoriesSync(directories) {
+    for (let dir in directories) {
+      fs.removeSync(dir);
+    }
+  }
   /////////////////////////////////////////////////////////////////////
   // Core
   /////////////////////////////////////////////////////////////////////
@@ -62,11 +67,9 @@ export default class Repospace {
       return false;
     }
   }
-  createRootDirectoriesSync() {
-    fs.ensureDirSync(this.repospace);
-    fs.ensureDirSync(this.repositories);
-  }
   async cloneFactory(repositoriesToClone) {
+    //TODO: Ensure that both array elements are being stepped into
+    //Seems like bash repo is attempting to be cloned twice
     for (let repo of repositoriesToClone) {
       let remote = this.getRemoteSSH(repo.acct, repo.repo);
       log(`${repo.acct} ${repo.repo}`);
@@ -78,12 +81,14 @@ export default class Repospace {
         log(`this.repospace: ${chalk.blue(this.repospace)}`);
         let sym = await fs.ensureSymlink(cloneDirectory, this.repospace);
         this.cloned.push(clone);
+        return true;
       } catch (err) {
         log(
           `Failed to clone repositories. ${chalk.yellow(
             "this.cloned[]"
           )} won't contain this repo. \n ${chalk.red(err)}`
         );
+        return false;
       }
     }
     log(`this.cloned: ${String(this.cloned)}`);
