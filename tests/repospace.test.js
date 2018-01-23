@@ -3,11 +3,12 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T16:18:51-08:00
+ * @Last modified time: 2018-01-22T17:06:55-08:00
  */
 
 const path = require("path");
 const chalk = require("chalk");
+const fs = require("fs-extra");
 const log = console.log;
 import Repospace from "../src/repospace.js";
 
@@ -16,32 +17,11 @@ const respacePath = path.join(__dirname, respaceName);
 const reposPath = path.join(__dirname, respaceName, "repos");
 
 beforeAll(() => {
-  const rimraf = require("rimraf");
-  rimraf(reposPath, err => {
-    if (err) {
-      log(`Failed to delete ${chalk.yellow(reposPath)} \n ${chalk.red(err)}`);
-    } else {
-      log(`${chalk.green("Successfully removed")} ${chalk.yellow(reposPath)}`);
-    }
-  });
+  log(`respacePath: ${chalk.yellow(respacePath)}`);
+  log(`reposPath: ${chalk.yellow(reposPath)}`);
+  fs.removeSync(reposPath);
+  fs.removeSync(respacePath);
 });
-
-async function instantiateRepospace(repos, respacePath, reposPath) {
-  let r = new Repospace(respacePath, reposPath);
-  r.createRootDirectoriesSync();
-  try {
-    // let directories = await r.createRootDirectories();
-    let repositories = await r.cloneFactory(repos);
-    return true;
-  } catch (err) {
-    log(
-      `Failed to createRootDirectories or cloneRepositories. \n ${chalk.red(
-        err
-      )}`
-    );
-    return false;
-  }
-}
 
 test("babel-plugin-inline-dotenv is loading", () => {
   let user = process.env.GIT_USER;
@@ -59,7 +39,7 @@ test("SSH remote created", () => {
   expect(remoteGenerated).toBe(remoteExpected);
 });
 
-test("Repospace is created", () => {
+test("repositories are cloned into repospace", async () => {
   // "https://github.com/alechp/bash"
   let repos = [
     {
@@ -71,14 +51,9 @@ test("Repospace is created", () => {
       repo: "file-genesis"
     }
   ];
-  let attempt = instantiateRepospace(repos, respacePath, reposPath)
-    .then(ret => {
-      return ret;
-    })
-    .catch(err => {
-      log(`instantiateRepospace failed. \n ${chalk.red(err)}`);
-      return err;
-    });
-  log(`Attempt: ${chalk.yellow(attempt)}`);
-  expect(Boolean(attempt)).toBe(true);
+  let r = new Repospace(respacePath, reposPath);
+  let directories = r.createRootDirectories();
+  let clones = r.cloneFactory(repos);
+  Promise.all([directories, clones]);
+  expect(Boolean(true)).toBe(true);
 });

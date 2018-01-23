@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T16:18:24-08:00
+ * @Last modified time: 2018-01-22T17:03:18-08:00
  */
 
 const Promise = require("bluebird");
@@ -52,8 +52,10 @@ export default class Repospace {
   /////////////////////////////////////////////////////////////////////
   async createRootDirectories() {
     try {
-      await fs.ensureDir(this.repospace);
-      await fs.ensureDir(this.repositories);
+      Promise.all([
+        await fs.ensureDir(this.repospace),
+        await fs.ensureDir(this.repositories)
+      ]);
       return true;
     } catch (err) {
       log(`Failed to create directories. \n ${chalk.red(err)}`);
@@ -64,7 +66,6 @@ export default class Repospace {
     fs.ensureDirSync(this.repospace);
     fs.ensureDirSync(this.repositories);
   }
-
   async cloneFactory(repositoriesToClone) {
     for (let repo of repositoriesToClone) {
       let remote = this.getRemoteSSH(repo.acct, repo.repo);
@@ -73,6 +74,8 @@ export default class Repospace {
       log(`${chalk.blue(remote)}`);
       try {
         let clone = await this.gitClone(remote);
+        log(`Clone Directory: ${chalk.blue(cloneDirectory)}`);
+        log(`this.repospace: ${chalk.blue(this.repospace)}`);
         let sym = await fs.ensureSymlink(cloneDirectory, this.repospace);
         this.cloned.push(clone);
       } catch (err) {
