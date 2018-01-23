@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T11:43:15-08:00
+ * @Last modified time: 2018-01-23T11:47:21-08:00
  */
 
 const Promise = require("bluebird");
@@ -75,8 +75,10 @@ export default class Repospace {
         this.cloned.push(clone);
       } catch (err) {
         log(`cloneFactory failed. \n ${chalk.red(err)}`);
+        return err;
       }
     }
-    log(`this.cloned: ${String(this.cloned)}`);
+    // log(`this.cloned: ${String(this.cloned)}`);
+    return this.cloned;
   }
 } //end of class

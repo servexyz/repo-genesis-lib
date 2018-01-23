@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T11:44:07-08:00
+ * @Last modified time: 2018-01-23T11:58:36-08:00
  */
 
 const path = require("path");
@@ -50,9 +50,13 @@ test(
     // "git@alechp:servexyz/file-genesis"
     let repos = { alechp: "bash", servexyz: "file-genesis" };
     let ret = await init(respacePath, reposPath, repos);
+    let expected = [
+      "git@alechp:alechp/bash",
+      "git@alechp:servexyz/file-genesis"
+    ];
     log(`ret: ${chalk.blue(ret)}`);
     //TODO: setup legitimate event to test this
-    expect(Boolean(ret)).toBe(true);
+    expect(ret).toEqual(expected);
   },
   30000
 );
