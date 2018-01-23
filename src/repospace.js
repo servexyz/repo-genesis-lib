@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T17:42:48-08:00
+ * @Last modified time: 2018-01-23T11:36:40-08:00
  */
 
 const Promise = require("bluebird");
@@ -32,16 +32,16 @@ export default class Repospace {
     return new Promise((resolve, reject) => {
       let cloneRepoPathRe = /[^/]+$/;
       let cloneRepoPath = String(cloneRepoPathRe.exec(remoteRepository));
-      log(`cloneRepoPath: ${cloneRepoPath}`);
-      log(`typeof cloneRepoPath: ${typeof cloneRepoPath}`);
+      // log(`cloneRepoPath: ${cloneRepoPath}`);
+      // log(`typeof cloneRepoPath: ${typeof cloneRepoPath}`);
       let clonePath = path.join(this.repositories, cloneRepoPath);
-      log(`clonePath: ${chalk.yellow(clonePath)}`);
+      // log(`clonePath: ${chalk.yellow(clonePath)}`);
       clone(remoteRepository, clonePath, err => {
         if (err) {
-          log(`Failed. ${err}`);
+          // log(`Failed. ${err}`);
           reject(`failed to clone ${remoteRepository}. \n ${chalk.red(err)}`);
         } else {
-          log(`Successfully cloned`);
+          // log(`Successfully cloned`);
           resolve(remoteRepository);
         }
       });
@@ -70,25 +70,15 @@ export default class Repospace {
   async cloneFactory(repositoriesToClone) {
     //TODO: Ensure that both array elements are being stepped into
     //Seems like bash repo is attempting to be cloned twice
-    for (let repo of repositoriesToClone) {
-      let remote = this.getRemoteSSH(repo.acct, repo.repo);
-      log(`${repo.acct} ${repo.repo}`);
-      let cloneDirectory = `${this.repositories}/${repo.repo}`;
-      log(`${chalk.blue(remote)}`);
+    for (let [acct, repo] of Object.entries(repositoriesToClone)) {
+      let remote = this.getRemoteSSH(acct, repo);
+      let cloneDirectory = `${this.repositories}/${repo}`;
       try {
         let clone = await this.gitClone(remote);
-        log(`Clone Directory: ${chalk.blue(cloneDirectory)}`);
-        log(`this.repospace: ${chalk.blue(this.repospace)}`);
         let sym = await fs.ensureSymlink(cloneDirectory, this.repospace);
         this.cloned.push(clone);
-        return true;
       } catch (err) {
-        log(
-          `Failed to clone repositories. ${chalk.yellow(
-            "this.cloned[]"
-          )} won't contain this repo. \n ${chalk.red(err)}`
-        );
-        return false;
+        log(`cloneFactory failed. \n ${chalk.red(err)}`);
       }
     }
     log(`this.cloned: ${String(this.cloned)}`);

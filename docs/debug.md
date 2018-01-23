@@ -2,6 +2,21 @@
 
 [Back to README](../README.md)
 
+---
+
+## January 23rd, 2018
+
+* Rewrote cloneFactory.
+* Rewrote the repos array into cleaner object.
+* Cleaned up some unnecessary logs in tests
+
+Issues:
+
+1. gitClone doesn't clone both repos... Only cloning bash right now.
+2. ensureSymlink still isn't working. Log cloneDirectory and other paths more extensively to check.
+
+---
+
 ## January 21st, 2018
 
 ```
