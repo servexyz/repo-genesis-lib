@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-21T11:46:30-08:00
+ * @Last modified time: 2018-01-23T11:47:21-08:00
  */
 
 const Promise = require("bluebird");
@@ -11,7 +11,8 @@ const chalk = require("chalk");
 const log = console.log;
 const path = require("path");
 const fs = require("fs-extra");
-//TODO: Checkout https://github.com/aichbauer/node-git-clone-repo
+const clone = require("git-clone");
+const empty = require("is-empty");
 
 export default class Repospace {
   constructor(repospace, repositories) {
@@ -22,35 +23,40 @@ export default class Repospace {
   /////////////////////////////////////////////////////////////////////
   // Helpers
   /////////////////////////////////////////////////////////////////////
-  getRemoteHTTPS(repository) {
-    return new String(
-      `https://${process.env.GIT_USER}:${process.env.GIT_PASS}@${repo}`
-    );
-  }
-  //TODO: Fix formatting of this function that it can handle account / repo objects
-  getRemoteSSH(organization, repository) {
-    return new String(
-      `git@${process.env.GIT_PROVIDER}:${organization}/${repository}`
-    );
+
+  //TODO: Create test for getRemoteSSH
+  getRemoteSSH(account, repository) {
+    return `git@${process.env.GIT_PROVIDER}:${account}/${repository}`;
   }
   gitClone(remoteRepository) {
     return new Promise((resolve, reject) => {
-      gitPOC(remoteRepository, this.repositories, err => {
+      let cloneRepoPathRe = /[^/]+$/;
+      let cloneRepoPath = String(cloneRepoPathRe.exec(remoteRepository));
+      // log(`cloneRepoPath: ${cloneRepoPath}`);
+      // log(`typeof cloneRepoPath: ${typeof cloneRepoPath}`);
+      let clonePath = path.join(this.repositories, cloneRepoPath);
+      // log(`clonePath: ${chalk.yellow(clonePath)}`);
+      clone(remoteRepository, clonePath, err => {
         if (err) {
-          reject(err);
+          // log(`Failed. ${err}`);
+          reject(`failed to clone ${remoteRepository}. \n ${chalk.red(err)}`);
         } else {
+          // log(`Successfully cloned`);
           resolve(remoteRepository);
         }
       });
     });
   }
+
   /////////////////////////////////////////////////////////////////////
   // Core
   /////////////////////////////////////////////////////////////////////
-  async createDirectories() {
+  async createRootDirectories() {
     try {
-      await fs.ensureDir(this.repospace);
-      await fs.ensureDir(this.repositories);
+      Promise.all([
+        await fs.ensureDir(this.repospace),
+        await fs.ensureDir(this.repositories)
+      ]);
       return true;
     } catch (err) {
       log(`Failed to create directories. \n ${chalk.red(err)}`);
@@ -58,27 +64,21 @@ export default class Repospace {
     }
   }
   async cloneFactory(repositoriesToClone) {
-    for (let repo of repositoriesToClone) {
-      let remote = getAuthenticatedRemoteStringFromRepo(repo);
+    //TODO: Ensure that both array elements are being stepped into
+    //Seems like bash repo is attempting to be cloned twice
+    for (let [acct, repo] of Object.entries(repositoriesToClone)) {
+      let remote = this.getRemoteSSH(acct, repo);
+      let cloneDirectory = `${this.repositories}/${repo}`;
       try {
-        let cloned = await gitPullOrClone(repo);
-        this.cloned.push(cloned);
-        log(`Added ${chalk.yellow(cloned)} to [this.cloned]`);
+        let clone = await this.gitClone(remote);
+        let sym = await fs.ensureSymlink(cloneDirectory, this.repospace);
+        this.cloned.push(clone);
       } catch (err) {
-        log(
-          `Failed to clone repositories. \n ${chalk.red(repositoriesToClone)}`
-        );
+        log(`cloneFactory failed. \n ${chalk.red(err)}`);
+        return err;
       }
     }
-  }
-  async symlinkFactory(pathsToClonedRepos) {
-    //need to create array of paths of every repo that was created here
-    for (let repo in pathsToClonedRepos) {
-      try {
-        await fs.ensureSymlink(repo, this.repospace);
-      } catch (err) {
-        log(`Failed to create symlink for ${repo}. \n ${chalk.red(err)}`);
-      }
-    }
+    // log(`this.cloned: ${String(this.cloned)}`);
+    return this.cloned;
   }
 } //end of class

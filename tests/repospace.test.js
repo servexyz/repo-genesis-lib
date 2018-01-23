@@ -3,44 +3,60 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-21T11:11:13-08:00
+ * @Last modified time: 2018-01-23T11:58:36-08:00
  */
 
-require("dotenv").config();
 const path = require("path");
-const repospace = require(path.join(__dirname, "../src/repospace.js"));
+const chalk = require("chalk");
+const fs = require("fs-extra");
+const log = console.log;
+import Repospace from "../src/repospace.js";
+import init from "../index.js";
+const respaceName = "sandbox";
+const respacePath = path.join(__dirname, respaceName);
+const reposPath = path.join(__dirname, respaceName, "repos");
 
-async function instantiateRepospace(repos, respacePath, reposPath) {
-  let r = new Repospace(respacePath, reposPath);
-  try {
-    let directories = await r.createDirectories();
-    let repositories = await r.cloneFactory(repos);
-    return true;
-  } catch (err) {
-    log(
-      `Failed to createDirectories or cloneRepositories. \n ${chalk.red(err)}`
-    );
-    return false;
+beforeAll(() => {
+  // log(`respacePath: ${chalk.yellow(respacePath)}`);
+  // log(`reposPath: ${chalk.yellow(reposPath)}`);
+  // fs.removeSync(reposPath);
+  // fs.removeSync(respacePath);
+  log(`Going to delete directories`);
+  let directories = [reposPath, respacePath];
+  for (let dir of directories) {
+    log(`deleting: ${chalk.yellow(dir)}`);
+    fs.removeSync(dir);
   }
-}
-
-test("Repospace is created", () => {
-  // "https://github.com/servexyz/kisoro",
-  // "https://github.com/alechp/bash"
-  let repos = [
-    {
-      acct: "servexyz",
-      repo: "kisoro"
-    },
-    {
-      acct: "alechp",
-      repo: "bash"
-    }
-  ];
-
-  let respaceName = ".sandbox";
-  let respacePath = path.join(__dirname, respaceName);
-  let reposPath = path.join(__dirname, respaceName, ".repos");
-  let attempt = instantiateRepos(repos, respacePath, reposPath);
-  expect(attempt).toBe(true);
 });
+
+test("babel-plugin-inline-dotenv is loading", () => {
+  let user = process.env.GIT_USER;
+  expect(String(user)).toBe("alechp");
+});
+
+test("SSH remote created", () => {
+  let r = new Repospace(respacePath, reposPath);
+  let acct = "alechp";
+  let repo = "bash";
+  let remoteGenerated = r.getRemoteSSH(acct, repo);
+  let remoteExpected = "git@alechp:alechp/bash";
+  expect(remoteGenerated).toBe(remoteExpected);
+});
+
+test(
+  "repositories are cloned into repospace",
+  async () => {
+    // "git@alechp:alechp/bash"
+    // "git@alechp:servexyz/file-genesis"
+    let repos = { alechp: "bash", servexyz: "file-genesis" };
+    let ret = await init(respacePath, reposPath, repos);
+    let expected = [
+      "git@alechp:alechp/bash",
+      "git@alechp:servexyz/file-genesis"
+    ];
+    log(`ret: ${chalk.blue(ret)}`);
+    //TODO: setup legitimate event to test this
+    expect(ret).toEqual(expected);
+  },
+  30000
+);
