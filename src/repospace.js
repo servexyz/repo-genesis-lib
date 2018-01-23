@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T14:01:39-08:00
+ * @Last modified time: 2018-01-22T16:18:24-08:00
  */
 
 const Promise = require("bluebird");
@@ -60,13 +60,20 @@ export default class Repospace {
       return false;
     }
   }
+  createRootDirectoriesSync() {
+    fs.ensureDirSync(this.repospace);
+    fs.ensureDirSync(this.repositories);
+  }
 
   async cloneFactory(repositoriesToClone) {
     for (let repo of repositoriesToClone) {
       let remote = this.getRemoteSSH(repo.acct, repo.repo);
+      log(`${repo.acct} ${repo.repo}`);
+      let cloneDirectory = `${this.repositories}/${repo.repo}`;
+      log(`${chalk.blue(remote)}`);
       try {
-        let cloneDirectory = `${this.repositories}/${repo.repo}`;
         let clone = await this.gitClone(remote);
+        let sym = await fs.ensureSymlink(cloneDirectory, this.repospace);
         this.cloned.push(clone);
       } catch (err) {
         log(
@@ -76,24 +83,6 @@ export default class Repospace {
         );
       }
     }
-  }
-  async symlinkFactory() {
-    if (empty(this.cloned)) {
-      log(
-        `${chalk.yellow("this.cloned[]")} is empty. Check ${chalk.yellow(
-          "cloneFactory"
-        )} function`
-      );
-      return false;
-    }
-    //need to create array of paths of every repo that was created here
-    for (let repo in this.cloned) {
-      log(`Repo: ${chalk.yellow(repo)}`);
-      try {
-        await fs.ensureSymlink(repo, this.repospace);
-      } catch (err) {
-        log(`Failed to create symlink for ${repo}. \n ${chalk.red(err)}`);
-      }
-    }
+    log(`this.cloned: ${String(this.cloned)}`);
   }
 } //end of class

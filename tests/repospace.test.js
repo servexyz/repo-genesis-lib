@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-22T13:59:50-08:00
+ * @Last modified time: 2018-01-22T16:18:51-08:00
  */
 
 const path = require("path");
@@ -15,12 +15,23 @@ const respaceName = "sandbox";
 const respacePath = path.join(__dirname, respaceName);
 const reposPath = path.join(__dirname, respaceName, "repos");
 
+beforeAll(() => {
+  const rimraf = require("rimraf");
+  rimraf(reposPath, err => {
+    if (err) {
+      log(`Failed to delete ${chalk.yellow(reposPath)} \n ${chalk.red(err)}`);
+    } else {
+      log(`${chalk.green("Successfully removed")} ${chalk.yellow(reposPath)}`);
+    }
+  });
+});
+
 async function instantiateRepospace(repos, respacePath, reposPath) {
   let r = new Repospace(respacePath, reposPath);
+  r.createRootDirectoriesSync();
   try {
-    let directories = await r.createRootDirectories();
+    // let directories = await r.createRootDirectories();
     let repositories = await r.cloneFactory(repos);
-    let symlinks = await r.symlinkFactory();
     return true;
   } catch (err) {
     log(
@@ -62,7 +73,6 @@ test("Repospace is created", () => {
   ];
   let attempt = instantiateRepospace(repos, respacePath, reposPath)
     .then(ret => {
-      log(`inside instantiateRepospace: ${chalk.green(ret)}`);
       return ret;
     })
     .catch(err => {
@@ -72,7 +82,3 @@ test("Repospace is created", () => {
   log(`Attempt: ${chalk.yellow(attempt)}`);
   expect(Boolean(attempt)).toBe(true);
 });
-
-// afterAll(async () => {
-//   await fs.remove(reposPath);
-// });

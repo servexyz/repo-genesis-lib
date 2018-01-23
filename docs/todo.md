@@ -49,5 +49,6 @@
 7. Is there a babel-plugin for dotenv ? Yes: https://www.npmjs.com/package/babel-plugin-dotenv
 8. Is there a library which concatenates env for you ? Would be nice to be able to have one "checked-in" env which wouldn't commit anything private to public repo but still have baseline. In other words you could have .env.private & .env.public where .env.public has paths and things like that.... .env.private would have SSH keys. And something like babel-plugin-inline-dotenv would load both, but git would only check in .env.public
 9. What's the best way to add a spinner while promise is being resolved? I believe sindresorhus had a solution for this
+10. Why isn't Atom showing sandbox directory in sidebar when it gets added/deleted repeatedly ?
 
 ---
