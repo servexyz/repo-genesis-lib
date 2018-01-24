@@ -21,22 +21,24 @@
 
 * [x] API Docs
   * [x] Seperate docs by concern
-  * [ ] Update API docs
+  * [x] Update API docs
     * [x] Remove old
-    * [ ] Add new
+    * [x] Add new
 * [x] Questions, references and trail for v.0.5.0
 * [x] Add jest config & tests directory
 * [x] Choose git-clone library (try a few different options)
-  * [ ] Promisify git-clone library if needed
-* [ ] Get repospace.test.js working
+  * [x] Promisify git-clone library if needed
+* [x] Get repospace.test.js working
 
 ### v.1.0.0
 
 * [ ] SymlinkLayoutFactory (right now symlinks all just dump into repospace)
 * [x] Replace dotenv require with https://www.npmjs.com/package/babel-plugin-dotenv
-* [ ] Create .gitignore based on passed repos path
+* [ ] Create .gitignore based on repospacePath
   * [ ] Check if already exists, if so add. Otherwise create and add
 * [ ] Set default GIT_PROVIDER to github (currently alechp)
+* [ ] Create CLI
+* [ ] Move .env path out of header (so TOC isn't messed up)
 
 ---
 
