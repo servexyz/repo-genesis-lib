@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T11:58:36-08:00
+ * @Last modified time: 2018-01-23T16:39:13-08:00
  */
 
 const path = require("path");
@@ -17,14 +17,9 @@ const respacePath = path.join(__dirname, respaceName);
 const reposPath = path.join(__dirname, respaceName, "repos");
 
 beforeAll(() => {
-  // log(`respacePath: ${chalk.yellow(respacePath)}`);
-  // log(`reposPath: ${chalk.yellow(reposPath)}`);
-  // fs.removeSync(reposPath);
-  // fs.removeSync(respacePath);
-  log(`Going to delete directories`);
   let directories = [reposPath, respacePath];
   for (let dir of directories) {
-    log(`deleting: ${chalk.yellow(dir)}`);
+    // log(`deleting: ${chalk.yellow(dir)}`);
     fs.removeSync(dir);
   }
 });

@@ -33,7 +33,10 @@
 ### v.1.0.0
 
 * [ ] SymlinkLayoutFactory (right now symlinks all just dump into repospace)
-* [ ] Replace dotenv require with https://www.npmjs.com/package/babel-plugin-dotenv
+* [x] Replace dotenv require with https://www.npmjs.com/package/babel-plugin-dotenv
+* [ ] Create .gitignore based on passed repos path
+  * [ ] Check if already exists, if so add. Otherwise create and add
+* [ ] Set default GIT_PROVIDER to github (currently alechp)
 
 ---
 
@@ -50,5 +53,6 @@
 8. Is there a library which concatenates env for you ? Would be nice to be able to have one "checked-in" env which wouldn't commit anything private to public repo but still have baseline. In other words you could have .env.private & .env.public where .env.public has paths and things like that.... .env.private would have SSH keys. And something like babel-plugin-inline-dotenv would load both, but git would only check in .env.public
 9. What's the best way to add a spinner while promise is being resolved? I believe sindresorhus had a solution for this
 10. Why isn't Atom showing sandbox directory in sidebar when it gets added/deleted repeatedly ?
+11. What's the best way to publish a private scope module ? Always run into difficulties when I try this for some reason. Looking to set scope to @servexyz
 
 ---
