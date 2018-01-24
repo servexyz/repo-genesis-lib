@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T11:47:21-08:00
+ * @Last modified time: 2018-01-23T16:40:23-08:00
  */
 
 const Promise = require("bluebird");
@@ -64,14 +64,15 @@ export default class Repospace {
     }
   }
   async cloneFactory(repositoriesToClone) {
-    //TODO: Ensure that both array elements are being stepped into
-    //Seems like bash repo is attempting to be cloned twice
     for (let [acct, repo] of Object.entries(repositoriesToClone)) {
       let remote = this.getRemoteSSH(acct, repo);
       let cloneDirectory = `${this.repositories}/${repo}`;
+      let symlinkTarget = `${this.repospace}/${repo}`;
       try {
         let clone = await this.gitClone(remote);
-        let sym = await fs.ensureSymlink(cloneDirectory, this.repospace);
+        log(`Clone Directory: ${chalk.blue(cloneDirectory)}`);
+        log(`this.repospace: ${chalk.blue(this.repospace)}`);
+        fs.ensureSymlinkSync(cloneDirectory, symlinkTarget);
         this.cloned.push(clone);
       } catch (err) {
         log(`cloneFactory failed. \n ${chalk.red(err)}`);
