@@ -25,7 +25,7 @@ beforeAll(() => {
 });
 
 test("babel-plugin-inline-dotenv is loading", () => {
-  let user = process.env.GIT_USER;
+  let user = process.env.GIT_PROVIDER;
   expect(String(user)).toBe("alechp");
 });
 
