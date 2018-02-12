@@ -15,9 +15,10 @@ const clone = require("git-clone");
 const empty = require("is-empty");
 
 export default class Repospace {
-  constructor(repospace, repositories) {
+  constructor(repospace, repositories, provider) {
     this.repospace = repospace; //path/to/repospace
     this.repositories = repositories; //path/to/repospace/.repositories
+    this.provider = provider;
     this.cloned = [];
   }
   /////////////////////////////////////////////////////////////////////
@@ -26,7 +27,8 @@ export default class Repospace {
 
   //TODO: Create test for getRemoteSSH
   getRemoteSSH(account, repository) {
-    return `git@${process.env.GIT_PROVIDER}:${account}/${repository}`;
+    let provider = process.env.GIT_PROVIDER || this.provider || "github.com";
+    return `git@${provider}:${account}/${repository}`;
   }
   gitClone(remoteRepository) {
     return new Promise((resolve, reject) => {

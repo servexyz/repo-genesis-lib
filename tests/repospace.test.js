@@ -10,8 +10,12 @@ const path = require("path");
 const chalk = require("chalk");
 const fs = require("fs-extra");
 const log = console.log;
+
+//Library functions
 import Repospace from "../src/repospace.js";
 import init from "../index.js";
+
+//Paths
 const respaceName = "sandbox";
 const respacePath = path.join(__dirname, respaceName);
 const reposPath = path.join(__dirname, respaceName, "repos");
@@ -24,13 +28,9 @@ beforeAll(() => {
   }
 });
 
-test("babel-plugin-inline-dotenv is loading", () => {
-  let user = process.env.GIT_PROVIDER;
-  expect(String(user)).toBe("alechp");
-});
-
-test("SSH remote created", () => {
-  let r = new Repospace(respacePath, reposPath);
+//TODO: Decouple testing dependence from alechp (right now that's tied to my ssh config)
+test("SSH remote created using alechp remote", () => {
+  let r = new Repospace(respacePath, reposPath, "alechp");
   let acct = "alechp";
   let repo = "bash";
   let remoteGenerated = r.getRemoteSSH(acct, repo);
@@ -44,7 +44,7 @@ test(
     // "git@alechp:alechp/bash"
     // "git@alechp:servexyz/file-genesis"
     let repos = { alechp: "bash", servexyz: "file-genesis" };
-    let ret = await init(respacePath, reposPath, repos);
+    let ret = await init(respacePath, reposPath, repos, "alechp");
     let expected = [
       "git@alechp:alechp/bash",
       "git@alechp:servexyz/file-genesis"

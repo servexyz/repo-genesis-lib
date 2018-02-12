@@ -10,8 +10,8 @@ const chalk = require("chalk");
 const Promise = require("bluebird");
 import Repospace from "./src/repospace.js";
 
-export default async function init(respacePath, reposPath, repos) {
-  let r = new Repospace(respacePath, reposPath);
+export default async function init(respacePath, reposPath, repos, provider) {
+  let r = new Repospace(respacePath, reposPath, provider);
   let directories = await r.createRootDirectories();
   let clones = await r.cloneFactory(repos);
   let clonedRepositories = Promise.all([directories, clones])
