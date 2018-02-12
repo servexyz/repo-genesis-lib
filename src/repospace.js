@@ -27,7 +27,7 @@ export default class Repospace {
 
   //TODO: Create test for getRemoteSSH
   getRemoteSSH(account, repository) {
-    let provider = process.env.GIT_PROVIDER || this.provider || "github.com";
+    let provider = this.provider || "github.com";
     return `git@${provider}:${account}/${repository}`;
   }
   gitClone(remoteRepository) {
