@@ -3,14 +3,14 @@
  * @Date:   2018-01-17T15:59:49-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T11:58:55-08:00
+ * @Last modified time: 2018-02-11T17:02:31-08:00
  */
 const log = console.log;
 const chalk = require("chalk");
 const Promise = require("bluebird");
-import Repospace from "./src/repospace.js";
+const { Repospace } = require("./src/repospace.js");
 
-export default async function init(respacePath, reposPath, repos, provider) {
+async function init(respacePath, reposPath, repos, provider) {
   let r = new Repospace(respacePath, reposPath, provider);
   let directories = await r.createRootDirectories();
   let clones = await r.cloneFactory(repos);
@@ -24,3 +24,5 @@ export default async function init(respacePath, reposPath, repos, provider) {
 
   return clonedRepositories;
 }
+
+module.exports = { init };

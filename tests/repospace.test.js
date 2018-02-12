@@ -3,7 +3,7 @@
  * @Date:   2018-01-19T16:05:25-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T16:39:13-08:00
+ * @Last modified time: 2018-02-11T17:02:05-08:00
  */
 
 const path = require("path");
@@ -12,8 +12,8 @@ const fs = require("fs-extra");
 const log = console.log;
 
 //Library functions
-import Repospace from "../src/repospace.js";
-import init from "../index.js";
+const { Repospace } = require("../src/repospace.js");
+const { init } = require("../index.js");
 
 //Paths
 const respaceName = "sandbox";

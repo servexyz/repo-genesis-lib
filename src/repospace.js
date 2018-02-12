@@ -3,7 +3,7 @@
  * @Date:   2018-01-20T15:27:38-08:00
  * @Email:  alec@bubblegum.academy
  * @Last modified by:   alechp
- * @Last modified time: 2018-01-23T16:40:23-08:00
+ * @Last modified time: 2018-02-11T17:01:54-08:00
  */
 
 const Promise = require("bluebird");
@@ -14,7 +14,7 @@ const fs = require("fs-extra");
 const clone = require("git-clone");
 const empty = require("is-empty");
 
-export default class Repospace {
+class Repospace {
   constructor(repospace, repositories, provider) {
     this.repospace = repospace; //path/to/repospace
     this.repositories = repositories; //path/to/repospace/.repositories
@@ -85,3 +85,5 @@ export default class Repospace {
     return this.cloned;
   }
 } //end of class
+
+module.exports = { Repospace };
