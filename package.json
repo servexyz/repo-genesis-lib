@@ -7,7 +7,6 @@
     "node": "9.3.0"
   },
   "dependencies": {
-    "babel-plugin-inline-dotenv": "^1.1.2",
     "babel-preset-env": "^1.6.1",
     "bluebird": "^3.5.1",
     "chalk": "^2.3.0",
@@ -40,14 +39,6 @@
           "targets": {
             "node": "9.3.0"
           }
-        }
-      ]
-    ],
-    "plugins": [
-      [
-        "inline-dotenv",
-        {
-          "path": "./.env"
         }
       ]
     ]
