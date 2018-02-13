@@ -1,11 +1,3 @@
-/**
- * @Author: Alec Hale-Pletka <alechp>
- * @Date:   2018-01-20T15:27:38-08:00
- * @Email:  alec@bubblegum.academy
- * @Last modified by:   alechp
- * @Last modified time: 2018-02-11T17:01:54-08:00
- */
-
 const Promise = require("bluebird");
 const chalk = require("chalk");
 const log = console.log;

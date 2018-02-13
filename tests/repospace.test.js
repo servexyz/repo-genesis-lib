@@ -1,11 +1,3 @@
-/**
- * @Author: Alec Hale-Pletka <alechp>
- * @Date:   2018-01-19T16:05:25-08:00
- * @Email:  alec@bubblegum.academy
- * @Last modified by:   alechp
- * @Last modified time: 2018-02-11T17:02:05-08:00
- */
-
 const path = require("path");
 const chalk = require("chalk");
 const fs = require("fs-extra");

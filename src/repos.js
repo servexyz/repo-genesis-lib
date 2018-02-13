@@ -1,11 +1,3 @@
-/**
- * @Author: Alec Hale-Pletka <alechp>
- * @Date:   2018-01-18T14:58:10-08:00
- * @Email:  alec@bubblegum.academy
- * @Last modified by:   alechp
- * @Last modified time: 2018-01-18T16:12:00-08:00
- */
-
 //this sample is based on real use case, but it's purposes are for testing
 
 let server = "https://github.com/servexyz";
