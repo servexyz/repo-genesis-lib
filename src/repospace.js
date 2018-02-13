@@ -21,6 +21,7 @@ class Repospace {
     this.provider = provider;
     this.cloned = [];
   }
+
   /////////////////////////////////////////////////////////////////////
   // Helpers
   /////////////////////////////////////////////////////////////////////
@@ -34,8 +35,8 @@ class Repospace {
     return new Promise((resolve, reject) => {
       let cloneRepoPathRe = /[^/]+$/;
       let cloneRepoPath = String(cloneRepoPathRe.exec(remoteRepository));
-      // log(`cloneRepoPath: ${cloneRepoPath}`);
-      // log(`typeof cloneRepoPath: ${typeof cloneRepoPath}`);
+      log(`cloneRepoPath: ${cloneRepoPath}`);
+      log(`typeof cloneRepoPath: ${typeof cloneRepoPath}`);
       let clonePath = path.join(this.repositories, cloneRepoPath);
       // log(`clonePath: ${chalk.yellow(clonePath)}`);
       clone(remoteRepository, clonePath, err => {
