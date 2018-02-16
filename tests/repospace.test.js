@@ -37,7 +37,8 @@ test(
     // "git@alechp:servexyz/file-genesis"
     let repos = { alechp: "bash", servexyz: "file-genesis" };
     //TODO: Update this by passing options
-    let ret = await init(respacePath, reposPath, repos, "alechp");
+    let options = Object.assign({}, reposPath, repos, "alechp");
+    let ret = await init(respacePath, options);
     let expected = [
       "git@alechp:alechp/bash",
       "git@alechp:servexyz/file-genesis"
