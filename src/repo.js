@@ -5,23 +5,24 @@ const empty = require("is-empty");
 const log = console.log;
 const chalk = require("chalk");
 
-//TODO: Add type checking on config
-
-/*
-  @@config.repositories = [{}, {}]
-  @@config.repospacePath = <sz> || default (process.cwd)
-  @@config.provider = <sz> || default (github.com)
-*/
-
 let Repo = config => {
-  var provider = config.provider || "github.com"; //optional
+  // var provider = config.provider || "github.com"; //optional
+  var provider = config.provider;
   var repospacePath = config.repospacePath; //required
   var repositories = config.repositories; //required
   var repositoriesPath = path.join(repospacePath, ".repositories"); //derived
   var clonedRepositories = [];
   return {
     getRemoteSSH: function(account, repository) {
-      return `git@${provider}:${account}/${repository}`;
+      log(`provider: ${provider}`);
+      log(`typeof provider: ${typeof provider}`);
+      if (provider === "undefined") {
+        let repo = `https://github.com/${account}/${repository}`;
+        // return `https://github.com/${account}/${repository}`;
+        return repo;
+      } else {
+        return `git@${provider}:${account}/${repository}`;
+      }
     },
     gitClone: function(remoteRepository) {
       return new Promise((resolve, reject) => {

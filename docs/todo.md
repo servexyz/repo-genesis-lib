@@ -34,11 +34,9 @@
 
 * [ ] SymlinkLayoutFactory (right now symlinks all just dump into repospace)
 * [x] Replace dotenv require with https://www.npmjs.com/package/babel-plugin-dotenv
-* [ ] Create .gitignore based on repospacePath
-  * [ ] Check if already exists, if so add. Otherwise create and add
-* [ ] Set default GIT_PROVIDER to github (currently alechp)
+* [x] Set default GIT_PROVIDER to github (currently alechp)
 * [ ] Create CLI
-* [ ] Move .env path out of header (so TOC isn't messed up)
+* [x] Move .env path out of header (so TOC isn't messed up)
 
 ---
 

@@ -1,6 +1,5 @@
 const path = require("path");
 const config = {
-  provider: "alechp",
   repospacePath: path.join(__dirname, "../sandbox"),
   repositories: [
     {

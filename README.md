@@ -1,7 +1,8 @@
 # Repo-Genesis
 
 > Convert config into library scaffolding
-> [![Build Status](https://travis-ci.org/servexyz/repo-genesis.svg?branch=master)](https://travis-ci.org/servexyz/repo-genesis)
+
+[![Build Status](https://travis-ci.org/servexyz/repo-genesis.svg?branch=master)](https://travis-ci.org/servexyz/repo-genesis)
 
 ## Install
 
@@ -17,6 +18,7 @@ await init(config);
 ```
 
 > See full test: [repo.test.js](./tests/repo.test.js)
+
 > See sample config: [sample.config.js](./tests/sample.config.js)
 
 ---
@@ -36,6 +38,21 @@ await init(config);
 
 ---
 
+#### For Users
+
+* [Config](./docs/config.md)
+  > Creating config used by init
+
+#### For Mainteners
+
+* [Reference](./docs/reference.md)
+
+  > 3rd party API's
+
+* [Todo](./docs/todo.md)
+
+  > Todos by release version & questions
+
 * [Brainstorm](./docs/brainstorm.md)
 
   > Thinking about the API
@@ -44,11 +61,4 @@ await init(config);
 
   > Errors & notes about fixing them
 
-* [Reference](./docs/reference.md)
-
-  > 3rd party API's
-
-* [Todo](./docs/todo.md)
-  > Todos by release version & questions
-
-### Related
+  ### Related
