@@ -25,6 +25,6 @@ test("repos are cloned", async () => {
   };
   let ret = await init(config);
   let expected = ["git@alechp:alechp/bash", "git@alechp:servexyz/cli-starter"];
-  log(`ret: ${chalk.blue(ret)}`);
+  // log(`ret: ${chalk.blue(ret)}`);
   expect(ret).toEqual(expected);
 });

@@ -68,7 +68,7 @@ let Repo = config => {
           });
         clonedRepositories.push(singleClonedRepo);
       }
-      log(`clonedRepositories: ${clonedRepositories}`);
+      // log(`clonedRepositories: ${clonedRepositories}`);
       return clonedRepositories;
     },
     createRootDirectories: function() {
@@ -84,9 +84,8 @@ function init(config) {
   let clonesResolved = Promise.all(clonesPromises)
     .then(clone => clone)
     .catch(err => err);
-  log(`clonesPromises: ${chalk.blue(clonesPromises)}`);
-  log(`clonesResolved: ${chalk.blue(clonesResolved)}`);
-
+  // log(`clonesPromises: ${chalk.blue(clonesPromises)}`);
+  // log(`clonesResolved: ${chalk.blue(clonesResolved)}`);
   return clonesResolved;
 }
 
