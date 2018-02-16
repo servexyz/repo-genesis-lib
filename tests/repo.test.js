@@ -13,7 +13,10 @@ test("repos are cloned", async () => {
   const { init } = require("../index.js");
   const { config } = require("./sample.config.js");
   let ret = await init(config);
-  let expected = ["git@alechp:alechp/bash", "git@alechp:servexyz/cli-starter"];
+  let expected = [
+    "git@alechp:servexyz/npm-starter",
+    "git@alechp:servexyz/cli-starter"
+  ];
   // log(`ret: ${chalk.blue(ret)}`);
   expect(ret).toEqual(expected);
 });

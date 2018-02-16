@@ -4,7 +4,7 @@ const config = {
   repospacePath: path.join(__dirname, "../sandbox"),
   repositories: [
     {
-      alechp: "bash"
+      servexyz: "npm-starter"
     },
     {
       servexyz: "cli-starter"
