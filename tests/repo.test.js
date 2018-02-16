@@ -1,4 +1,3 @@
-const { init } = require("../src/repo.js");
 const log = console.log;
 const chalk = require("chalk");
 const path = require("path");
@@ -9,13 +8,9 @@ beforeAll(() => {
   fs.removeSync(sandbox);
 });
 
-/*
-  @@config.repositories = [{}, {}]
-  @@config.repospacePath = <sz> || default (process.cwd)
-  @@config.provider = <sz> || default (github.com)
-*/
-
 test("repos are cloned", async () => {
+  // const { init } = require("../src/repo.js");
+  const { init } = require("../index.js");
   const config = {
     provider: "alechp",
     repospacePath: path.join(__dirname, "../sandbox"),
@@ -33,8 +28,3 @@ test("repos are cloned", async () => {
   log(`ret: ${chalk.blue(ret)}`);
   expect(ret).toEqual(expected);
 });
-
-test("api is working", () => {});
-// async function testInit() {}
-//TODO: Extract test function into testInit since it's being used twice
-// test("api is working");

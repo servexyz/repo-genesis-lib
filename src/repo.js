@@ -80,6 +80,7 @@ let Repo = config => {
 
 function init(config) {
   let clonesPromises = Repo(config).cloneFactory();
+  // => [object Promise], [object Promise]
   let clonesResolved = Promise.all(clonesPromises)
     .then(clone => clone)
     .catch(err => err);
