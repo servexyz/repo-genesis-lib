@@ -63,13 +63,13 @@ let Repo = config => {
             fs.ensureSymlinkSync(cloneDirectory, symlinkTarget);
             log(`repo inside cloneFactory: ${chalk.blue(repo)}`);
             clonedRepositories.push(repo);
-            return "completed gitClone";
           })
           .catch(err => {
             log(`cloneFactory failed. \n ${chalk.red(err)}`);
-            return err;
           });
       }
+      //TODO: Fix this return so that testing works properly
+      log(`clonedRepositories: ${clonedRepositories}`);
       return clonedRepositories;
     },
     createRootDirectories: function() {

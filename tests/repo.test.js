@@ -32,4 +32,8 @@ test("repos are cloned", async () => {
   let expected = ["git@alechp:alechp/bash", "git@alechp:servexyz/cli-starter"];
   log(`ret: ${chalk.blue(ret)}`);
   // expect(ret).toEqual(expected);
+  //TODO: make this test work
 });
+// async function testInit() {}
+//TODO: Extract test function into testInit since it's being used twice
+// test("api is working");
