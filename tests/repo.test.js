@@ -5,14 +5,8 @@ const path = require("path");
 const fs = require("fs-extra");
 
 beforeAll(() => {
-  const respaceName = "sandbox";
-  const respacePath = path.join(__dirname, respaceName);
-  const reposPath = path.join(__dirname, respaceName, ".repositories");
-  let directories = [reposPath, respacePath];
-  for (let dir of directories) {
-    // log(`deleting: ${chalk.yellow(dir)}`);
-    fs.removeSync(dir);
-  }
+  const sandbox = path.join(__dirname, "../sandbox");
+  fs.removeSync(sandbox);
 });
 
 /*

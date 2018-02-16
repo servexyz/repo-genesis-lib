@@ -15,7 +15,7 @@ const chalk = require("chalk");
 
 let Repo = config => {
   var provider = config.provider || "github.com"; //optional
-  var repospacePath = config.repospacePath || process.cwd(); //optional
+  var repospacePath = config.repospacePath; //required
   var repositories = config.repositories; //required
   var repositoriesPath = path.join(repospacePath, ".repositories"); //derived
   var clonedRepositories = [];
