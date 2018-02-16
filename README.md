@@ -17,8 +17,8 @@ const { init } = require("repo-genesis");
 await init(config);
 ```
 
-> Test [repo.test.js](./tests/repo.test.js)
-> Config [sample.config.js](./tests/sample.config.js)
+> See full test: [repo.test.js](./tests/repo.test.js)
+> See sample config: [sample.config.js](./tests/sample.config.js)
 
 ---
 
