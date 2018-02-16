@@ -11,18 +11,7 @@ beforeAll(() => {
 test("repos are cloned", async () => {
   // const { init } = require("../src/repo.js");
   const { init } = require("../index.js");
-  const config = {
-    provider: "alechp",
-    repospacePath: path.join(__dirname, "../sandbox"),
-    repositories: [
-      {
-        alechp: "bash"
-      },
-      {
-        servexyz: "cli-starter"
-      }
-    ]
-  };
+  const { config } = require("./sample.config.js");
   let ret = await init(config);
   let expected = ["git@alechp:alechp/bash", "git@alechp:servexyz/cli-starter"];
   // log(`ret: ${chalk.blue(ret)}`);
