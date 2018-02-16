@@ -28,10 +28,11 @@ let Repo = config => {
         let cloneRepoPathRe = /[^/]+$/;
         let cloneRepoPath = String(cloneRepoPathRe.exec(remoteRepository));
         let clonePath = path.join(repositoriesPath, cloneRepoPath);
-        log("repositoriesPath: ", repositoriesPath);
-        log(`cloneRepoPath: ${cloneRepoPath}`);
-        log(`typeof cloneRepoPath: ${typeof cloneRepoPath}`);
-        log(`clonePath: ${clonePath}`);
+        // log("repositoriesPath: ", repositoriesPath);
+        // log(`cloneRepoPath: ${cloneRepoPath}`);
+        // log(`typeof cloneRepoPath: ${typeof cloneRepoPath}`);
+        // log(`clonePath: ${clonePath}`);
+        // log(`remote repository: ${chalk.magenta(remoteRepository)}`);
         clone(remoteRepository, clonePath, err => {
           if (err) {
             reject(`Failed to clone ${remoteRepository}. \n ${chalk.red(err)}`);
@@ -43,32 +44,30 @@ let Repo = config => {
     },
     cloneFactory: function() {
       this.createRootDirectories();
-      log(`repositories: ${JSON.stringify(repositories)}`);
-      // repositories.map(([acct, repo]) => {
-      // Object.entries(repositories).forEach(([acct, repo]) => {
+      // log(`repositories: ${JSON.stringify(repositories)}`);
       for (let [index, obj] of Object.entries(repositories)) {
         let acct = Object.keys(obj);
         let repo = Object.values(obj);
-        log(
-          `index: ${chalk.yellow(index)} \n acct: ${chalk.green(
-            acct
-          )} \n repo: ${chalk.blue(repo)}`
-        );
+        // log(
+        //   `index: ${chalk.yellow(index)} \n acct: ${chalk.green(
+        //     acct
+        //   )} \n repo: ${chalk.blue(repo)}`
+        // );
         let remote = this.getRemoteSSH(acct, repo);
-        log(`remote: ${chalk.yellow(remote)}`);
+        // log(`remote: ${chalk.yellow(remote)}`);
         let cloneDirectory = `${repositoriesPath}/${repo}`;
         let symlinkTarget = `${repospacePath}/${repo}`;
-        this.gitClone(remote)
+        let singleClonedRepo = this.gitClone(remote)
           .then(repo => {
             fs.ensureSymlinkSync(cloneDirectory, symlinkTarget);
             log(`repo inside cloneFactory: ${chalk.blue(repo)}`);
-            clonedRepositories.push(repo);
+            return repo;
           })
           .catch(err => {
             log(`cloneFactory failed. \n ${chalk.red(err)}`);
           });
+        clonedRepositories.push(singleClonedRepo);
       }
-      //TODO: Fix this return so that testing works properly
       log(`clonedRepositories: ${clonedRepositories}`);
       return clonedRepositories;
     },
@@ -80,9 +79,14 @@ let Repo = config => {
 };
 
 function init(config) {
-  let clones = Repo(config).cloneFactory();
-  log(`clones init: ${chalk.blue(clones)}`);
-  return clones;
+  let clonesPromises = Repo(config).cloneFactory();
+  let clonesResolved = Promise.all(clonesPromises)
+    .then(clone => clone)
+    .catch(err => err);
+  log(`clonesPromises: ${chalk.blue(clonesPromises)}`);
+  log(`clonesResolved: ${chalk.blue(clonesResolved)}`);
+
+  return clonesResolved;
 }
 
 module.exports = { init };
