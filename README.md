@@ -1,8 +1,7 @@
-# Library-Genesis
+# Repo-Genesis
 
 > Convert config into library scaffolding
-
-[![Build Status](https://travis-ci.org/servexyz/library-genesis.svg?branch=master)](https://travis-ci.org/servexyz/library-genesis)
+> [![Build Status](https://travis-ci.org/servexyz/repo-genesis.svg?branch=master)](https://travis-ci.org/servexyz/repo-genesis)
 
 ## Install
 
