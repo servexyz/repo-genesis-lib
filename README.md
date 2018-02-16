@@ -17,9 +17,33 @@ const { init } = require("repo-genesis");
 await init(config);
 ```
 
-> See full test: [repo.test.js](./tests/repo.test.js)
+> Full test: [repo.test.js](./tests/repo.test.js)
 
-> See sample config: [sample.config.js](./tests/sample.config.js)
+> Full config: [sample.config.js](./tests/sample.config.js)
+
+#### Config
+
+```js
+const config = {
+  provider: "myProviderAlias",
+  repospacePath: path.join(__dirname, "../sandbox"),
+  repositories: [
+    {
+      servexyz: "npm-starter"
+    },
+    {
+      servexyz: "cli-starter"
+    }
+  ]
+};
+```
+
+**Provider**
+
+* `Public` repos? Provider is `optional`
+* `Private` repos? Provider is `required`
+
+  > Read more about defining config [here](config.md)
 
 ---
 
@@ -43,7 +67,7 @@ await init(config);
 * [Config](./docs/config.md)
   > Creating config used by init
 
-#### For Mainteners
+#### For Maintainers
 
 * [Reference](./docs/reference.md)
 

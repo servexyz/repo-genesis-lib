@@ -9,13 +9,12 @@ beforeAll(() => {
 });
 
 test("repos are cloned", async () => {
-  // const { init } = require("../src/repo.js");
   const { init } = require("../index.js");
   const { config } = require("./sample.config.js");
   let ret = await init(config);
   let expected = [
-    "git@alechp:servexyz/npm-starter",
-    "git@alechp:servexyz/cli-starter"
+    "https://github.com/servexyz/npm-starter",
+    "https://github.com/servexyz/cli-starter"
   ];
   // log(`ret: ${chalk.blue(ret)}`);
   expect(ret).toEqual(expected);

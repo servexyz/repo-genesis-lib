@@ -13,13 +13,9 @@ let Repo = config => {
   var repositoriesPath = path.join(repospacePath, ".repositories"); //derived
   var clonedRepositories = [];
   return {
-    getRemoteSSH: function(account, repository) {
-      log(`provider: ${provider}`);
-      log(`typeof provider: ${typeof provider}`);
-      if (provider === "undefined") {
-        let repo = `https://github.com/${account}/${repository}`;
-        // return `https://github.com/${account}/${repository}`;
-        return repo;
+    getRemoteString: function(account, repository) {
+      if (provider === undefined) {
+        return `https://github.com/${account}/${repository}`;
       } else {
         return `git@${provider}:${account}/${repository}`;
       }
@@ -54,7 +50,7 @@ let Repo = config => {
         //     acct
         //   )} \n repo: ${chalk.blue(repo)}`
         // );
-        let remote = this.getRemoteSSH(acct, repo);
+        let remote = this.getRemoteString(acct, repo);
         // log(`remote: ${chalk.yellow(remote)}`);
         let cloneDirectory = `${repositoriesPath}/${repo}`;
         let symlinkTarget = `${repospacePath}/${repo}`;

@@ -30,22 +30,27 @@ If the config has provider, SSH string is returned. If the config has no provide
 
 ### Sample SSH Config
 
-**Where**
-~/.ssh/config
+##### Setup
 
-**What**
+* File Path
 
-```
-Host myProviderAlias
-  HostName github.com
-  User git
-  IdentityFile ~/.ssh/myPrivateKey
-```
+  > ~/.ssh/config
 
-#### without provider
+* Content
 
-> https://github.com/account/repository
+  > ```
+  > Host myProviderAlias
+  >  HostName github.com
+  >  User git
+  >  IdentityFile ~/.ssh/myPrivateKey
+  > ```
 
-##### with `provider: myProviderAlias`
+##### Rendered by getRemoteString
 
-> git@myProviderAlias:account/repository
+* without provider
+
+  > https://github.com/account/repository
+
+* with `provider: myProviderAlias`
+
+  > git@myProviderAlias:account/repository
