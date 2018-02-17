@@ -1,6 +1,6 @@
 {
   "name": "repo-genesis",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "main": "index.js",
   "license": "MIT",
   "engines": {
@@ -29,7 +29,11 @@
     "verbose": true,
     "bail": false,
     "collectCoverage": false,
-    "modulePathIgnorePatterns": ["sandbox", "node_modules", "repospace.test.js"]
+    "modulePathIgnorePatterns": [
+      "sandbox",
+      "node_modules",
+      "repospace.test.js"
+    ]
   },
   "babel": {
     "presets": [
