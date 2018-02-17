@@ -1,5 +1,6 @@
 {
   "name": "repo-genesis",
+  "description": "Organize multiple repositories into monolith structure",
   "version": "0.5.6",
   "main": "index.js",
   "license": "MIT",
@@ -29,11 +30,7 @@
     "verbose": true,
     "bail": false,
     "collectCoverage": false,
-    "modulePathIgnorePatterns": [
-      "sandbox",
-      "node_modules",
-      "repospace.test.js"
-    ]
+    "modulePathIgnorePatterns": ["sandbox", "node_modules", "repospace.test.js"]
   },
   "babel": {
     "presets": [
