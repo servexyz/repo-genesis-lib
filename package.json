@@ -6,6 +6,10 @@
   "engines": {
     "node": "9.3.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/servexyz/repo-genesis"
+  },
   "dependencies": {
     "chalk": "^2.3.0",
     "fs-extra": "^5.0.0",
@@ -25,11 +29,7 @@
     "verbose": true,
     "bail": false,
     "collectCoverage": false,
-    "modulePathIgnorePatterns": [
-      "sandbox",
-      "node_modules",
-      "repospace.test.js"
-    ]
+    "modulePathIgnorePatterns": ["sandbox", "node_modules", "repospace.test.js"]
   },
   "babel": {
     "presets": [
