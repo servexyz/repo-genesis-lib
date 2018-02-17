@@ -1,6 +1,6 @@
 # Repo-Genesis
 
-> Convert config into library scaffolding
+> Organize multiple repositories into monolith structure
 
 [![Build Status](https://travis-ci.org/servexyz/repo-genesis.svg?branch=master)](https://travis-ci.org/servexyz/repo-genesis)
 
