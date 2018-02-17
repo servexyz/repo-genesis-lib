@@ -21,6 +21,8 @@ await init(config);
 
 > Full config: [sample.config.js](./tests/sample.config.js)
 
+Note: Doc links only work from Github (do 404 from npmjs.com)
+
 #### Config
 
 ```js
@@ -85,4 +87,4 @@ const config = {
 
   > Errors & notes about fixing them
 
-  ### Related
+### Related
