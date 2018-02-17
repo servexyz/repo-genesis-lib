@@ -4,12 +4,10 @@ node_js:
   - "9.3.0"
 before_install:
   - npm i -g npm
-  - brew install git
 install:
   - npm install
 script:
   - npm test
 cache:
   directories:
-    - "node_modules"%                                                                                           
-    - $HOME/Library/Caches/Homebrew 
+    - "node_modules"

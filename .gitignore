@@ -1,5 +1,6 @@
 .DS_Store
 tests/sandbox/*
+.dockerignore
 # Logs
 logs
 *.log
