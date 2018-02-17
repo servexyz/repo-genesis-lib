@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs-extra");
 const clone = require("git-clone");
-const empty = require("is-empty");
 const log = console.log;
 const chalk = require("chalk");
 

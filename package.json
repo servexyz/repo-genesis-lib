@@ -7,13 +7,16 @@
     "node": "9.3.0"
   },
   "dependencies": {
-    "bluebird": "^3.5.1",
     "chalk": "^2.3.0",
-    "dotenv": "^4.0.0",
     "fs-extra": "^5.0.0",
-    "git-clone": "^0.1.0",
-    "is-empty": "^1.2.0",
-    "rimraf": "^2.6.2"
+    "git-clone": "^0.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.1.0",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^22.1.2"
   },
   "scripts": {
     "test": "jest"
@@ -22,18 +25,7 @@
     "verbose": true,
     "bail": false,
     "collectCoverage": false,
-    "modulePathIgnorePatterns": [
-      "sandbox",
-      "node_modules",
-      "repospace.test.js"
-    ]
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-jest": "^22.1.0",
-    "babel-preset-env": "^1.6.1",
-    "jest": "^22.1.2"
+    "modulePathIgnorePatterns": ["sandbox", "node_modules", "repospace.test.js"]
   },
   "babel": {
     "presets": [
