@@ -86,3 +86,6 @@ const config = {
   > Errors & notes about fixing them
 
 ### Related
+
+* `@servexyz/repo-genesis-cli`
+  > [@github](https://github.com/servexyz/repo-genesis-cli) | [@npm](https://npmjs.com/package/repo-genesis-cli)
