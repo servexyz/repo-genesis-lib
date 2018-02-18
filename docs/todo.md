@@ -37,6 +37,7 @@
 * [x] Set default GIT_PROVIDER to github (currently alechp)
 * [ ] Create CLI
 * [x] Move .env path out of header (so TOC isn't messed up)
+* [ ] Update init() to take string instead of require
 
 ---
 
