@@ -1,7 +1,7 @@
 {
   "name": "repo-genesis",
   "description": "Organize multiple repositories into monolith structure",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "main": "index.js",
   "license": "MIT",
   "engines": {
