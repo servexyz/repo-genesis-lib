@@ -8,7 +8,7 @@ beforeAll(() => {
   fs.removeSync(sandbox);
 });
 
-test("repos are cloned", async () => {
+test.skip("repos are cloned", async () => {
   const { init } = require("../index.js");
   const { config } = require("./sample.config.js");
   let ret = await init(config);
