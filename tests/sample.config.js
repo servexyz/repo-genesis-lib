@@ -1,13 +1,21 @@
 const path = require("path");
-const config = {
+const configPlural = {
   repospacePath: path.join(__dirname, "../sandbox"),
   repositories: [
     {
-      servexyz: "npm-starter"
+      servexyz: "node-starter"
     },
     {
-      servexyz: "cli-starter"
+      servexyz: "npm-starter-sample-module"
     }
   ]
 };
-module.exports = { config };
+const configSingular = {
+  repospacePath: path.join(__dirname, "../sandbox"),
+  repositories: [
+    {
+      servexyz: "npm-starter-sample-module"
+    }
+  ]
+};
+module.exports = { configSingular, configPlural };
