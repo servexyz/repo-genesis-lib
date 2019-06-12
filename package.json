@@ -19,27 +19,29 @@
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
+    "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
-    "babel-jest": "^24.8.0",
-    "jest": "^24.8.0"
+    "@babel/register": "^7.4.4",
+    "ava": "^2.1.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "ava"
   },
-  "jest": {
-    "verbose": true,
-    "bail": false,
-    "collectCoverage": false,
-    "modulePathIgnorePatterns": [
-      "sandbox",
-      "node_modules",
-      "repospace.test.js"
-    ]
+  "ava": {
+    "files": [
+      "!npm-starter-sample-module/**/*.js",
+      "tests/**/*.test.js"
+    ],
+    "require": [
+      "@babel/register",
+      "@babel/polyfill"
+    ],
+    "verbose": true
   },
   "babel": {
     "presets": [
       [
-        "env",
+        "@babel/preset-env",
         {
           "targets": {
             "node": "9.3.0"
