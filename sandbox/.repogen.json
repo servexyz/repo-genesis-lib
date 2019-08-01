@@ -1,0 +1,24 @@
+{
+  "dir": ".",
+  "repos": [
+    {
+      "github": {
+        "servexyz": "get-pkg-prop"
+      },
+      "dir": "modules",
+      "sym": "gpp"
+    },
+    {
+      "github": {
+        "servexyz": "tacker"
+      },
+      "dir": "modules",
+      "sym": "tkr"
+    },
+    {
+      "github": {
+        "servexyz": "node-starter"
+      }
+    }
+  ]
+}
