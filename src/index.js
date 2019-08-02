@@ -10,14 +10,12 @@ let inlineConfig = {
       sym: "gpp"
     },
     {
-      remote: "github.com",
       space: "servexyz",
       repo: "tacker",
       dir: "modules",
       sym: "tkr"
     },
     {
-      remote: "github.com",
       servexyz: "node-starter"
     }
   ]
