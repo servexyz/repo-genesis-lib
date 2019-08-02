@@ -2,23 +2,20 @@
   "dir": ".",
   "repos": [
     {
-      "github": {
-        "servexyz": "get-pkg-prop"
-      },
+      "remote": "github.com",
+      "space": "servexyz",
+      "repo": "get-pkg-prop",
       "dir": "modules",
       "sym": "gpp"
     },
     {
-      "github": {
-        "servexyz": "tacker"
-      },
+      "space": "servexyz",
+      "repo": "tacker",
       "dir": "modules",
       "sym": "tkr"
     },
     {
-      "github": {
-        "servexyz": "node-starter"
-      }
+      "servexyz": "node-starter"
     }
   ]
 }

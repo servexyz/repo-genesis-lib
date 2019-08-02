@@ -21,6 +21,11 @@ let inlineConfig = {
   ]
 };
 
+// dir === repospacePath (need to check both)
+//repos[0] == all options
+//repos[1] == some options
+//repos[2] == retro options; backwards support
+
 console.log(`Hello from node-starter!`);
 parse(inlineConfig);
 /*
