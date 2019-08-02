@@ -34,11 +34,15 @@ import { pathsExist } from "paths-exist";
   ? Need to use local config database. 
   ? Otherwise, when doing look ups there will be failures if the user changes their config
 */
-async function parse(oConfig) {
-  function getPlatform() {}
-  function getNamespace() {}
-  function getRepository() {}
-  function getRemoteURI() {}
-  function getSymlinkPath() {}
-  function getRepositoryPath() {}
+
+export async function parse(oConfig) {
+  oConfig.repos.map(oRepo => {
+    let { remote, space, repo, dir, sym } = oRepo;
+    getRemoteString(remote, space, repo);
+  });
+  function getRemoteString(szRemote, szWorkspace, szRepository) {
+    //TODO: Check whether provider is set
+    return `https://${szRemote}/${szWorkspace}:${szRepository}`;
+  }
+  function getSymlinkCommand(szDirectory, szSymlink) {}
 }
