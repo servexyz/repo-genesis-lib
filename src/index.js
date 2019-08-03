@@ -3,7 +3,7 @@ let inlineConfig = {
   dir: ".",
   repos: [
     {
-      remote: "github.com",
+      plat: "github.com",
       space: "servexyz",
       repo: "get-pkg-prop",
       dir: "modules",
