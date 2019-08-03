@@ -22,24 +22,34 @@ export async function readConfig(szPath) {
 export async function parse(oConfig) {
   let rootDir = oConfig.dir;
   return oConfig.repos
-    .reduce((oNewConfig, oRepository) => {
-      let {
-        plat = "github.com",
-        space,
-        repo,
-        dir = rootDir,
-        sym = repo
-      } = oRepository;
-      printMirror({ sym }, "green", "grey");
-      printMirror({ rootDir }, "cyan", "grey");
-      let cloneRemoteString = getRemoteString(plat, space, repo);
-      printMirror({ cloneRemoteString }, "yellow", "grey");
-      Object.assign(oNewConfig, {
-        uri: cloneRemoteString,
-        sym,
-        dir
-      });
-    }, {})
+    .map(oRepository => {
+      //TODO: Add regression check (ie. if only 1 key/value pair)
+      if (Object.keys(oRepository).length > 1) {
+        let {
+          plat = "github.com",
+          space,
+          repo,
+          dir = rootDir,
+          sym = repo
+        } = oRepository;
+        printMirror({ sym }, "green", "grey");
+        printMirror({ rootDir }, "cyan", "grey");
+        let cloneRemoteString = getRemoteString(plat, space, repo);
+        printMirror({ cloneRemoteString }, "yellow", "grey");
+        return {
+          uri: cloneRemoteString,
+          sym,
+          dir
+        };
+      } else {
+        let space = Object.keys(oRepository); //key
+        let repo = oRepository[space]; //value
+        printMirror({ space }, "yellow", "grey");
+        printMirror({ repo }, "yellow", "grey");
+        let cloneRemoteString = getRemoteString("github.com", space, repo);
+        return { uri: cloneRemoteString, sym: repo };
+      }
+    })
     .map(o => {
       printMirror({ o }, "blue", "grey");
       return o;
@@ -48,7 +58,7 @@ export async function parse(oConfig) {
 function getRemoteString(szPlatform, szWorkspace, szRepository) {
   //TODO: Check whether provider is set
   if (is.nullOrUndefined(process.env.rgenHost)) {
-    return `https://${szPlatform}/${szWorkspace}:${szRepository}`;
+    return `https://${szPlatform}/${szWorkspace}/${szRepository}`;
   } else {
     return `git@${process.env.rgenHost}:${szWorkspace}/${szRepository}`;
   }

@@ -7,16 +7,20 @@ import { printMirror } from "tacker";
 const configFile = path.resolve(__dirname, "../", "sandbox", ".repogen.json");
 
 test.before(t => {
-  process.env.rgenHost = "alechp";
+  process.env.rgenHost = undefined; // --> Will not work
+  process.env.rgenHost = null; // --> Will not work
+  delete process.env.rgenHost; // --> Works as expected; use this to ensure rgenHost isn't set
 });
 
 test(`parsing`, async t => {
   try {
     let config = await readConfig(configFile);
-    printMirror({ config }, "orange", "grey");
+    printMirror({ config }, "magenta", "grey");
     let parsed = await parse(config);
     printMirror({ parsed }, "magenta", "grey");
-    t.true(is.plainObject(parsed));
+    let x = is.array(parsed);
+    printMirror({ x }, "magenta", "grey");
+    t.true(x);
   } catch (e) {
     t.fail(e);
   }

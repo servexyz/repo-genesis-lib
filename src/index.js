@@ -1,25 +1,25 @@
-import { parse } from "./parse";
-let inlineConfig = {
-  dir: ".",
-  repos: [
-    {
-      plat: "github.com",
-      space: "servexyz",
-      repo: "get-pkg-prop",
-      dir: "modules",
-      sym: "gpp"
-    },
-    {
-      space: "servexyz",
-      repo: "tacker",
-      dir: "modules",
-      sym: "tkr"
-    },
-    {
-      servexyz: "node-starter"
-    }
-  ]
-};
+// import { parse } from "./parse";
+// let inlineConfig = {
+//   dir: ".",
+//   repos: [
+//     {
+//       plat: "github.com",
+//       space: "servexyz",
+//       repo: "get-pkg-prop",
+//       dir: "modules",
+//       sym: "gpp"
+//     },
+//     {
+//       space: "servexyz",
+//       repo: "tacker",
+//       dir: "modules",
+//       sym: "tkr"
+//     },
+//     {
+//       servexyz: "node-starter"
+//     }
+//   ]
+// };
 
 // dir === repospacePath (need to check both)
 //repos[0] == all options
