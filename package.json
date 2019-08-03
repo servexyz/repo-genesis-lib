@@ -36,7 +36,10 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
+    "@sindresorhus/is": "^1.0.0",
+    "chalk": "^2.4.2",
     "execa": "^2.0.3",
+    "fs-extra": "^8.1.0",
     "nommer": "^0.2.2",
     "paths-exist": "^0.2.3",
     "tacker": "^0.2.9"
@@ -81,7 +84,8 @@
       }
     },
     "files": [
-      "tests/**/*"
+      "tests/**/*",
+      "!tests/clone.test.js"
     ],
     "verbose": true
   }

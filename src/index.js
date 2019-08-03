@@ -27,7 +27,7 @@ let inlineConfig = {
 //repos[2] == retro options; backwards support
 
 console.log(`Hello from node-starter!`);
-parse(inlineConfig);
+// parse(inlineConfig);
 /*
  * Parse
  * Sync
