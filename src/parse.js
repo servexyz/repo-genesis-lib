@@ -6,9 +6,9 @@ import chalk from "chalk";
 
 // ? What if I just created a script which marshalled old repogen config files to new ones?
 export async function readConfig(szPath) {
-  //TODO: Enable repogen.json
-  //TODO: Enable .repogen.js
-  //TODO: Enable package.json
+  //TODO: Enable repogen.json --> monolith libs (ie. "container" monolith)
+  //TODO: Enable .repogen.js --> backwards compatability
+  //TODO: Enable package.json --> disadvantage being requires npm; useful only for packages
   try {
     if (await pathsExist(szPath)) {
       return await fs.readJson(szPath);
@@ -19,7 +19,23 @@ export async function readConfig(szPath) {
     throw new Error(`Could not ${chalk.underline("read")} config`);
   }
 }
-export async function parse(oConfig) {
+//TODO: Determine which is the source of the config
+/* 
+? Order of priority:
+1. Set via CLI flag
+2. .repogen.json exists
+3. package.json exists
+4. e
+
+*/
+//TODO: Try to set process.env.rgenHost
+// - .repogen.js: "provider"
+// - .repogen.json: "provider"
+// - .package.json: "provider"
+// - directly via CLI flag (ie. options)
+
+export async function parse(oConfig, oCliOptions) {
+  //TODO: Use options as if CLI was passing information
   let rootDir = oConfig.dir;
   return oConfig.repos
     .map(oRepository => {
@@ -56,7 +72,6 @@ export async function parse(oConfig) {
     });
 }
 function getRemoteString(szPlatform, szWorkspace, szRepository) {
-  //TODO: Check whether provider is set
   if (is.nullOrUndefined(process.env.rgenHost)) {
     return `https://${szPlatform}/${szWorkspace}/${szRepository}`;
   } else {
