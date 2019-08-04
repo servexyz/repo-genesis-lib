@@ -1,7 +1,7 @@
 {
-  "name": "node-starter",
+  "name": "repo-genesis",
   "version": "1.0.0",
-  "description": "starting point for node modules and servers",
+  "description": "monolith maker; uses symlinks instead of submodules",
   "main": "build/main.js",
   "license": "MIT",
   "keywords": [

@@ -7,8 +7,8 @@ import { printMirror } from "tacker";
 const configFile = path.resolve(__dirname, "../", "sandbox", ".repogen.json");
 
 test.before(t => {
-  process.env.rgenHost = undefined; // --> Will not work
-  process.env.rgenHost = null; // --> Will not work
+  process.env.rgenHost = undefined; // --> Will not work; "undefined" not undefined
+  process.env.rgenHost = null; // --> Will not work; "null" not null
   delete process.env.rgenHost; // --> Works as expected; use this to ensure rgenHost isn't set
 });
 
