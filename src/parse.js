@@ -63,7 +63,7 @@ export async function parse(oConfig, oCliOptions) {
         printMirror({ space }, "yellow", "grey");
         printMirror({ repo }, "yellow", "grey");
         let cloneRemoteString = getRemoteString("github.com", space, repo);
-        return { uri: cloneRemoteString, sym: repo };
+        return { uri: cloneRemoteString, sym: repo, dir: rootDir };
       }
     })
     .map(o => {
