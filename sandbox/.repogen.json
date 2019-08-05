@@ -1,5 +1,5 @@
 {
-  "dir": ".",
+  "dir": "sandbox",
   "repos": [
     {
       "plat": "github.com",
@@ -11,7 +11,6 @@
     {
       "space": "servexyz",
       "repo": "tacker",
-      "dir": "modules",
       "sym": "tkr"
     },
     {

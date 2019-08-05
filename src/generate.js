@@ -41,8 +41,12 @@ export async function genRepository(szRepoURIToClone, szWhereToCloneRepoTo) {
   }
 }
 export async function genSymlink(szRepoPath, szSymlinkPath) {
+  let name = szSymlinkPath.substring(
+    szSymlinkPath.lastIndexOf("/"),
+    szSymlinkPath.length
+  );
   try {
-    await execa("ln", ["-s", szRepoPath, szSymlinkPath]);
+    await execa("ln", ["-s", szRepoPath, name], szSymlinkPath);
   } catch (e) {
     return new Error(e);
   }
@@ -71,6 +75,7 @@ async function cloneRepository(szURI, cwd) {
 
 export async function cloneRepositories(arrURIs) {
   // [ { uri, sym, dir }, { uri, sym, dir }]
+  //TODO: Ensure .repositories directory
   let cloneRes = {};
   for await (let uri of arrURIs) {
     try {
