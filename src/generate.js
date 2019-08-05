@@ -1,5 +1,7 @@
+const log = console.log;
 import execa from "execa";
-import { printMirror } from "tacker";
+import { printMirror, printLine } from "tacker";
+import is from "tacker/node_modules/@sindresorhus/is/dist";
 
 export async function rgGen(oWhat, szHow) {
   try {
@@ -41,11 +43,32 @@ export async function genRepository(szRepoURIToClone) {
     return new Error(e);
   }
 }
-export async function genSymlink(szRepoPath, szSymlinkPath) {
-  let name = szSymlinkPath.substring(
-    szSymlinkPath.lastIndexOf("/"),
-    szSymlinkPath.length
+function getStringAfterChar(szString, szCharacter) {
+  return szString.substring(
+    szString.lastIndexOf(szCharacter) + 1,
+    szString.length
   );
+}
+export async function genSymlink(szRepoPath, szSymlinkPath) {
+  let name;
+  if (is.nullOrUndefined(szSymlinkPath)) {
+    printLine("blue");
+    log(`null or undefined`);
+    printLine("blue");
+    name = getStringAfterChar(szRepoPath, "/");
+    printMirror({ name }, "yellow", "grey");
+  } else {
+    printMirror({ szSymlinkPath }, "yellow", "grey");
+    printLine("blue");
+    log(`else`);
+    printLine("blue");
+    name = getStringAfterChar(szSymlinkPath, "/");
+    printMirror({ name }, "yellow", "grey");
+    // name = szSymlinkPath.substring(
+    //   szSymlinkPath.lastIndexOf("/"),
+    //   szSymlinkPath.length
+    // );
+  }
   printMirror({ name }, "red", "grey");
   printMirror({ szSymlinkPath }, "red", "grey");
   try {

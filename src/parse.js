@@ -43,9 +43,8 @@ export async function parseConfig(oConfig, oCliOptions) {
   let repoRootDir = path.join(rootDir, ".repositories");
   process.env.rgRepoRootDir = repoRootDir;
   fs.ensureDir(repoRootDir);
-  // if(!await pathsExist())
   return oConfig.repos
-    .map(oRepository => {
+    .map(async oRepository => {
       //TODO: Add regression check (ie. if only 1 key/value pair)
       if (Object.keys(oRepository).length > 1) {
         // * Modern config
@@ -59,7 +58,7 @@ export async function parseConfig(oConfig, oCliOptions) {
         printMirror({ sym }, "green", "grey");
         printMirror({ dir }, "red", "grey");
         let cloneRemoteString = getRemoteString(plat, space, repo);
-        let symlinkPath = getSymlinkPath(sym, dir);
+        let symlinkPath = await getSymlinkPath(sym, dir);
         let repositoryPath = getRepositoryPath(rootDir, repo);
         printMirror({ cloneRemoteString }, "green", "grey");
         printMirror({ symlinkPath }, "green", "grey");
@@ -71,13 +70,15 @@ export async function parseConfig(oConfig, oCliOptions) {
         };
       } else {
         // * Backwards compatibility
+        //TODO: Fix symlink path for this version
         let space = Object.keys(oRepository); //key
         let repo = oRepository[space]; //value
         printMirror({ space }, "yellow", "grey");
         printMirror({ repo }, "yellow", "grey");
         let cloneRemoteString = getRemoteString("github.com", space, repo);
-        let symlinkPath = getSymlinkPath(repo);
-        let repositoryPath = getSymlinkPath(repo);
+        //TODO: use repositoryPath as arg in getSymlinkPath
+        let symlinkPath = await getSymlinkPath(repo);
+        let repositoryPath = getRepositoryPath(rootDir, repo);
         printMirror({ cloneRemoteString }, "cyan", "grey");
         printMirror({ symlinkPath }, "cyan", "grey");
         printMirror({ repositoryPath }, "cyan", "grey");
@@ -114,12 +115,14 @@ function getRemoteString(szPlatform, szWorkspace, szRepository) {
     return `git@${process.env.rgenHost}:${szWorkspace}/${szRepository}`;
   }
 }
-function getSymlinkPath(szNameOfSym, szOptionalSubdir = "") {
+async function getSymlinkPath(szNameOfSym, szOptionalSubdir = "") {
   //TODO: FIX
+  //TODO: Replace process.env.rgRootDir with param
   if (is.nullOrUndefined(szNameOfSym)) return null;
-  let rootPath = path.join(process.env.rgRootDir, szOptionalSubdir);
-  printMirror({ rootPath }, "cyan", "grey");
-  let joinedSymlinkPath = path.join(rootPath, szNameOfSym);
+  let symlinkRootDir = path.join(process.env.rgRootDir, szOptionalSubdir);
+  await fs.ensureDir(symlinkRootDir);
+  printMirror({ rootPath: symlinkRootDir }, "cyan", "grey");
+  let joinedSymlinkPath = path.join(symlinkRootDir, szNameOfSym);
   printMirror({ joinedSymlinkPath }, "magenta", "grey");
   return joinedSymlinkPath;
 }
