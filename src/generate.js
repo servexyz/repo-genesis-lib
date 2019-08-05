@@ -33,9 +33,10 @@ async function genAll(oWhatToGenerate) {
     return new Error(e);
   }
 }
-export async function genRepository(szRepoURIToClone, szWhereToCloneRepoTo) {
+export async function genRepository(szRepoURIToClone) {
+  printMirror({ szRepoURIToClone }, "red", "grey");
   try {
-    await cloneRepository(szRepoURIToClone, szWhereToCloneRepoTo);
+    await cloneRepository(szRepoURIToClone);
   } catch (e) {
     return new Error(e);
   }
@@ -45,6 +46,7 @@ export async function genSymlink(szRepoPath, szSymlinkPath) {
     szSymlinkPath.lastIndexOf("/"),
     szSymlinkPath.length
   );
+  printMirror({ name }, "red", "grey");
   try {
     await execa("ln", ["-s", szRepoPath, name], szSymlinkPath);
   } catch (e) {
@@ -65,8 +67,10 @@ export async function genDependency(szWhereToInstall) {
 // async function genSymlinks(oWhatToGenerate) {}
 // async function genDependencies(oWhatToGenerate) {}
 
-async function cloneRepository(szURI, cwd) {
-  return await execa("git", ["clone", szURI], { cwd });
+async function cloneRepository(szURI) {
+  return await execa("git", ["clone", szURI], {
+    cwd: process.env.rgRepoRootDir
+  });
 }
 
 // https://github.com/servexyz/node-starter

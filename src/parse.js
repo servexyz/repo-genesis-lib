@@ -38,10 +38,12 @@ export async function readConfig(szPath) {
 export async function parseConfig(oConfig, oCliOptions) {
   //TODO: Use options as if CLI was passing information
   let rootDir = path.join(process.cwd(), oConfig.dir);
+  printMirror({ rootDir }, "red", "grey");
   let repoRootDir = path.join(rootDir, ".repositories");
-  await fs.ensureDir(repoRootDir);
+  process.env.rgRepoRootDir = repoRootDir;
+  fs.ensureDir(repoRootDir);
   // if(!await pathsExist())
-  return oConfig.repos.map(async oRepository => {
+  return await oConfig.repos.map(async oRepository => {
     //TODO: Add regression check (ie. if only 1 key/value pair)
     if (Object.keys(oRepository).length > 1) {
       // * Modern config
@@ -49,16 +51,13 @@ export async function parseConfig(oConfig, oCliOptions) {
         plat = "github.com",
         space,
         repo,
-        dir = rootDir,
+        dir = "",
         sym = repo
       } = oRepository;
-      let joinedDir = path.join(rootDir, dir);
-      await fs.ensureDir(joinedDir);
       printMirror({ sym }, "green", "grey");
       printMirror({ dir }, "red", "grey");
-      printMirror({ joinedDir }, "red", "grey");
       let cloneRemoteString = getRemoteString(plat, space, repo);
-      let symlinkPath = getSymlinkPath(sym, joinedDir);
+      let symlinkPath = getSymlinkPath(sym, dir);
       let repositoryPath = getRepositoryPath(rootDir, repo);
       printMirror({ cloneRemoteString }, "green", "grey");
       printMirror({ symlinkPath }, "green", "grey");
