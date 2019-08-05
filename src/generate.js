@@ -21,33 +21,47 @@ async function genAll(oWhatToGenerate) {
   try {
     for await (let what of oWhatToGenerate) {
       let { repoRemoteUri, symPath, repoPath } = what;
-      // printMirror({ what }, "magenta", "grey");
+      await genRepository(repoRemoteUri, repoPath);
+      await genSymlink(repoPath, symPath);
+      await genDependency(repoPath);
       printMirror({ repoRemoteUri }, "cyan", "grey");
       printMirror({ symPath }, "cyan", "grey");
       printMirror({ repoPath }, "cyan", "grey");
-      /*
-        let fullyParsedConfig = [
-          {
-            uri: "",
-            repoPath: "",
-            symPath: ""
-          }
-        ];
-      */
     }
     return true;
   } catch (e) {
     return new Error(e);
   }
 }
-async function genRepositories(oWhatToGenerate) {}
-async function genRepository(oWhatToGenerate) {}
-async function genSymlinks(oWhatToGenerate) {}
-async function genSymlink(oWhatToGenerate) {}
-async function genDependencies(oWhatToGenerate) {}
-async function genDependency(oWhatToGenerate) {}
+export async function genRepository(szRepoURIToClone, szWhereToCloneRepoTo) {
+  try {
+    await cloneRepository(szRepoURIToClone, szWhereToCloneRepoTo);
+  } catch (e) {
+    return new Error(e);
+  }
+}
+export async function genSymlink(szRepoPath, szSymlinkPath) {
+  try {
+    await execa("ln", ["-s", szRepoPath, szSymlinkPath]);
+  } catch (e) {
+    return new Error(e);
+  }
+}
+export async function genDependency(szWhereToInstall) {
+  //TODO: Add option to allow choosing package manager (npm, yarn, etc)
+  try {
+    await execa("npm", ["install"], { cwd: szWhereToInstall });
+    return true;
+  } catch (e) {
+    return new Error(e);
+  }
+}
 
-export async function cloneRepository(szURI, cwd) {
+// async function genRepositories(oWhatToGenerate) {}
+// async function genSymlinks(oWhatToGenerate) {}
+// async function genDependencies(oWhatToGenerate) {}
+
+async function cloneRepository(szURI, cwd) {
   return await execa("git", ["clone", szURI], { cwd });
 }
 

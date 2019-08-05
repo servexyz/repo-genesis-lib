@@ -11,7 +11,5 @@ test(`${chalk.blue("rgGen(")}${chalk.cyan("all")}${chalk.blue(
 )} :: returns true `, async t => {
   let config = await readConfig(configFile);
   let parsedConfig = await parseConfig(config);
-  let x = await rgGen(parsedConfig, "all");
-  printMirror({ x }, "blueBright", "grey");
-  t.true(x);
+  t.true(await rgGen(parsedConfig, "all"));
 });
