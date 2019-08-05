@@ -1,3 +1,4 @@
+const log = console.log;
 import { rgGen } from "../src/generate";
 import test from "ava";
 import chalk from "chalk";

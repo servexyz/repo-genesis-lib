@@ -1,9 +1,17 @@
+const log = console.log;
 import test from "ava";
 import { readConfig, parseConfig } from "../src/parse";
 import path from "path";
 import is from "@sindresorhus/is";
 import { printMirror } from "tacker";
 
+// repositoryPath: /Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/sandbox/.repositories/get-pkg-prop
+// c { repoRemoteUri: 'https://github.com/servexyz/get-pkg-prop',
+//   symPath:
+//    '/Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/sandbox/modules/gpp',
+//   repoPath:
+//    '/Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/sandbox/.repositories/get-pkg-prop' }
+// c.is Object
 const configFile = path.resolve(__dirname, "../", "sandbox", ".repogen.json");
 
 test.before(t => {
@@ -18,10 +26,21 @@ test(`parsing`, async t => {
     let config = await readConfig(configFile);
     printMirror({ config }, "magenta", "grey");
     let parsed = await parseConfig(config);
-    printMirror({ parsed }, "magenta", "grey");
-    let x = is.array(parsed);
-    printMirror({ x }, "magenta", "grey");
-    t.true(x);
+    t.true(is.array(parsed));
+    for await (let c of parsed) {
+      let { repoRemoteUri, symPath, repoPath } = await c;
+      printMirror({ repoRemoteUri }, "magenta", "grey");
+      printMirror({ symPath }, "magenta", "grey");
+      printMirror({ repoPath }, "magenta", "grey");
+      // log("c", await c);
+      // log("c.is", is(c));
+      log("is(repoRemoteUri)", is(repoRemoteUri));
+      log("is(symPath)", is(symPath));
+      log("is(repoPath)", is(repoPath));
+      t.true(is.string(repoRemoteUri));
+      t.true(is.string(symPath));
+      t.true(is.string(repoPath));
+    }
   } catch (e) {
     t.fail(e);
   }

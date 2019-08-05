@@ -23,7 +23,7 @@ async function genAll(oWhatToGenerate) {
   try {
     for await (let what of oWhatToGenerate) {
       let { repoRemoteUri, symPath, repoPath } = what;
-      await genRepository(repoRemoteUri, repoPath);
+      // await genRepository(repoRemoteUri, repoPath);
       await genSymlink(repoPath, symPath);
       await genDependency(repoPath);
       // printMirror({ repoRemoteUri }, "cyan", "grey");
@@ -64,10 +64,6 @@ export async function genSymlink(szRepoPath, szSymlinkPath) {
     printLine("blue");
     name = getStringAfterChar(szSymlinkPath, "/");
     printMirror({ name }, "yellow", "grey");
-    // name = szSymlinkPath.substring(
-    //   szSymlinkPath.lastIndexOf("/"),
-    //   szSymlinkPath.length
-    // );
   }
   printMirror({ name }, "red", "grey");
   printMirror({ szSymlinkPath }, "red", "grey");
