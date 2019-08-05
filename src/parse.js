@@ -42,6 +42,7 @@ export async function parseConfig(oConfig, oCliOptions) {
     .map(oRepository => {
       //TODO: Add regression check (ie. if only 1 key/value pair)
       if (Object.keys(oRepository).length > 1) {
+        // * Modern config
         let {
           plat = "github.com",
           space,
@@ -64,8 +65,7 @@ export async function parseConfig(oConfig, oCliOptions) {
           repoPath: repositoryPath
         };
       } else {
-        // ? I think this is wrong.
-        // ? Repos should be checking length for backwards compat
+        // * Backwards compatibility
         let space = Object.keys(oRepository); //key
         let repo = oRepository[space]; //value
         printMirror({ space }, "yellow", "grey");
@@ -119,4 +119,3 @@ function getRepositoryPath(szNameOfRepo) {
   let repositoriesPath = path.join(process.cwd(), ".repositories");
   return path.join(repositoriesPath, szNameOfRepo);
 }
-// function getSymlinkCommand(szDirectory, szSymlink) {}
