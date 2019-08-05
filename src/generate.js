@@ -24,9 +24,9 @@ async function genAll(oWhatToGenerate) {
       await genRepository(repoRemoteUri, repoPath);
       await genSymlink(repoPath, symPath);
       await genDependency(repoPath);
-      printMirror({ repoRemoteUri }, "cyan", "grey");
-      printMirror({ symPath }, "cyan", "grey");
-      printMirror({ repoPath }, "cyan", "grey");
+      // printMirror({ repoRemoteUri }, "cyan", "grey");
+      // printMirror({ symPath }, "cyan", "grey");
+      // printMirror({ repoPath }, "cyan", "grey");
     }
     return true;
   } catch (e) {
@@ -47,8 +47,9 @@ export async function genSymlink(szRepoPath, szSymlinkPath) {
     szSymlinkPath.length
   );
   printMirror({ name }, "red", "grey");
+  printMirror({ szSymlinkPath }, "red", "grey");
   try {
-    await execa("ln", ["-s", szRepoPath, name], szSymlinkPath);
+    await execa("ln", ["-s", szRepoPath, szSymlinkPath]);
   } catch (e) {
     return new Error(e);
   }
