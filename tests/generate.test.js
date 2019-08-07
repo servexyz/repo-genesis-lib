@@ -10,7 +10,9 @@ const configFile = path.resolve(__dirname, "../", "sandbox", ".repogen.json");
 test.before(t => {
   process.env.rgenHost = "alechp";
 });
-test(`${chalk.blue("rgGen(")}${chalk.cyan("all")}${chalk.blue(
+
+//* Should work, just don't want to run everytime
+test.skip(`${chalk.blue("rgGen(")}${chalk.cyan("all")}${chalk.blue(
   ")"
 )} :: returns true `, async t => {
   let config = await readConfig(configFile);

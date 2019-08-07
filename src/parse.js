@@ -1,9 +1,45 @@
+import fs from "fs-extra";
+import path from "path";
+import chalk from "chalk";
+import is from "@sindresorhus/is";
 import { pathsExist } from "paths-exist";
 import { printMirror } from "tacker";
-import is from "@sindresorhus/is";
-import fs from "fs-extra";
-import chalk from "chalk";
-import path from "path";
+import { getPkgProp } from "get-pkg-prop";
+
+export async function chooseConfig() {
+  const { rgConfigPath } = process.env;
+  const repogenJsonPath = path.join(process.cwd(), "repogen.json");
+  if (is.nullOrUndefined(rgConfigPath)) {
+    if (!(await pathsExist(repogenJsonPath))) {
+      if (!(await getPkgProp("repogen"))) {
+        const { config } = require(".repogen.js");
+        return modernizeOldConfig(config);
+      } else {
+        return await getPkgProp("repogen");
+      }
+    } else {
+      return await readConfig(repogenJsonPath);
+    }
+  } else {
+    return await readConfig(rgConfigPath);
+  }
+}
+export function modernizeOldConfig(oOldConfig) {
+  //TODO: Convert .repogen.js -> .repogen.json
+  let oNewConfig = {};
+  for (let [k, v] of Object.entries(oOldConfig)) {
+    if (k === "provider") {
+      process.env.rgenHost = v;
+    }
+    if (k === "repospacePath") {
+      Object.assign(oNewConfig, { dir: v });
+    }
+    if (k === "repositories") {
+      Object.assign(oNewConfig, { repos: v });
+    }
+  }
+  return oNewConfig;
+}
 
 // ? What if I just created a script which marshalled old repogen config files to new ones?
 export async function readConfig(szPath) {
@@ -36,6 +72,12 @@ export async function readConfig(szPath) {
 // - .repogen.json: "provider"
 // - .package.json: "provider"
 // - directly via CLI flag (ie. options)
+
+/*
+TODO: Breakup return oConfig.repos.map into two functions:
+? -- create parseOldConfig function (.js)
+? -- create parseModernConfig function (.json)
+*/
 
 export async function parseConfig(oConfig, oCliOptions) {
   //TODO: Use options as if CLI was passing information
@@ -113,7 +155,6 @@ function getRemoteString(szPlatform, szWorkspace, szRepository) {
   }
 }
 async function getSymlinkPath(szNameOfSym, szOptionalSubdir = "") {
-  //TODO: FIX
   //TODO: Replace process.env.rgRootDir with param
   if (is.nullOrUndefined(szNameOfSym)) return null;
   let symlinkRootDir = path.join(process.env.rgRootDir, szOptionalSubdir);

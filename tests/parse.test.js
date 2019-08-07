@@ -1,6 +1,7 @@
 const log = console.log;
 import test from "ava";
-import { readConfig, parseConfig } from "../src/parse";
+import chalk from "chalk";
+import { readConfig, parseConfig, modernizeOldConfig } from "../src/parse";
 import path from "path";
 import is from "@sindresorhus/is";
 import { printMirror } from "tacker";
@@ -14,20 +15,15 @@ test.before(t => {
   delete process.env.rgenHost; // --> Works as expected; use this to ensure rgenHost isn't set
 });
 
-test(`parsing`, async t => {
+test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
+  "repoRemoteUri"
+)}, ${chalk.underline("symPath")}, ${chalk.underline("repoPath")}`, async t => {
   try {
     let config = await readConfig(configFile);
-    // printMirror({ config }, "magenta", "grey");
     let parsed = await parseConfig(config);
     t.true(is.array(parsed));
     for await (let c of parsed) {
       let { repoRemoteUri, symPath, repoPath } = await c;
-      // printMirror({ repoRemoteUri }, "magenta", "grey");
-      // printMirror({ symPath }, "magenta", "grey");
-      // printMirror({ repoPath }, "magenta", "grey");
-      // log("is(repoRemoteUri)", is(repoRemoteUri));
-      // log("is(symPath)", is(symPath));
-      // log("is(repoPath)", is(repoPath));
       t.true(is.string(repoRemoteUri));
       t.true(is.string(symPath));
       t.true(is.string(repoPath));
@@ -35,6 +31,36 @@ test(`parsing`, async t => {
   } catch (e) {
     t.fail(e);
   }
+});
+
+test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
+  "process.env.rgenHost"
+)} and returns a JSON config`, async t => {
+  const oldConfig = {
+    provider: "alechp",
+    repospacePath: "sandbox",
+    repositories: [
+      { servexyz: "get-pkg-prop" },
+      { servexyz: "tacker" },
+      { servexyz: "node-starter" }
+    ]
+  };
+  const newConfig = {
+    dir: "sandbox",
+    repos: [
+      {
+        servexyz: "get-pkg-prop"
+      },
+      {
+        servexyz: "tacker"
+      },
+      {
+        servexyz: "node-starter"
+      }
+    ]
+  };
+  let modernizedConfig = modernizeOldConfig(oldConfig);
+  t.deepEqual(modernizedConfig, newConfig);
 });
 
 //TODO: Create a parse for when rgenHost is present (ie. private + public repos)

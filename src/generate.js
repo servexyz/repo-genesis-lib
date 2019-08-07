@@ -1,7 +1,7 @@
 const log = console.log;
 import execa from "execa";
 import { printMirror, printLine } from "tacker";
-import is from "tacker/node_modules/@sindresorhus/is/dist";
+import is from "@sindresorhus/is";
 
 export async function rgGen(oWhat, szHow) {
   try {
@@ -23,12 +23,9 @@ async function genAll(oWhatToGenerate) {
   try {
     for await (let what of oWhatToGenerate) {
       let { repoRemoteUri, symPath, repoPath } = what;
-      // await genRepository(repoRemoteUri, repoPath);
+      await genRepository(repoRemoteUri, repoPath);
       await genSymlink(repoPath, symPath);
       await genDependency(repoPath);
-      // printMirror({ repoRemoteUri }, "cyan", "grey");
-      // printMirror({ symPath }, "cyan", "grey");
-      // printMirror({ repoPath }, "cyan", "grey");
     }
     return true;
   } catch (e) {
@@ -92,11 +89,6 @@ async function cloneRepository(szURI) {
     cwd: process.env.rgRepoRootDir
   });
 }
-
-// https://github.com/servexyz/node-starter
-// https://github.com/servexyz/npm-starter-sample-module
-// https://github.com/servexyz/file-genesis
-
 export async function cloneRepositories(arrURIs) {
   // [ { uri, sym, dir }, { uri, sym, dir }]
   //TODO: Ensure .repositories directory
