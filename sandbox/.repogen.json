@@ -1,0 +1,20 @@
+{
+  "dir": "sandbox",
+  "repos": [
+    {
+      "plat": "github.com",
+      "space": "servexyz",
+      "repo": "get-pkg-prop",
+      "dir": "modules",
+      "sym": "gpp"
+    },
+    {
+      "space": "servexyz",
+      "repo": "tacker",
+      "sym": "tkr"
+    },
+    {
+      "servexyz": "node-starter"
+    }
+  ]
+}
