@@ -1,3 +1,4 @@
+const log = console.log;
 import fs from "fs-extra";
 import path from "path";
 import chalk from "chalk";
@@ -9,41 +10,71 @@ import { getPkgProp } from "get-pkg-prop";
 export async function parse(oConfig) {
   let config = await chooseConfig(oConfig);
   printMirror({ config }, "magenta", "grey");
-  let parsedConfig = await parseConfig(config);
-  let finalConfig = {};
-  for await (let cfg of parsedConfig) {
-    let { repoRemoteUri, symPath, repoPath } = await parsedConfig;
-    printMirror({ repoRemoteUri }, "blue", "grey");
-    Object.assign(finalConfig, { repoRemoteUri, symPath, repoPath });
+  let finalConfig = [];
+  let index = 0;
+  for await (let cfg of await parseConfig(config)) {
+    printMirror({ index }, "magenta", "blue");
+    let { repoRemoteUri, symPath, repoPath } = await cfg;
+    finalConfig.push({ repoRemoteUri, symPath, repoPath });
+    index++;
   }
+  printMirror({ finalConfig }, "magenta", "grey");
+  log(`finalConfig.length`, finalConfig.length);
+  log(`index`, index);
   return finalConfig;
 }
 export async function chooseConfig(oConfig) {
+  let chosen;
   if (is.nullOrUndefined(oConfig)) {
-    //TODO:
     const { rgConfigPath } = process.env; // => Set by CLI
-    //TODO: replace with pkgUp
     const repogenJsonPath = path.join(process.cwd(), "repogen.json");
+    printMirror({ repogenJsonPath }, "red", "blue");
     if (is.nullOrUndefined(rgConfigPath)) {
-      if (!(await pathsExist(repogenJsonPath))) {
-        if (!(await getPkgProp("repogen"))) {
-          //TODO: replace with pkgUp
+      printMirror({ rgConfigPath }, "red", "yellow");
+      if ((await pathsExist(repogenJsonPath)) === false) {
+        printMirror({ repogenJsonPath }, "red", "yellow");
+        let repogenPkg = await getPkgProp("repogen");
+        printMirror({ repogenPkg }, "yellow", "red");
+        if ((await getPkgProp("repogen")) === false) {
           const repogenJsPath = path.join(process.cwd(), ".repogen.js");
           const { config } = require(repogenJsPath);
+          printMirror({ config }, "red", "yellow");
+          chosen = "repogen.js in cwd";
+
+          printMirror({ chosen }, "red", "yellow");
           return modernizeOldConfig(config);
         } else {
+          chosen = "package.json in pkgUp";
+          printMirror({ chosen }, "red", "yellow");
           return await getPkgProp("repogen");
         }
       } else {
+        printMirror({ repogenJsonPath }, "red", "green");
+        chosen = "repogen.json in cwd";
+
+        printMirror({ chosen }, "red", "yellow");
         return await readConfig(repogenJsonPath);
       }
     } else {
+      printMirror({ rgConfigPath }, "red", "green");
+      chosen = "custom config at specified path";
+
+      printMirror({ chosen }, "red", "yellow");
       return await readConfig(rgConfigPath);
     }
   } else {
     if (oConfig.hasOwnProperty("repositories")) {
+      let xo = oConfig.repositories;
+      chosen = "passed repogen.js style config";
+
+      printMirror({ chosen }, "red", "yellow");
+      printMirror({ xo }, "red", "green");
       return modernizeOldConfig(oConfig);
     } else {
+      printMirror({ oConfig }, "red", "green");
+      chosen = "passed repogen.json style config";
+
+      printMirror({ chosen }, "red", "yellow");
       return oConfig;
     }
   }
@@ -61,6 +92,9 @@ export function modernizeOldConfig(oOldConfig) {
     if (k === "repositories") {
       Object.assign(oNewConfig, { repos: v });
     }
+  }
+  if (oNewConfig.hasOwnProperty("dir") === false) {
+    Object.assign(oNewConfig, { dir: "" });
   }
   return oNewConfig;
 }
@@ -105,6 +139,11 @@ TODO: Breakup return oConfig.repos.map into two functions:
 
 export async function parseConfig(oConfig, oCliOptions) {
   //TODO: Use options as if CLI was passing information
+  // let { dir = "" } = oConfig;
+
+  printMirror({ oConfig }, "red", "blue");
+  // let dir = oConfig.dir || "";
+  // printMirror({ dir }, "red", "blue");
   let rootDir = path.join(process.cwd(), oConfig.dir);
   // printMirror({ rootDir }, "red", "grey");
   process.env.rgRootDir = rootDir;

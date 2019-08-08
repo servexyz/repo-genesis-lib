@@ -70,11 +70,16 @@ test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
   t.deepEqual(modernizedConfig, newConfig);
 });
 //TODO: Write "chooseConfig" test
-test(`${chalk.cyan("parse")} chooses and parses config`, async t => {
-  // let x = await parse(oldConfig);
-  let x = await parse(newConfig);
-  printMirror({ x }, "magenta", "grey");
-  t.pass();
+test(`${chalk.cyan(
+  "parse"
+)} return is the same for new config & old config`, async t => {
+  let cOld = await parse(oldConfig);
+  let cNew = await parse(newConfig);
+  t.deepEqual(cOld, cNew);
+});
+test(`${chalk.cyan("parse")} `, async t => {
+  let cImplicitNew = await parse();
+  printMirror({ cImplicitNew }, "magenta", "grey");
 });
 
 //TODO: Create a test for when rgAuthHost is present (ie. private + public repos)
