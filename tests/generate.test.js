@@ -8,7 +8,7 @@ import { printMirror } from "tacker";
 
 const configFile = path.resolve(__dirname, "../", "sandbox", ".repogen.json");
 test.before(t => {
-  process.env.rgenHost = "alechp";
+  process.env.rgAuthHost = "alechp";
 });
 
 //* Should work, just don't want to run everytime

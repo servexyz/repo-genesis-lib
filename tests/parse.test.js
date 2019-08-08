@@ -9,10 +9,10 @@ import { printMirror } from "tacker";
 const configFile = path.resolve(__dirname, "../", "sandbox", ".repogen.json");
 
 test.before(t => {
-  process.env.rgenHost = undefined; // --> Will not work; "undefined" not undefined
-  process.env.rgenHost = null; // --> Will not work; "null" not null
-  process.env.rgenHost = "alechp"; // --> Proper config
-  delete process.env.rgenHost; // --> Works as expected; use this to ensure rgenHost isn't set
+  process.env.rgAuthHost = undefined; // --> Will not work; "undefined" not undefined
+  process.env.rgAuthHost = null; // --> Will not work; "null" not null
+  process.env.rgAuthHost = "alechp"; // --> Proper config
+  delete process.env.rgAuthHost; // --> Works as expected; use this to ensure rgAuthHost isn't set
 });
 
 test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
@@ -34,8 +34,9 @@ test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
 });
 
 test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
-  "process.env.rgenHost"
+  "process.env.rgAuthHost"
 )} and returns a JSON config`, async t => {
+  t.plan(2);
   const oldConfig = {
     provider: "alechp",
     repospacePath: "sandbox",
@@ -60,9 +61,9 @@ test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
     ]
   };
   let modernizedConfig = modernizeOldConfig(oldConfig);
+  t.is(process.env.rgAuthHost, oldConfig.provider);
   t.deepEqual(modernizedConfig, newConfig);
 });
 
-//TODO: Create a parse for when rgenHost is present (ie. private + public repos)
-//TODO: Create a parse for when rgenHost is absent (ie. public repos)
-//TODO: Rename rgenHost to rgAuthHost
+//TODO: Create a test for when rgAuthHost is present (ie. private + public repos)
+//TODO: Create a test for when rgAuthHost is absent (ie. public repos)

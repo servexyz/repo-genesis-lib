@@ -7,7 +7,7 @@ import { printMirror } from "tacker";
 import { getPkgProp } from "get-pkg-prop";
 
 export async function chooseConfig() {
-  const { rgConfigPath } = process.env;
+  const { rgConfigPath } = process.env; // => Set by CLI
   const repogenJsonPath = path.join(process.cwd(), "repogen.json");
   if (is.nullOrUndefined(rgConfigPath)) {
     if (!(await pathsExist(repogenJsonPath))) {
@@ -29,7 +29,7 @@ export function modernizeOldConfig(oOldConfig) {
   let oNewConfig = {};
   for (let [k, v] of Object.entries(oOldConfig)) {
     if (k === "provider") {
-      process.env.rgenHost = v;
+      process.env.rgAuthHost = v;
     }
     if (k === "repospacePath") {
       Object.assign(oNewConfig, { dir: v });
@@ -67,7 +67,7 @@ export async function readConfig(szPath) {
 4. implicit .repogen.js exists (and nothing above does)
 
 */
-//TODO: Try to set process.env.rgenHost
+//TODO: Try to set process.env.rgAuthHost
 // - .repogen.js: "provider"
 // - .repogen.json: "provider"
 // - .package.json: "provider"
@@ -148,10 +148,10 @@ function getRemoteString(szPlatform, szWorkspace, szRepository) {
     is.nullOrUndefined(szRepository)
   )
     return null;
-  if (is.nullOrUndefined(process.env.rgenHost)) {
+  if (is.nullOrUndefined(process.env.rgAuthHost)) {
     return `https://${szPlatform}/${szWorkspace}/${szRepository}`;
   } else {
-    return `git@${process.env.rgenHost}:${szWorkspace}/${szRepository}`;
+    return `git@${process.env.rgAuthHost}:${szWorkspace}/${szRepository}`;
   }
 }
 async function getSymlinkPath(szNameOfSym, szOptionalSubdir = "") {
