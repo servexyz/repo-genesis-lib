@@ -77,7 +77,6 @@ export async function chooseConfig(oConfig) {
   }
 }
 export function modernizeOldConfig(oOldConfig) {
-  //TODO: Convert .repogen.js -> .repogen.json
   let oNewConfig = {};
   for (let [k, v] of Object.entries(oOldConfig)) {
     if (k === "provider") {
@@ -96,9 +95,8 @@ export function modernizeOldConfig(oOldConfig) {
   return oNewConfig;
 }
 
-// ? What if I just created a script which marshalled old repogen config files to new ones?
 export async function readConfig(szPath) {
-  //TODO: Enable repogen.json --> monolith libs (ie. "container" monolith)
+  //TODO: Enable .repogen.json --> monolith libs (ie. "container" monolith)
   //TODO: Enable .repogen.js --> backwards compatability
   //TODO: Enable package.json --> disadvantage being requires npm; useful only for packages
   try {
@@ -112,16 +110,6 @@ export async function readConfig(szPath) {
   }
 }
 
-//TODO: Determine which is the source of the config
-
-/* 
-? Order of priority:
-1. Set via CLI flag
-2. implicit .repogen.json exists (and nothing above does)
-3. implicit package.json exists (and nothing above does)
-4. implicit .repogen.js exists (and nothing above does)
-
-*/
 //TODO: Try to set process.env.rgAuthHost
 // - .repogen.js: "provider"
 // - .repogen.json: "provider"
