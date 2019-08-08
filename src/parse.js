@@ -4,25 +4,20 @@ import path from "path";
 import chalk from "chalk";
 import is from "@sindresorhus/is";
 import { pathsExist } from "paths-exist";
-import { printMirror } from "tacker";
+import { printError, printLine, printMirror } from "tacker";
 import { getPkgProp } from "get-pkg-prop";
 
 export async function parse(oConfig) {
   let config = await chooseConfig(oConfig);
   printMirror({ config }, "magenta", "grey");
   let finalConfig = [];
-  let index = 0;
   for await (let cfg of await parseConfig(config)) {
-    printMirror({ index }, "magenta", "blue");
     let { repoRemoteUri, symPath, repoPath } = await cfg;
     finalConfig.push({ repoRemoteUri, symPath, repoPath });
-    index++;
   }
-  printMirror({ finalConfig }, "magenta", "grey");
-  log(`finalConfig.length`, finalConfig.length);
-  log(`index`, index);
   return finalConfig;
 }
+
 export async function chooseConfig(oConfig) {
   let chosen;
   if (is.nullOrUndefined(oConfig)) {
@@ -37,12 +32,19 @@ export async function chooseConfig(oConfig) {
         printMirror({ repogenPkg }, "yellow", "red");
         if ((await getPkgProp("repogen")) === false) {
           const repogenJsPath = path.join(process.cwd(), ".repogen.js");
-          const { config } = require(repogenJsPath);
-          printMirror({ config }, "red", "yellow");
-          chosen = "repogen.js in cwd";
-
-          printMirror({ chosen }, "red", "yellow");
-          return modernizeOldConfig(config);
+          if (await pathsExist(repogenJsPath)) {
+            const { config } = require(repogenJsPath);
+            printMirror({ config }, "red", "yellow");
+            chosen = "repogen.js in cwd";
+            printMirror({ chosen }, "red", "yellow");
+            return modernizeOldConfig(config);
+          } else {
+            printError({
+              fn: "await pathsExist(repogenJsPath)",
+              msg: "Path didn't exist or there was an error with require()"
+            });
+            return false;
+          }
         } else {
           chosen = "package.json in pkgUp";
           printMirror({ chosen }, "red", "yellow");
@@ -64,16 +66,11 @@ export async function chooseConfig(oConfig) {
     }
   } else {
     if (oConfig.hasOwnProperty("repositories")) {
-      let xo = oConfig.repositories;
       chosen = "passed repogen.js style config";
-
       printMirror({ chosen }, "red", "yellow");
-      printMirror({ xo }, "red", "green");
       return modernizeOldConfig(oConfig);
     } else {
-      printMirror({ oConfig }, "red", "green");
       chosen = "passed repogen.json style config";
-
       printMirror({ chosen }, "red", "yellow");
       return oConfig;
     }
@@ -161,14 +158,14 @@ export async function parseConfig(oConfig, oCliOptions) {
         dir = "",
         sym = repo
       } = oRepository;
-      printMirror({ sym }, "green", "grey");
-      printMirror({ dir }, "red", "grey");
+      // printMirror({ sym }, "green", "grey");
+      // printMirror({ dir }, "red", "grey");
       let cloneRemoteString = getRemoteString(plat, space, repo);
       let symlinkPath = await getSymlinkPath(sym, dir);
       let repositoryPath = getRepositoryPath(rootDir, repo);
-      printMirror({ cloneRemoteString }, "green", "grey");
-      printMirror({ symlinkPath }, "green", "grey");
-      printMirror({ repositoryPath }, "green", "grey");
+      // printMirror({ cloneRemoteString }, "green", "grey");
+      // printMirror({ symlinkPath }, "green", "grey");
+      // printMirror({ repositoryPath }, "green", "grey");
       return {
         repoRemoteUri: cloneRemoteString,
         symPath: symlinkPath,
@@ -222,9 +219,7 @@ async function getSymlinkPath(szNameOfSym, szOptionalSubdir = "") {
   if (is.nullOrUndefined(szNameOfSym)) return null;
   let symlinkRootDir = path.join(process.env.rgRootDir, szOptionalSubdir);
   await fs.ensureDir(symlinkRootDir);
-  printMirror({ rootPath: symlinkRootDir }, "cyan", "grey");
   let joinedSymlinkPath = path.join(symlinkRootDir, szNameOfSym);
-  printMirror({ joinedSymlinkPath }, "magenta", "grey");
   return joinedSymlinkPath;
 }
 function getRepositoryPath(szRootDir, szNameOfRepo) {

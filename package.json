@@ -42,7 +42,7 @@
     "get-pkg-prop": "^0.3.1",
     "nommer": "^0.2.2",
     "paths-exist": "^0.2.3",
-    "tacker": "^0.3.1"
+    "tacker": "^0.3.2"
   },
   "scripts": {
     "start": "npm run dev",
