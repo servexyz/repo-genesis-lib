@@ -136,13 +136,7 @@ TODO: Breakup return oConfig.repos.map into two functions:
 
 export async function parseConfig(oConfig, oCliOptions) {
   //TODO: Use options as if CLI was passing information
-  // let { dir = "" } = oConfig;
-
-  printMirror({ oConfig }, "red", "blue");
-  // let dir = oConfig.dir || "";
-  // printMirror({ dir }, "red", "blue");
   let rootDir = path.join(process.cwd(), oConfig.dir);
-  // printMirror({ rootDir }, "red", "grey");
   process.env.rgRootDir = rootDir;
   let repoRootDir = path.join(rootDir, ".repositories");
   process.env.rgRepoRootDir = repoRootDir;
