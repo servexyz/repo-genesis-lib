@@ -6,22 +6,46 @@ import { pathsExist } from "paths-exist";
 import { printMirror } from "tacker";
 import { getPkgProp } from "get-pkg-prop";
 
-export async function chooseConfig() {
-  const { rgConfigPath } = process.env; // => Set by CLI
-  const repogenJsonPath = path.join(process.cwd(), "repogen.json");
-  if (is.nullOrUndefined(rgConfigPath)) {
-    if (!(await pathsExist(repogenJsonPath))) {
-      if (!(await getPkgProp("repogen"))) {
-        const { config } = require(".repogen.js");
-        return modernizeOldConfig(config);
+export async function parse(oConfig) {
+  let config = await chooseConfig(oConfig);
+  printMirror({ config }, "magenta", "grey");
+  let parsedConfig = await parseConfig(config);
+  let finalConfig = {};
+  for await (let cfg of parsedConfig) {
+    let { repoRemoteUri, symPath, repoPath } = await parsedConfig;
+    printMirror({ repoRemoteUri }, "blue", "grey");
+    Object.assign(finalConfig, { repoRemoteUri, symPath, repoPath });
+  }
+  return finalConfig;
+}
+export async function chooseConfig(oConfig) {
+  if (is.nullOrUndefined(oConfig)) {
+    //TODO:
+    const { rgConfigPath } = process.env; // => Set by CLI
+    //TODO: replace with pkgUp
+    const repogenJsonPath = path.join(process.cwd(), "repogen.json");
+    if (is.nullOrUndefined(rgConfigPath)) {
+      if (!(await pathsExist(repogenJsonPath))) {
+        if (!(await getPkgProp("repogen"))) {
+          //TODO: replace with pkgUp
+          const repogenJsPath = path.join(process.cwd(), ".repogen.js");
+          const { config } = require(repogenJsPath);
+          return modernizeOldConfig(config);
+        } else {
+          return await getPkgProp("repogen");
+        }
       } else {
-        return await getPkgProp("repogen");
+        return await readConfig(repogenJsonPath);
       }
     } else {
-      return await readConfig(repogenJsonPath);
+      return await readConfig(rgConfigPath);
     }
   } else {
-    return await readConfig(rgConfigPath);
+    if (oConfig.hasOwnProperty("repositories")) {
+      return modernizeOldConfig(oConfig);
+    } else {
+      return oConfig;
+    }
   }
 }
 export function modernizeOldConfig(oOldConfig) {

@@ -1,12 +1,40 @@
 const log = console.log;
 import test from "ava";
 import chalk from "chalk";
-import { readConfig, parseConfig, modernizeOldConfig } from "../src/parse";
+import {
+  parse,
+  readConfig,
+  parseConfig,
+  modernizeOldConfig
+} from "../src/parse";
 import path from "path";
 import is from "@sindresorhus/is";
 import { printMirror } from "tacker";
 
 const configFile = path.resolve(__dirname, "../", "sandbox", ".repogen.json");
+const oldConfig = {
+  provider: "alechp",
+  repospacePath: "sandbox",
+  repositories: [
+    { servexyz: "get-pkg-prop" },
+    { servexyz: "tacker" },
+    { servexyz: "node-starter" }
+  ]
+};
+const newConfig = {
+  dir: "sandbox",
+  repos: [
+    {
+      servexyz: "get-pkg-prop"
+    },
+    {
+      servexyz: "tacker"
+    },
+    {
+      servexyz: "node-starter"
+    }
+  ]
+};
 
 test.before(t => {
   process.env.rgAuthHost = undefined; // --> Will not work; "undefined" not undefined
@@ -37,32 +65,16 @@ test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
   "process.env.rgAuthHost"
 )} and returns a JSON config`, async t => {
   t.plan(2);
-  const oldConfig = {
-    provider: "alechp",
-    repospacePath: "sandbox",
-    repositories: [
-      { servexyz: "get-pkg-prop" },
-      { servexyz: "tacker" },
-      { servexyz: "node-starter" }
-    ]
-  };
-  const newConfig = {
-    dir: "sandbox",
-    repos: [
-      {
-        servexyz: "get-pkg-prop"
-      },
-      {
-        servexyz: "tacker"
-      },
-      {
-        servexyz: "node-starter"
-      }
-    ]
-  };
   let modernizedConfig = modernizeOldConfig(oldConfig);
   t.is(process.env.rgAuthHost, oldConfig.provider);
   t.deepEqual(modernizedConfig, newConfig);
+});
+//TODO: Write "chooseConfig" test
+test(`${chalk.cyan("parse")} chooses and parses config`, async t => {
+  // let x = await parse(oldConfig);
+  let x = await parse(newConfig);
+  printMirror({ x }, "magenta", "grey");
+  t.pass();
 });
 
 //TODO: Create a test for when rgAuthHost is present (ie. private + public repos)
