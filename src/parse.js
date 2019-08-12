@@ -249,6 +249,19 @@ export function parseTransformedConfig(oTransformedConfig) {
   } else {
   }
 }
+export function parseNewRepoFormat(oRepository) {
+  if (is.nullOrUndefined(oRepository)) {
+    return null;
+  }
+  const {
+    plat = "github.com",
+    space,
+    repo,
+    dir = "",
+    sym = repo
+  } = oRepository;
+  return getConfigToParse(plat, space, repo, dir, sym);
+}
 export function parseOldRepoFormat(
   szPlatform = "github.com",
   oRepoKV,
@@ -267,6 +280,7 @@ export function parseOldRepoFormat(
     repo,
     szRootDirToCloneInto,
     szSymlinkOptionalSubdir,
+    repo,
     oOptions
   );
 }
@@ -277,6 +291,7 @@ export function getConfigToParse(
   szRepositoryName,
   szRootDirToCloneInto,
   szSymlinkOptionalSubdir = "",
+  szSymlinkName = szRepositoryName,
   oOptions = { ensureDir: true }
 ) {
   //TODO: Add null params
@@ -287,7 +302,7 @@ export function getConfigToParse(
     szRepositoryName
   );
   let symPath = getSymlinkPath(
-    szRepositoryName,
+    szSymlinkName,
     szRootDirToCloneInto,
     szSymlinkOptionalSubdir,
     oOptions
