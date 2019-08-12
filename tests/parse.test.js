@@ -12,20 +12,16 @@ import path from "path";
 import is from "@sindresorhus/is";
 import { printMirror } from "tacker";
 
-const newConfigFile = path.resolve(
-  __dirname,
-  "../",
-  "sandbox",
-  ".repogen.json"
-);
-const oldConfigFile = path.resolve(__dirname, "../", "sandbox", ".repogen.js");
+const sandboxDir = path.join(__dirname, "../", "sandbox");
+const newConfigFile = path.join(sandboxDir, ".repogen.json");
+const oldConfigFile = path.join(sandboxDir, ".repogen.js");
 const oldConfig = {
   provider: "alechp",
   repospacePath: "sandbox",
   repositories: [
     { servexyz: "get-pkg-prop" },
     { servexyz: "tacker" },
-    { servexyz: "node-starter" }
+    { servexyz: "paths-exist" }
   ]
 };
 const newConfig = {
@@ -38,7 +34,7 @@ const newConfig = {
       servexyz: "tacker"
     },
     {
-      servexyz: "node-starter"
+      servexyz: "paths-exist"
     }
   ]
 };
@@ -47,7 +43,7 @@ test.before(t => {
   process.env.rgAuthHost = undefined; // --> Will not work; "undefined" not undefined
   process.env.rgAuthHost = null; // --> Will not work; "null" not null
   process.env.rgAuthHost = "alechp"; // --> Proper config
-  delete process.env.rgAuthHost; // --> Works as expected; use this to ensure rgAuthHost isn't set
+  // delete process.env.rgAuthHost; // --> Works as expected; use this to ensure rgAuthHost isn't set
 });
 
 test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
@@ -63,7 +59,25 @@ test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
   // printMirror({ cOldRepos }, "magenta", "grey");
   t.deepEqual(cNewRepos, cOldRepos);
 });
-// test(`${chalk.cyan("getConfigToParse")} `)
+test(`${chalk.cyan("getConfigToParse")} produces ${chalk.underline(
+  "(1)"
+)} object consisting of ${chalk.underline("(3)")} strings`, async t => {
+  let { repoRemoteUri, symPath, repoPath } = getConfigToParse(
+    "github.com",
+    "servexyz",
+    "paths-exist",
+    sandboxDir
+  );
+  if (is.nullOrUndefined(process.env.rgAuthHost)) {
+    t.true(repoRemoteUri === "https://github.com/servexyz/paths-exist");
+  } else {
+    t.true(
+      repoRemoteUri === `git@${process.env.rgAuthHost}:servexyz/paths-exist`
+    );
+  }
+  t.true(symPath.endsWith("sandbox/paths-exist"));
+  t.true(repoPath.endsWith("sandbox/.repositories/paths-exist"));
+});
 // test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
 //   "repoRemoteUri"
 // )}, ${chalk.underline("symPath")}, ${chalk.underline("repoPath")}`, async t => {

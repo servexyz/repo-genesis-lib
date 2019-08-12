@@ -244,18 +244,25 @@ TODO: Create a helper function to abstract the below
 */
 
 export async function parseConfig(oTransformedConfig) {}
-export async function getConfigToParse(
+export function getConfigToParse(
   szPlatform = "github.com",
   szPlatformWorkspace,
   szRepositoryName,
-  szRootDirToCloneInto
+  szRootDirToCloneInto,
+  szSymlinkOptionalSubdir,
+  oOptions = { ensureDir: true }
 ) {
   let repoRemoteUri = getRemoteUri(
     szPlatform,
     szPlatformWorkspace,
     szRepositoryName
   );
-  let symPath = await getSymlinkPath(szRepositoryName);
+  let symPath = getSymlinkPath(
+    szRepositoryName,
+    szRootDirToCloneInto,
+    szSymlinkOptionalSubdir,
+    oOptions
+  );
   let repoPath = getRepositoryPath(szRootDirToCloneInto, szRepositoryName);
   return {
     repoRemoteUri,
@@ -276,11 +283,19 @@ function getRemoteUri(szPlatform, szWorkspace, szRepository) {
     return `git@${process.env.rgAuthHost}:${szWorkspace}/${szRepository}`;
   }
 }
-async function getSymlinkPath(szNameOfSym, szOptionalSubdir = "") {
-  //TODO: Replace process.env.rgRootDir with param
+function getSymlinkPath(
+  szNameOfSym,
+  szRootDir,
+  szOptionalSubdir = "",
+  oOptions = { ensureDir: true }
+) {
   if (is.nullOrUndefined(szNameOfSym)) return null;
-  let symlinkRootDir = path.join(process.env.rgRootDir, szOptionalSubdir);
-  await fs.ensureDir(symlinkRootDir);
+  let symlinkRootDir = path.join(szRootDir, szOptionalSubdir);
+  if (oOptions.ensureDir === true) {
+    (async () => {
+      await fs.ensureDir(symlinkRootDir);
+    })();
+  }
   let joinedSymlinkPath = path.join(symlinkRootDir, szNameOfSym);
   return joinedSymlinkPath;
 }
