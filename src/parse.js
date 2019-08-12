@@ -7,7 +7,7 @@ import { pathsExist } from "paths-exist";
 import { printError, printLine, printMirror } from "tacker";
 import { getPkgProp } from "get-pkg-prop";
 
-export async function parse(oConfig) {
+export async function parse(oConfig = undefined) {
   let config = await chooseConfig(oConfig);
   printMirror({ config }, "magenta", "grey");
   let finalConfig = [];
@@ -18,7 +18,7 @@ export async function parse(oConfig) {
   return finalConfig;
 }
 
-export async function chooseConfig(oConfig) {
+export async function chooseConfig(oConfig = undefined) {
   let chosen;
   if (is.nullOrUndefined(oConfig)) {
     const { rgConfigPath } = process.env; // => Set by CLI
@@ -124,38 +124,62 @@ TODO: Breakup return oConfig.repos.map into two functions:
 
 export async function parseConfig(oConfig, oCliOptions) {
   //TODO: Use options as if CLI was passing information
-  let rootDir = path.join(process.cwd(), oConfig.dir);
+  let configDir = is.nullOrUndefined(oConfig.dir) ? "." : oConfig.dir;
+  printMirror({ configDir }, "red", "yellow");
+  let rootDir = path.join(process.cwd(), configDir);
   process.env.rgRootDir = rootDir;
   let repoRootDir = path.join(rootDir, ".repositories");
   process.env.rgRepoRootDir = repoRootDir;
   fs.ensureDir(repoRootDir);
-  return oConfig.repos.map(async oRepository => {
-    //TODO: Add regression check (ie. if only 1 key/value pair)
-    if (Object.keys(oRepository).length > 1) {
-      // * Modern config
-      let {
-        plat = "github.com",
-        space,
-        repo,
-        dir = "",
-        sym = repo
-      } = oRepository;
-      // printMirror({ sym }, "green", "grey");
-      // printMirror({ dir }, "red", "grey");
-      let cloneRemoteString = getRemoteString(plat, space, repo);
-      let symlinkPath = await getSymlinkPath(sym, dir);
-      let repositoryPath = getRepositoryPath(rootDir, repo);
-      // printMirror({ cloneRemoteString }, "green", "grey");
-      // printMirror({ symlinkPath }, "green", "grey");
-      // printMirror({ repositoryPath }, "green", "grey");
-      return {
-        repoRemoteUri: cloneRemoteString,
-        symPath: symlinkPath,
-        repoPath: repositoryPath
-      };
-    } else {
-      // * Backwards compatibility
-      //TODO: Fix symlink path for this version
+  if (oConfig.hasOwnProperty("repos")) {
+    return oConfig.repos.map(async oRepository => {
+      //TODO: Add regression check (ie. if only 1 key/value pair)
+      if (Object.keys(oRepository).length > 1) {
+        // * Modern config
+        let {
+          plat = "github.com",
+          space,
+          repo,
+          dir = "",
+          sym = repo
+        } = oRepository;
+        // printMirror({ sym }, "green", "grey");
+        // printMirror({ dir }, "red", "grey");
+        let cloneRemoteString = getRemoteString(plat, space, repo);
+        let symlinkPath = await getSymlinkPath(sym, dir);
+        let repositoryPath = getRepositoryPath(rootDir, repo);
+        // printMirror({ cloneRemoteString }, "green", "grey");
+        // printMirror({ symlinkPath }, "green", "grey");
+        // printMirror({ repositoryPath }, "green", "grey");
+        return {
+          repoRemoteUri: cloneRemoteString,
+          symPath: symlinkPath,
+          repoPath: repositoryPath
+        };
+      } else {
+        // * Backwards compatibility
+        //TODO: Fix symlink path for this version
+        let space = Object.keys(oRepository); //key
+        let repo = oRepository[space]; //value
+        // printMirror({ space }, "yellow", "grey");
+        // printMirror({ repo }, "yellow", "grey");
+        let cloneRemoteString = getRemoteString("github.com", space, repo);
+        //TODO: use repositoryPath as arg in getSymlinkPath
+        let symlinkPath = await getSymlinkPath(repo);
+        let repositoryPath = getRepositoryPath(rootDir, repo);
+        // printMirror({ cloneRemoteString }, "cyan", "grey");
+        // printMirror({ symlinkPath }, "cyan", "grey");
+        // printMirror({ repositoryPath }, "cyan", "grey");
+        return {
+          repoRemoteUri: cloneRemoteString,
+          symPath: symlinkPath,
+          repoPath: repositoryPath
+        };
+      }
+    });
+  } else {
+    log("repogen.js");
+    return oConfig.repositories.map(async oRepository => {
       let space = Object.keys(oRepository); //key
       let repo = oRepository[space]; //value
       // printMirror({ space }, "yellow", "grey");
@@ -172,8 +196,8 @@ export async function parseConfig(oConfig, oCliOptions) {
         symPath: symlinkPath,
         repoPath: repositoryPath
       };
-    }
-  });
+    });
+  }
 }
 
 /*
