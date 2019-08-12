@@ -7,16 +7,36 @@ import { pathsExist } from "paths-exist";
 import { printError, printLine, printMirror } from "tacker";
 import { getPkgProp } from "get-pkg-prop";
 
-export async function parse(oConfig = undefined) {
-  let config = await chooseConfig(oConfig);
-  printMirror({ config }, "magenta", "grey");
-  let finalConfig = [];
-  for await (let cfg of await parseConfig(config)) {
-    let { repoRemoteUri, symPath, repoPath } = await cfg;
-    finalConfig.push({ repoRemoteUri, symPath, repoPath });
+export async function parse(mConfig) {
+  // ? mConfig == string || object
+  let oConfig = {};
+  if (is.nullOrUndefined(mConfig)) {
+    return null;
+  } else if (is.string(mConfig)) {
+    if (mConfig.endsWith(".json")) {
+    } else if (myConfig.endsWith(".js")) {
+    } else {
+      return printError(true, {
+        fn: "parse",
+        msg: `Unrecognized file type to parse. Expecting ${chalk.underline(
+          ".js"
+        )} or ${chalk.underline(".json")}`
+      });
+    }
+  } else {
+    is.string(mConfig);
   }
-  return finalConfig;
 }
+// export async function parse(oConfig = undefined) {
+//   let config = await chooseConfig(oConfig);
+//   printMirror({ config }, "magenta", "grey");
+//   let finalConfig = [];
+//   for await (let cfg of await parseConfig(config)) {
+//     let { repoRemoteUri, symPath, repoPath } = await cfg;
+//     finalConfig.push({ repoRemoteUri, symPath, repoPath });
+//   }
+//   return finalConfig;
+// }
 
 export async function chooseConfig(oConfig = undefined) {
   let chosen;
@@ -77,6 +97,7 @@ export async function chooseConfig(oConfig = undefined) {
     }
   }
 }
+
 export function modernizeOldConfig(oOldConfig) {
   let oNewConfig = {};
   printMirror({ oOldConfig }, "blue", "red");
@@ -101,14 +122,13 @@ export async function readConfig(szPath) {
   //TODO: Enable .repogen.json --> monolith libs (ie. "container" monolith)
   //TODO: Enable .repogen.js --> backwards compatability
   //TODO: Enable package.json --> disadvantage being requires npm; useful only for packages
-  try {
-    if (await pathsExist(szPath)) {
+  if (await pathsExist(szPath)) {
+    if (szPath.endsWidth(".json")) {
       return await fs.readJson(szPath);
-    } else {
-      throw new Error(`Could not ${chalk.underline("find")} config`);
+    } else if (szPath.endsWidth(".js")) {
     }
-  } catch (e) {
-    throw new Error(`Could not ${chalk.underline("read")} config`);
+  } else {
+    throw new Error(`Could not ${chalk.underline("find")} config`);
   }
 }
 

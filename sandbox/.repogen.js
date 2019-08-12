@@ -1,4 +1,4 @@
-const oldConfig = {
+const config = {
   provider: "alechp",
   repospacePath: "sandbox",
   repositories: [
@@ -7,3 +7,5 @@ const oldConfig = {
     { servexyz: "node-starter" }
   ]
 };
+
+module.exports = { config };
