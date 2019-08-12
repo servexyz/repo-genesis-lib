@@ -100,7 +100,6 @@ export async function chooseConfig(oConfig = undefined) {
 
 export function modernizeOldConfig(oOldConfig) {
   let oNewConfig = {};
-  printMirror({ oOldConfig }, "blue", "red");
   for (let [k, v] of Object.entries(oOldConfig)) {
     if (k === "provider") {
       process.env.rgAuthHost = v;
@@ -123,12 +122,26 @@ export async function readConfig(szPath) {
   //TODO: Enable .repogen.js --> backwards compatability
   //TODO: Enable package.json --> disadvantage being requires npm; useful only for packages
   if (await pathsExist(szPath)) {
-    if (szPath.endsWidth(".json")) {
+    if (szPath.endsWith(".json")) {
       return await fs.readJson(szPath);
-    } else if (szPath.endsWidth(".js")) {
+    } else if (szPath.endsWith(".js")) {
+      const { config } = require(szPath);
+      if (is.nullOrUndefined(config)) {
+        return printError(true, {
+          fn: "readConfig()->require()",
+          msg: "Does your repogen.js config export a config object?"
+        });
+      } else {
+        return config;
+      }
     }
   } else {
-    throw new Error(`Could not ${chalk.underline("find")} config`);
+    return printError(true, {
+      fn: "readConfig()",
+      msg: `Specified config file path doesn't exist:\n ${chalk.underline(
+        szPath
+      )}`
+    });
   }
 }
 
@@ -144,7 +157,7 @@ TODO: Breakup return oConfig.repos.map into two functions:
 ? -- create parseModernConfig function (.json)
 */
 
-export async function parseConfig(oConfig, oCliOptions) {
+export async function parseConfigOriginal(oConfig, oCliOptions) {
   //TODO: Use options as if CLI was passing information
   let configDir = is.nullOrUndefined(oConfig.dir) ? "." : oConfig.dir;
   printMirror({ configDir }, "red", "yellow");
@@ -167,7 +180,7 @@ export async function parseConfig(oConfig, oCliOptions) {
         } = oRepository;
         // printMirror({ sym }, "green", "grey");
         // printMirror({ dir }, "red", "grey");
-        let cloneRemoteString = getRemoteString(plat, space, repo);
+        let cloneRemoteString = getRemoteUri(plat, space, repo);
         let symlinkPath = await getSymlinkPath(sym, dir);
         let repositoryPath = getRepositoryPath(rootDir, repo);
         // printMirror({ cloneRemoteString }, "green", "grey");
@@ -185,7 +198,7 @@ export async function parseConfig(oConfig, oCliOptions) {
         let repo = oRepository[space]; //value
         // printMirror({ space }, "yellow", "grey");
         // printMirror({ repo }, "yellow", "grey");
-        let cloneRemoteString = getRemoteString("github.com", space, repo);
+        let cloneRemoteString = getRemoteUri("github.com", space, repo);
         //TODO: use repositoryPath as arg in getSymlinkPath
         let symlinkPath = await getSymlinkPath(repo);
         let repositoryPath = getRepositoryPath(rootDir, repo);
@@ -207,7 +220,7 @@ export async function parseConfig(oConfig, oCliOptions) {
       let repo = oRepository[space]; //value
       // printMirror({ space }, "yellow", "grey");
       // printMirror({ repo }, "yellow", "grey");
-      let cloneRemoteString = getRemoteString("github.com", space, repo);
+      let cloneRemoteString = getRemoteUri("github.com", space, repo);
       //TODO: use repositoryPath as arg in getSymlinkPath
       let symlinkPath = await getSymlinkPath(repo);
       let repositoryPath = getRepositoryPath(rootDir, repo);
@@ -230,7 +243,27 @@ TODO: Create a helper function to abstract the below
 *  let repositoryPath = getSymlinkPath(repo)
 */
 
-function getRemoteString(szPlatform, szWorkspace, szRepository) {
+export async function parseConfig(oTransformedConfig) {}
+export async function getConfigToParse(
+  szPlatform = "github.com",
+  szPlatformWorkspace,
+  szRepositoryName,
+  szRootDirToCloneInto
+) {
+  let repoRemoteUri = getRemoteUri(
+    szPlatform,
+    szPlatformWorkspace,
+    szRepositoryName
+  );
+  let symPath = await getSymlinkPath(szRepositoryName);
+  let repoPath = getRepositoryPath(szRootDirToCloneInto, szRepositoryName);
+  return {
+    repoRemoteUri,
+    symPath,
+    repoPath
+  };
+}
+function getRemoteUri(szPlatform, szWorkspace, szRepository) {
   if (
     is.nullOrUndefined(szPlatform) ||
     is.nullOrUndefined(szWorkspace) ||

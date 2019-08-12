@@ -4,6 +4,7 @@ import chalk from "chalk";
 import {
   parse,
   readConfig,
+  getConfigToParse,
   parseConfig,
   modernizeOldConfig
 } from "../src/parse";
@@ -11,7 +12,13 @@ import path from "path";
 import is from "@sindresorhus/is";
 import { printMirror } from "tacker";
 
-const configFile = path.resolve(__dirname, "../", "sandbox", ".repogen.json");
+const newConfigFile = path.resolve(
+  __dirname,
+  "../",
+  "sandbox",
+  ".repogen.json"
+);
+const oldConfigFile = path.resolve(__dirname, "../", "sandbox", ".repogen.js");
 const oldConfig = {
   provider: "alechp",
   repospacePath: "sandbox",
@@ -43,23 +50,37 @@ test.before(t => {
   delete process.env.rgAuthHost; // --> Works as expected; use this to ensure rgAuthHost isn't set
 });
 
-test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
-  "repoRemoteUri"
-)}, ${chalk.underline("symPath")}, ${chalk.underline("repoPath")}`, async t => {
-  try {
-    let config = await readConfig(configFile);
-    let parsed = await parseConfig(config);
-    t.true(is.array(parsed));
-    for await (let c of parsed) {
-      let { repoRemoteUri, symPath, repoPath } = await c;
-      t.true(is.string(repoRemoteUri));
-      t.true(is.string(symPath));
-      t.true(is.string(repoPath));
-    }
-  } catch (e) {
-    t.fail(e);
-  }
+test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
+  ".repogen.js"
+)} and ${chalk.underline(
+  ".repogen.json"
+)}; have identical repositories objects`, async t => {
+  let cNew = await readConfig(newConfigFile);
+  let cOld = await readConfig(oldConfigFile);
+  let cNewRepos = cNew.repos[2];
+  let cOldRepos = cOld.repositories[2];
+  // printMirror({ cNewRepos }, "magenta", "grey");
+  // printMirror({ cOldRepos }, "magenta", "grey");
+  t.deepEqual(cNewRepos, cOldRepos);
 });
+// test(`${chalk.cyan("getConfigToParse")} `)
+// test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
+//   "repoRemoteUri"
+// )}, ${chalk.underline("symPath")}, ${chalk.underline("repoPath")}`, async t => {
+//   try {
+//     let config = await readConfig(configFile);
+//     let parsed = await parseConfig(config);
+//     t.true(is.array(parsed));
+//     for await (let c of parsed) {
+//       let { repoRemoteUri, symPath, repoPath } = await c;
+//       t.true(is.string(repoRemoteUri));
+//       t.true(is.string(symPath));
+//       t.true(is.string(repoPath));
+//     }
+//   } catch (e) {
+//     t.fail(e);
+//   }
+// });
 
 test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
   "process.env.rgAuthHost"
@@ -69,18 +90,18 @@ test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
   t.is(process.env.rgAuthHost, oldConfig.provider);
   t.deepEqual(modernizedConfig, newConfig);
 });
-//TODO: Write "chooseConfig" test
-test(`${chalk.cyan(
-  "parse"
-)} return is the same for new config & old config`, async t => {
-  let cOld = await parse(oldConfig);
-  let cNew = await parse(newConfig);
-  t.deepEqual(cOld, cNew);
-});
-test(`${chalk.cyan("parse")} `, async t => {
-  let cImplicitNew = await parse();
-  printMirror({ cImplicitNew }, "magenta", "grey");
-});
+// //TODO: Write "chooseConfig" test
+// test(`${chalk.cyan(
+//   "parse"
+// )} return is the same for new config & old config`, async t => {
+//   let cOld = await parse(oldConfig);
+//   let cNew = await parse(newConfig);
+//   t.deepEqual(cOld, cNew);
+// });
+// test(`${chalk.cyan("parse")} `, async t => {
+//   let cImplicitNew = await parse();
+//   printMirror({ cImplicitNew }, "magenta", "grey");
+// });
 
-//TODO: Create a test for when rgAuthHost is present (ie. private + public repos)
-//TODO: Create a test for when rgAuthHost is absent (ie. public repos)
+// //TODO: Create a test for when rgAuthHost is present (ie. private + public repos)
+// //TODO: Create a test for when rgAuthHost is absent (ie. public repos)

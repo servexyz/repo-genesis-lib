@@ -4,7 +4,7 @@ const config = {
   repositories: [
     { servexyz: "get-pkg-prop" },
     { servexyz: "tacker" },
-    { servexyz: "node-starter" }
+    { servexyz: "paths-exist" }
   ]
 };
 
