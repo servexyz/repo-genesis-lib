@@ -61,7 +61,7 @@ test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
 });
 test(`${chalk.cyan("getConfigToParse")} produces ${chalk.underline(
   "(1)"
-)} object consisting of ${chalk.underline("(3)")} strings`, async t => {
+)} object consisting of ${chalk.underline("(3)")} strings`, t => {
   let { repoRemoteUri, symPath, repoPath } = getConfigToParse(
     "github.com",
     "servexyz",
