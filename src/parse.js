@@ -68,6 +68,7 @@ export async function chooseConfig(oConfig = undefined) {
     if (oConfig.hasOwnProperty("repositories")) {
       chosen = "passed repogen.js style config";
       printMirror({ chosen }, "red", "yellow");
+      printMirror({ oConfig }, "red", "blue");
       return modernizeOldConfig(oConfig);
     } else {
       chosen = "passed repogen.json style config";
@@ -78,6 +79,7 @@ export async function chooseConfig(oConfig = undefined) {
 }
 export function modernizeOldConfig(oOldConfig) {
   let oNewConfig = {};
+  printMirror({ oOldConfig }, "blue", "red");
   for (let [k, v] of Object.entries(oOldConfig)) {
     if (k === "provider") {
       process.env.rgAuthHost = v;
@@ -179,6 +181,7 @@ export async function parseConfig(oConfig, oCliOptions) {
     });
   } else {
     log("repogen.js");
+    //TODO: Stop reusing entire function block. Convert to function
     return oConfig.repositories.map(async oRepository => {
       let space = Object.keys(oRepository); //key
       let repo = oRepository[space]; //value
