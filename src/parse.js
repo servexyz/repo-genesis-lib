@@ -243,15 +243,44 @@ TODO: Create a helper function to abstract the below
 *  let repositoryPath = getSymlinkPath(repo)
 */
 
-export async function parseConfig(oTransformedConfig) {}
+export function parseTransformedConfig(oTransformedConfig) {
+  if (oTransformedConfig.hasOwnProperty("repos")) {
+    // Modern
+  } else {
+  }
+}
+export function parseOldRepoFormat(
+  szPlatform = "github.com",
+  oRepoKV,
+  szRootDirToCloneInto,
+  szSymlinkOptionalSubdir = "",
+  oOptions = { ensureDir: true }
+) {
+  if (is.nullOrUndefined(oRepoKV) || is.nullOrUndefined(szRootDirToCloneInto)) {
+    return null;
+  }
+  let space = Object.keys(oRepoKV);
+  let repo = oRepoKV[space];
+  return getConfigToParse(
+    szPlatform,
+    space,
+    repo,
+    szRootDirToCloneInto,
+    szSymlinkOptionalSubdir,
+    oOptions
+  );
+}
+
 export function getConfigToParse(
   szPlatform = "github.com",
   szPlatformWorkspace,
   szRepositoryName,
   szRootDirToCloneInto,
-  szSymlinkOptionalSubdir,
+  szSymlinkOptionalSubdir = "",
   oOptions = { ensureDir: true }
 ) {
+  //TODO: Add null params
+  //TODO: Add null param test
   let repoRemoteUri = getRemoteUri(
     szPlatform,
     szPlatformWorkspace,

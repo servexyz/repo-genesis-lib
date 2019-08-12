@@ -6,6 +6,8 @@ import {
   readConfig,
   getConfigToParse,
   parseConfig,
+  parseTransformedConfig,
+  parseOldRepoFormat,
   modernizeOldConfig
 } from "../src/parse";
 import path from "path";
@@ -27,15 +29,9 @@ const oldConfig = {
 const newConfig = {
   dir: "sandbox",
   repos: [
-    {
-      servexyz: "get-pkg-prop"
-    },
-    {
-      servexyz: "tacker"
-    },
-    {
-      servexyz: "paths-exist"
-    }
+    { servexyz: "get-pkg-prop" },
+    { servexyz: "tacker" },
+    { servexyz: "paths-exist" }
   ]
 };
 
@@ -43,7 +39,7 @@ test.before(t => {
   process.env.rgAuthHost = undefined; // --> Will not work; "undefined" not undefined
   process.env.rgAuthHost = null; // --> Will not work; "null" not null
   process.env.rgAuthHost = "alechp"; // --> Proper config
-  // delete process.env.rgAuthHost; // --> Works as expected; use this to ensure rgAuthHost isn't set
+  delete process.env.rgAuthHost; // --> Works as expected; use this to ensure rgAuthHost isn't set
 });
 
 test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
@@ -59,15 +55,9 @@ test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
   // printMirror({ cOldRepos }, "magenta", "grey");
   t.deepEqual(cNewRepos, cOldRepos);
 });
-test(`${chalk.cyan("getConfigToParse")} produces ${chalk.underline(
-  "(1)"
-)} object consisting of ${chalk.underline("(3)")} strings`, t => {
-  let { repoRemoteUri, symPath, repoPath } = getConfigToParse(
-    "github.com",
-    "servexyz",
-    "paths-exist",
-    sandboxDir
-  );
+
+const testGetConfigToParseStrings = (t, oCfg) => {
+  const { repoRemoteUri, symPath, repoPath } = oCfg;
   if (is.nullOrUndefined(process.env.rgAuthHost)) {
     t.true(repoRemoteUri === "https://github.com/servexyz/paths-exist");
   } else {
@@ -77,6 +67,35 @@ test(`${chalk.cyan("getConfigToParse")} produces ${chalk.underline(
   }
   t.true(symPath.endsWith("sandbox/paths-exist"));
   t.true(repoPath.endsWith("sandbox/.repositories/paths-exist"));
+};
+
+test(`${chalk.cyan("getConfigToParse")} produces ${chalk.underline(
+  "(1)"
+)} object consisting of ${chalk.underline("(3)")} strings`, t => {
+  let oCfg = getConfigToParse(
+    "github.com",
+    "servexyz",
+    "paths-exist",
+    sandboxDir
+  );
+  testGetConfigToParseStrings(t, oCfg);
+});
+
+test.skip(`${chalk.cyan(
+  "parseOldRepoFormat"
+)} produces three correct strings`, t => {
+  const oCfg = parseOldRepoFormat(
+    "github.com",
+    { servexyz: "paths-exist" },
+    sandboxDir
+  );
+  testGetConfigToParseStrings(t, oCfg);
+});
+
+test(`${chalk.cyan(
+  "parseOldRepoFormat"
+)} returns null if oRepoKV or szRootDirToCloneInto are undefined`, t => {
+  t.true(is.nullOrUndefined(parseOldRepoFormat()));
 });
 // test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
 //   "repoRemoteUri"
@@ -98,7 +117,7 @@ test(`${chalk.cyan("getConfigToParse")} produces ${chalk.underline(
 
 test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
   "process.env.rgAuthHost"
-)} and returns a JSON config`, async t => {
+)} and returns a JSON config`, t => {
   t.plan(2);
   let modernizedConfig = modernizeOldConfig(oldConfig);
   t.is(process.env.rgAuthHost, oldConfig.provider);
