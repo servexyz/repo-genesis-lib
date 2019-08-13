@@ -4,7 +4,7 @@ import chalk from "chalk";
 import {
   parse,
   readConfig,
-  getConfigToParse,
+  getTransformedConfig,
   parseConfig,
   parseTransformedConfig,
   parseOldRepoFormat,
@@ -57,7 +57,7 @@ test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
   t.deepEqual(cNewRepos, cOldRepos);
 });
 
-const testGetConfigToParseStrings = (t, oCfg) => {
+const testgetTransformedConfigStrings = (t, oCfg) => {
   const { repoRemoteUri, symPath, repoPath } = oCfg;
   // printMirror({ repoRemoteUri }, "magenta", "grey");
   // printMirror({ symPath }, "magenta", "grey");
@@ -73,16 +73,16 @@ const testGetConfigToParseStrings = (t, oCfg) => {
   t.true(repoPath.endsWith("sandbox/.repositories/paths-exist"));
 };
 
-test(`${chalk.cyan("getConfigToParse")} produces ${chalk.underline(
+test(`${chalk.cyan("getTransformedConfig")} produces ${chalk.underline(
   "(1)"
 )} object consisting of ${chalk.underline("(3)")} strings`, t => {
-  let oCfg = getConfigToParse(
+  let oCfg = getTransformedConfig(
     "github.com",
     "servexyz",
     "paths-exist",
     sandboxDir
   );
-  testGetConfigToParseStrings(t, oCfg);
+  testgetTransformedConfigStrings(t, oCfg);
 });
 
 test(`${chalk.cyan(
@@ -93,7 +93,7 @@ test(`${chalk.cyan(
     { servexyz: "paths-exist" },
     sandboxDir
   );
-  testGetConfigToParseStrings(t, oCfg);
+  testgetTransformedConfigStrings(t, oCfg);
 });
 
 test(`${chalk.cyan(
@@ -121,8 +121,8 @@ test(`${chalk.cyan("parseNewRepoFormat")} produces ${chalk.underline(
   const oCfgPartial = parseNewRepoFormat(cPartial, sandboxDir);
   // printMirror({ oCfgFull }, "magenta", "grey");
   // printMirror({ oCfgPartial }, "magenta", "grey");
-  testGetConfigToParseStrings(t, oCfgFull);
-  testGetConfigToParseStrings(t, oCfgPartial);
+  testgetTransformedConfigStrings(t, oCfgFull);
+  testgetTransformedConfigStrings(t, oCfgPartial);
 });
 
 test(`${chalk.cyan("parseOldRepoFormat")} produces  ${chalk.underline(
@@ -133,7 +133,7 @@ test(`${chalk.cyan("parseOldRepoFormat")} produces  ${chalk.underline(
   };
   const oCfgOld = parseOldRepoFormat("github.com", cOld, sandboxDir);
   // printMirror({ oCfgOld }, "magenta", "grey");
-  testGetConfigToParseStrings(t, oCfgOld);
+  testgetTransformedConfigStrings(t, oCfgOld);
 });
 
 // test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
