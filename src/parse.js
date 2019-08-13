@@ -38,65 +38,65 @@ export async function parse(mConfig) {
 //   return finalConfig;
 // }
 
-export async function chooseConfig(oConfig = undefined) {
-  let chosen;
-  if (is.nullOrUndefined(oConfig)) {
-    const { rgConfigPath } = process.env; // => Set by CLI
-    const repogenJsonPath = path.join(process.cwd(), "repogen.json");
-    printMirror({ repogenJsonPath }, "red", "blue");
-    if (is.nullOrUndefined(rgConfigPath)) {
-      printMirror({ rgConfigPath }, "red", "yellow");
-      if ((await pathsExist(repogenJsonPath)) === false) {
-        printMirror({ repogenJsonPath }, "red", "yellow");
-        let repogenPkg = await getPkgProp("repogen");
-        printMirror({ repogenPkg }, "yellow", "red");
-        if ((await getPkgProp("repogen")) === false) {
-          const repogenJsPath = path.join(process.cwd(), ".repogen.js");
-          if (await pathsExist(repogenJsPath)) {
-            const { config } = require(repogenJsPath);
-            printMirror({ config }, "red", "yellow");
-            chosen = "repogen.js in cwd";
-            printMirror({ chosen }, "red", "yellow");
-            return modernizeOldConfig(config);
-          } else {
-            printError({
-              fn: "await pathsExist(repogenJsPath)",
-              msg: "Path didn't exist or there was an error with require()"
-            });
-            return false;
-          }
-        } else {
-          chosen = "package.json in pkgUp";
-          printMirror({ chosen }, "red", "yellow");
-          return await getPkgProp("repogen");
-        }
-      } else {
-        printMirror({ repogenJsonPath }, "red", "green");
-        chosen = "repogen.json in cwd";
+// export async function chooseConfig(oConfig = undefined) {
+//   let chosen;
+//   if (is.nullOrUndefined(oConfig)) {
+//     const { rgConfigPath } = process.env; // => Set by CLI
+//     const repogenJsonPath = path.join(process.cwd(), "repogen.json");
+//     printMirror({ repogenJsonPath }, "red", "blue");
+//     if (is.nullOrUndefined(rgConfigPath)) {
+//       printMirror({ rgConfigPath }, "red", "yellow");
+//       if ((await pathsExist(repogenJsonPath)) === false) {
+//         printMirror({ repogenJsonPath }, "red", "yellow");
+//         let repogenPkg = await getPkgProp("repogen");
+//         printMirror({ repogenPkg }, "yellow", "red");
+//         if ((await getPkgProp("repogen")) === false) {
+//           const repogenJsPath = path.join(process.cwd(), ".repogen.js");
+//           if (await pathsExist(repogenJsPath)) {
+//             const { config } = require(repogenJsPath);
+//             printMirror({ config }, "red", "yellow");
+//             chosen = "repogen.js in cwd";
+//             printMirror({ chosen }, "red", "yellow");
+//             return modernizeOldConfig(config);
+//           } else {
+//             printError({
+//               fn: "await pathsExist(repogenJsPath)",
+//               msg: "Path didn't exist or there was an error with require()"
+//             });
+//             return false;
+//           }
+//         } else {
+//           chosen = "package.json in pkgUp";
+//           printMirror({ chosen }, "red", "yellow");
+//           return await getPkgProp("repogen");
+//         }
+//       } else {
+//         printMirror({ repogenJsonPath }, "red", "green");
+//         chosen = "repogen.json in cwd";
 
-        printMirror({ chosen }, "red", "yellow");
-        return await readConfig(repogenJsonPath);
-      }
-    } else {
-      printMirror({ rgConfigPath }, "red", "green");
-      chosen = "custom config at specified path";
+//         printMirror({ chosen }, "red", "yellow");
+//         return await readConfig(repogenJsonPath);
+//       }
+//     } else {
+//       printMirror({ rgConfigPath }, "red", "green");
+//       chosen = "custom config at specified path";
 
-      printMirror({ chosen }, "red", "yellow");
-      return await readConfig(rgConfigPath);
-    }
-  } else {
-    if (oConfig.hasOwnProperty("repositories")) {
-      chosen = "passed repogen.js style config";
-      printMirror({ chosen }, "red", "yellow");
-      printMirror({ oConfig }, "red", "blue");
-      return modernizeOldConfig(oConfig);
-    } else {
-      chosen = "passed repogen.json style config";
-      printMirror({ chosen }, "red", "yellow");
-      return oConfig;
-    }
-  }
-}
+//       printMirror({ chosen }, "red", "yellow");
+//       return await readConfig(rgConfigPath);
+//     }
+//   } else {
+//     if (oConfig.hasOwnProperty("repositories")) {
+//       chosen = "passed repogen.js style config";
+//       printMirror({ chosen }, "red", "yellow");
+//       printMirror({ oConfig }, "red", "blue");
+//       return modernizeOldConfig(oConfig);
+//     } else {
+//       chosen = "passed repogen.json style config";
+//       printMirror({ chosen }, "red", "yellow");
+//       return oConfig;
+//     }
+//   }
+// }
 
 export function modernizeOldConfig(oOldConfig) {
   let oNewConfig = {};
@@ -244,9 +244,10 @@ TODO: Create a helper function to abstract the below
 */
 
 export function parseConfig(oConfig) {
-  if (oTransformedConfig.hasOwnProperty("repos")) {
+  if (oConfig.hasOwnProperty("repos")) {
     // Modern
-  } else if{
+  } else if (oConfig.hasOwnProperty("repositories")) {
+    //Old
   }
 }
 export function parseNewRepoFormat(oRepository, szRootDir) {
