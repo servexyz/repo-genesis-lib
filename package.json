@@ -1,6 +1,6 @@
 {
   "name": "repo-genesis-lib",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "monolith maker; uses symlinks instead of submodules",
   "main": "build/main.js",
   "license": "MIT",
