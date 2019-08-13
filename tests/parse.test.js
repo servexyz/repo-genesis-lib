@@ -189,7 +189,7 @@ test(`${chalk.cyan("parse(undefined)")} returns ${chalk.underline(
   let configFromParseConfig = await parseConfig(configFromRead);
   // printMirror({ configFromParse }, "magenta", "red");
   // printMirror({ configFromRead }, "magenta", "red");
-  // printMirror({ configFromParseConfig }, "magenta", "red");
+  printMirror({ configFromParseConfig }, "magenta", "red");
   t.deepEqual(configFromParse, configFromParseConfig);
 });
 
