@@ -38,7 +38,7 @@ async function genAll(oWhatToGenerate) {
   }
 }
 export async function genRepository(szRepoURIToClone) {
-  printMirror({ szRepoURIToClone }, "red", "grey");
+  // printMirror({ szRepoURIToClone }, "red", "grey");
   try {
     await cloneRepository(szRepoURIToClone);
   } catch (e) {
