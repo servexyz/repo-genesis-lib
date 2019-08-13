@@ -174,11 +174,19 @@ test(`${chalk.cyan(
   // printMirror({ cNew }, "magenta", "grey");
   t.is(cOld.repoRemoteUri, cNew.repoRemoteUri);
 });
+
 test(`${chalk.cyan("chooseConfig")} picks .repogen.json`, async t => {
   let config = await chooseConfig();
-  printMirror({ config }, "blue", "red");
+  // printMirror({ config }, "blue", "red");
   t.true(is.object(config[0]));
   t.true(is.string(config[1]));
 });
-// //TODO: Create a test for when rgAuthHost is present (ie. private + public repos)
-// //TODO: Create a test for when rgAuthHost is absent (ie. public repos)
+test(`${chalk.cyan("parse(&lt;null&gt;)")}`, async t => {
+  let config = await parse();
+  // printMirror({ config }, "blue", "red");
+  t.pass();
+});
+
+// ? repogen-demo:
+//TODO: Create a test for when rgAuthHost is present (ie. private + public repos)
+//TODO: Create a test for when rgAuthHost is absent (ie. public repos)

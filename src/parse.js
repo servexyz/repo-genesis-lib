@@ -157,7 +157,17 @@ TODO: Create a helper function to abstract the below
 */
 
 export function parseConfig(oConfig) {
-  let configDir = is.nullOrUndefined(oConfig.dir) ? "." : oConfig.dir;
+  // if (is.nullOrUndefined(oConfig.dir)) {
+  if (is.nullOrUndefined(oConfig)) {
+    var configDir = ".";
+  } else {
+    if (oConfig.hasOwnProperty("dir")) {
+      configDir = oConfig.dir;
+    } else {
+      configDir = ".";
+    }
+  }
+  // let configDir = () => (is.nullOrUndefined(oConfig.dir) ? "." : oConfig.dir;
   let rootDir = path.join(process.cwd(), configDir);
   process.env.rgRootDir = rootDir;
   let repoRootDir = path.join(rootDir, ".repositories");
