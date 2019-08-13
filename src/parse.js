@@ -11,7 +11,8 @@ import { getPkgProp } from "get-pkg-prop";
 export async function parse(mConfig) {
   //TODO: Replace all ifs is() with 1 is call at top of fn and do simple str compare in ifs
   if (is.nullOrUndefined(mConfig)) {
-    let config = chooseConfig();
+    let config = await chooseConfig();
+    printMirror({ config }, "blue", "green");
     return parseConfig(config[0]);
   } else if (is.string(mConfig)) {
     if (mConfig.endsWith(".json") || myConfig.endsWidth(".js")) {
@@ -157,9 +158,8 @@ TODO: Create a helper function to abstract the below
 */
 
 export function parseConfig(oConfig) {
-  // if (is.nullOrUndefined(oConfig.dir)) {
   if (is.nullOrUndefined(oConfig)) {
-    var configDir = ".";
+    return null;
   } else {
     if (oConfig.hasOwnProperty("dir")) {
       configDir = oConfig.dir;
@@ -167,7 +167,11 @@ export function parseConfig(oConfig) {
       configDir = ".";
     }
   }
-  // let configDir = () => (is.nullOrUndefined(oConfig.dir) ? "." : oConfig.dir;
+  if (oConfig.hasOwnProperty === true) {
+    var configDir = oConfig.dir;
+  } else {
+    configDir = ".";
+  }
   let rootDir = path.join(process.cwd(), configDir);
   process.env.rgRootDir = rootDir;
   let repoRootDir = path.join(rootDir, ".repositories");

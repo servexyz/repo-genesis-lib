@@ -181,10 +181,13 @@ test(`${chalk.cyan("chooseConfig")} picks .repogen.json`, async t => {
   t.true(is.object(config[0]));
   t.true(is.string(config[1]));
 });
-test(`${chalk.cyan("parse(&lt;null&gt;)")}`, async t => {
-  let config = await parse();
-  // printMirror({ config }, "blue", "red");
-  t.pass();
+test(`${chalk.cyan("parse(undefined)")} returns ${chalk.underline(
+  ".repogen.json config"
+)}`, async t => {
+  let configFromParse = await parse();
+  let configFromRead = await readConfig(newConfigFile);
+  let configFromParseConfig = await parseConfig(configFromRead);
+  t.deepEqual(configFromParse, configFromParseConfig);
 });
 
 // ? repogen-demo:
