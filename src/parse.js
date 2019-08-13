@@ -4,7 +4,7 @@ import path from "path";
 import chalk from "chalk";
 import is from "@sindresorhus/is";
 import { pathsExist } from "paths-exist";
-import { printError, printLine, printMirror } from "tacker";
+import { printError, printMirror } from "tacker";
 import { getPkgProp } from "get-pkg-prop";
 
 //TODO: Create (or add) chooseConfig
@@ -39,6 +39,7 @@ export async function parse(mConfig) {
 //TODO: Debug this selecting .js instead of .json when both are present
 export async function chooseConfig(oConfig = undefined) {
   // let chosen;
+  //TODO: Remove first is.nullOrDefined check. Unnecessary
   if (is.nullOrUndefined(oConfig)) {
     const { rgConfigPath } = process.env; // => Set by CLI
     const repogenJsonPath = path.join(process.cwd(), ".repogen.json");
@@ -81,6 +82,7 @@ export async function chooseConfig(oConfig = undefined) {
       return [await readConfig(rgConfigPath), rgConfigPath];
     }
   } else {
+    //TODO: Also unnecessary... Unless chooseConfig is being used on its own
     if (oConfig.hasOwnProperty("repositories")) {
       // chosen = "passed repogen.js style config";
       // printMirror({ chosen }, "red", "yellow");
