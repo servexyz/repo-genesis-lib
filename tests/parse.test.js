@@ -59,9 +59,9 @@ test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
 
 const testGetConfigToParseStrings = (t, oCfg) => {
   const { repoRemoteUri, symPath, repoPath } = oCfg;
-  printMirror({ repoRemoteUri }, "magenta", "grey");
-  printMirror({ symPath }, "magenta", "grey");
-  printMirror({ repoPath }, "magenta", "grey");
+  // printMirror({ repoRemoteUri }, "magenta", "grey");
+  // printMirror({ symPath }, "magenta", "grey");
+  // printMirror({ repoPath }, "magenta", "grey");
   if (is.nullOrUndefined(process.env.rgAuthHost)) {
     t.true(repoRemoteUri === "https://github.com/servexyz/paths-exist");
   } else {
@@ -119,8 +119,8 @@ test(`${chalk.cyan("parseNewRepoFormat")} produces ${chalk.underline(
   };
   const oCfgFull = parseNewRepoFormat(cFull, sandboxDir);
   const oCfgPartial = parseNewRepoFormat(cPartial, sandboxDir);
-  printMirror({ oCfgFull }, "magenta", "grey");
-  printMirror({ oCfgPartial }, "magenta", "grey");
+  // printMirror({ oCfgFull }, "magenta", "grey");
+  // printMirror({ oCfgPartial }, "magenta", "grey");
   testGetConfigToParseStrings(t, oCfgFull);
   testGetConfigToParseStrings(t, oCfgPartial);
 });
@@ -132,7 +132,7 @@ test(`${chalk.cyan("parseOldRepoFormat")} produces  ${chalk.underline(
     servexyz: "paths-exist"
   };
   const oCfgOld = parseOldRepoFormat("github.com", cOld, sandboxDir);
-  printMirror({ oCfgOld }, "magenta", "grey");
+  // printMirror({ oCfgOld }, "magenta", "grey");
   testGetConfigToParseStrings(t, oCfgOld);
 });
 

@@ -27,6 +27,8 @@ export async function parse(mConfig) {
     is.string(mConfig);
   }
 }
+
+//TODO: Break up functions below into CLI functions (for auto finding)
 // export async function parse(oConfig = undefined) {
 //   let config = await chooseConfig(oConfig);
 //   printMirror({ config }, "magenta", "grey");
@@ -150,91 +152,6 @@ export async function readConfig(szPath) {
 // - .repogen.json: "provider"
 // - .package.json: "provider"
 // - directly via CLI flag (ie. options)
-
-/*
-TODO: Breakup return oConfig.repos.map into two functions:
-? -- create parseOldConfig function (.js)
-? -- create parseModernConfig function (.json)
-*/
-
-export async function parseConfigOriginal(oConfig, oCliOptions) {
-  //TODO: Use options as if CLI was passing information
-  let configDir = is.nullOrUndefined(oConfig.dir) ? "." : oConfig.dir;
-  printMirror({ configDir }, "red", "yellow");
-  let rootDir = path.join(process.cwd(), configDir);
-  process.env.rgRootDir = rootDir;
-  let repoRootDir = path.join(rootDir, ".repositories");
-  process.env.rgRepoRootDir = repoRootDir;
-  fs.ensureDir(repoRootDir);
-  if (oConfig.hasOwnProperty("repos")) {
-    return oConfig.repos.map(async oRepository => {
-      //TODO: Add regression check (ie. if only 1 key/value pair)
-      if (Object.keys(oRepository).length > 1) {
-        // * Modern config
-        let {
-          plat = "github.com",
-          space,
-          repo,
-          dir = "",
-          sym = repo
-        } = oRepository;
-        // printMirror({ sym }, "green", "grey");
-        // printMirror({ dir }, "red", "grey");
-        let cloneRemoteString = getRemoteUri(plat, space, repo);
-        let symlinkPath = await getSymlinkPath(sym, dir);
-        let repositoryPath = getRepositoryPath(rootDir, repo);
-        // printMirror({ cloneRemoteString }, "green", "grey");
-        // printMirror({ symlinkPath }, "green", "grey");
-        // printMirror({ repositoryPath }, "green", "grey");
-        return {
-          repoRemoteUri: cloneRemoteString,
-          symPath: symlinkPath,
-          repoPath: repositoryPath
-        };
-      } else {
-        // * Backwards compatibility
-        //TODO: Fix symlink path for this version
-        let space = Object.keys(oRepository); //key
-        let repo = oRepository[space]; //value
-        // printMirror({ space }, "yellow", "grey");
-        // printMirror({ repo }, "yellow", "grey");
-        let cloneRemoteString = getRemoteUri("github.com", space, repo);
-        //TODO: use repositoryPath as arg in getSymlinkPath
-        let symlinkPath = await getSymlinkPath(repo);
-        let repositoryPath = getRepositoryPath(rootDir, repo);
-        // printMirror({ cloneRemoteString }, "cyan", "grey");
-        // printMirror({ symlinkPath }, "cyan", "grey");
-        // printMirror({ repositoryPath }, "cyan", "grey");
-        return {
-          repoRemoteUri: cloneRemoteString,
-          symPath: symlinkPath,
-          repoPath: repositoryPath
-        };
-      }
-    });
-  } else {
-    log("repogen.js");
-    //TODO: Stop reusing entire function block. Convert to function
-    return oConfig.repositories.map(async oRepository => {
-      let space = Object.keys(oRepository); //key
-      let repo = oRepository[space]; //value
-      // printMirror({ space }, "yellow", "grey");
-      // printMirror({ repo }, "yellow", "grey");
-      let cloneRemoteString = getRemoteUri("github.com", space, repo);
-      //TODO: use repositoryPath as arg in getSymlinkPath
-      let symlinkPath = await getSymlinkPath(repo);
-      let repositoryPath = getRepositoryPath(rootDir, repo);
-      // printMirror({ cloneRemoteString }, "cyan", "grey");
-      // printMirror({ symlinkPath }, "cyan", "grey");
-      // printMirror({ repositoryPath }, "cyan", "grey");
-      return {
-        repoRemoteUri: cloneRemoteString,
-        symPath: symlinkPath,
-        repoPath: repositoryPath
-      };
-    });
-  }
-}
 
 /*
 TODO: Create a helper function to abstract the below
@@ -361,13 +278,13 @@ function getRemoteUri(szPlatform, szWorkspace, szRepository) {
     log(`process.env.rgAuthHost: ${chalk.red(process.env.rgAuthHost)}`);
   if (is.nullOrUndefined(process.env.rgAuthHost)) {
     let repoUri = `https://${szPlatform}/${szWorkspace}/${szRepository}`;
-    printMirror({ repoUri }, "magenta", "blue");
+    // printMirror({ repoUri }, "magenta", "blue");
     return repoUri;
   } else {
     let repoUri = `git@${
       process.env.rgAuthHost
     }:${szWorkspace}/${szRepository}`;
-    printMirror({ repoUri }, "magenta", "green");
+    // printMirror({ repoUri }, "magenta", "green");
     return repoUri;
   }
 }
