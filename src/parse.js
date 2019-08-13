@@ -12,7 +12,7 @@ export async function parse(mConfig) {
   //TODO: Replace all ifs is() with 1 is call at top of fn and do simple str compare in ifs
   if (is.nullOrUndefined(mConfig)) {
     let config = await chooseConfig();
-    printMirror({ config }, "blue", "green");
+    // printMirror({ config }, "blue", "green");
     return parseConfig(config[0]);
   } else if (is.string(mConfig)) {
     if (mConfig.endsWith(".json") || myConfig.endsWidth(".js")) {
