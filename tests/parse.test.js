@@ -5,6 +5,8 @@ import {
   parse,
   readConfig,
   getTransformedConfig,
+  chooseConfig,
+  printTransformedConfig,
   parseConfig,
   parseTransformedConfig,
   parseOldRepoFormat,
@@ -14,6 +16,8 @@ import {
 import path from "path";
 import is from "@sindresorhus/is";
 import { printMirror } from "tacker";
+
+//TODO: Write parseConfig test
 
 const sandboxDir = path.join(__dirname, "../", "sandbox");
 const newConfigFile = path.join(sandboxDir, ".repogen.json");
@@ -59,9 +63,7 @@ test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
 
 const testGetTransformedConfigStrings = (t, oCfg) => {
   const { repoRemoteUri, symPath, repoPath } = oCfg;
-  // printMirror({ repoRemoteUri }, "magenta", "grey");
-  // printMirror({ symPath }, "magenta", "grey");
-  // printMirror({ repoPath }, "magenta", "grey");
+  // printTransformedConfig(oCfg)
   if (is.nullOrUndefined(process.env.rgAuthHost)) {
     t.true(repoRemoteUri === "https://github.com/servexyz/paths-exist");
   } else {
@@ -136,23 +138,23 @@ test(`${chalk.cyan("parseOldRepoFormat")} produces  ${chalk.underline(
   testGetTransformedConfigStrings(t, oCfgOld);
 });
 
-// test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
-//   "repoRemoteUri"
-// )}, ${chalk.underline("symPath")}, ${chalk.underline("repoPath")}`, async t => {
-//   try {
-//     let config = await readConfig(configFile);
-//     let parsed = await parseConfig(config);
-//     t.true(is.array(parsed));
-//     for await (let c of parsed) {
-//       let { repoRemoteUri, symPath, repoPath } = await c;
-//       t.true(is.string(repoRemoteUri));
-//       t.true(is.string(symPath));
-//       t.true(is.string(repoPath));
-//     }
-//   } catch (e) {
-//     t.fail(e);
-//   }
-// });
+test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
+  "repoRemoteUri"
+)}, ${chalk.underline("symPath")}, ${chalk.underline("repoPath")}`, async t => {
+  try {
+    let config = await readConfig(newConfigFile);
+    let parsed = await parseConfig(config);
+    t.true(is.array(parsed));
+    for await (let c of parsed) {
+      let { repoRemoteUri, symPath, repoPath } = await c;
+      t.true(is.string(repoRemoteUri));
+      t.true(is.string(symPath));
+      t.true(is.string(repoPath));
+    }
+  } catch (e) {
+    t.fail(e);
+  }
+});
 
 test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
   "process.env.rgAuthHost"
@@ -163,17 +165,20 @@ test(`${chalk.cyan("modernizeOldConfig")} sets ${chalk.underline.grey(
   t.deepEqual(modernizedConfig, newConfig);
 });
 // //TODO: Write "chooseConfig" test
-// test(`${chalk.cyan(
-//   "parse"
-// )} return is the same for new config & old config`, async t => {
-//   let cOld = await parse(oldConfig);
-//   let cNew = await parse(newConfig);
-//   t.deepEqual(cOld, cNew);
-// });
-// test(`${chalk.cyan("parse")} `, async t => {
-//   let cImplicitNew = await parse();
-//   printMirror({ cImplicitNew }, "magenta", "grey");
-// });
-
+test(`${chalk.cyan(
+  "parse"
+)} return is the same for new config & old config`, async t => {
+  let cOld = await parse(oldConfig);
+  // printMirror({ cOld }, "magenta", "grey");
+  let cNew = await parse(newConfig);
+  // printMirror({ cNew }, "magenta", "grey");
+  t.is(cOld.repoRemoteUri, cNew.repoRemoteUri);
+});
+test(`${chalk.cyan("chooseConfig")} picks .repogen.json`, async t => {
+  let config = await chooseConfig();
+  printMirror({ config }, "blue", "red");
+  t.true(is.object(config[0]));
+  t.true(is.string(config[1]));
+});
 // //TODO: Create a test for when rgAuthHost is present (ie. private + public repos)
 // //TODO: Create a test for when rgAuthHost is absent (ie. public repos)

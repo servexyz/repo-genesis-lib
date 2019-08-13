@@ -7,14 +7,17 @@ import { pathsExist } from "paths-exist";
 import { printError, printLine, printMirror } from "tacker";
 import { getPkgProp } from "get-pkg-prop";
 
+//TODO: Create (or add) chooseConfig
 export async function parse(mConfig) {
-  // ? mConfig == string || object
-  let oConfig = {};
+  //TODO: Replace all ifs is() with 1 is call at top of fn and do simple str compare in ifs
   if (is.nullOrUndefined(mConfig)) {
-    return null;
+    let config = chooseConfig();
+    return parseConfig(config[0]);
   } else if (is.string(mConfig)) {
-    if (mConfig.endsWith(".json")) {
-    } else if (myConfig.endsWith(".js")) {
+    if (mConfig.endsWith(".json") || myConfig.endsWidth(".js")) {
+      let cfg = await readConfig(mConfig);
+      // printMirror({ cfg }, "cyan", "red");
+      return parseConfig(cfg);
     } else {
       return printError(true, {
         fn: "parse",
@@ -23,8 +26,71 @@ export async function parse(mConfig) {
         )} or ${chalk.underline(".json")}`
       });
     }
+  } else if (is.object(mConfig)) {
+    return parseConfig(mConfig);
   } else {
-    is.string(mConfig);
+    printError(true, {
+      fn: "parse",
+      msg: "Need to provide either a config object or path to a config file"
+    });
+  }
+}
+
+//TODO: Debug this selecting .js instead of .json when both are present
+export async function chooseConfig(oConfig = undefined) {
+  // let chosen;
+  if (is.nullOrUndefined(oConfig)) {
+    const { rgConfigPath } = process.env; // => Set by CLI
+    const repogenJsonPath = path.join(process.cwd(), ".repogen.json");
+    // printMirror({ repogenJsonPath }, "red", "blue");
+    if (is.nullOrUndefined(rgConfigPath)) {
+      // printMirror({ rgConfigPath }, "red", "yellow");
+      if ((await pathsExist(repogenJsonPath)) === false) {
+        // printMirror({ repogenJsonPath }, "red", "yellow");
+        let repogenPkg = await getPkgProp("repogen");
+        printMirror({ repogenPkg }, "yellow", "red");
+        if ((await getPkgProp("repogen")) === false) {
+          const repogenJsPath = path.join(process.cwd(), ".repogen.js");
+          if (await pathsExist(repogenJsPath)) {
+            const { config } = require(repogenJsPath);
+            // printMirror({ config }, "red", "yellow");
+            // chosen = "repogen.js in cwd";
+            // printMirror({ chosen }, "red", "yellow");
+            return [modernizeOldConfig(config), ".repogen.js"];
+          } else {
+            return printError({
+              fn: "await pathsExist(repogenJsPath)",
+              msg: "Path didn't exist or there was an error with require()"
+            });
+          }
+        } else {
+          // chosen = "package.json in pkgUp";
+          // printMirror({ chosen }, "red", "yellow");
+          return [await getPkgProp("repogen"), "package.json"];
+        }
+      } else {
+        // printMirror({ repogenJsonPath }, "red", "green");
+        // chosen = ".repogen.json in cwd";
+        // printMirror({ chosen }, "red", "yellow");
+        return [await readConfig(repogenJsonPath), ".repogen.json"];
+      }
+    } else {
+      // printMirror({ rgConfigPath }, "red", "green");
+      // chosen = "custom config at specified path";
+      // printMirror({ chosen }, "red", "yellow");
+      return [await readConfig(rgConfigPath), rgConfigPath];
+    }
+  } else {
+    if (oConfig.hasOwnProperty("repositories")) {
+      // chosen = "passed repogen.js style config";
+      // printMirror({ chosen }, "red", "yellow");
+      // printMirror({ oConfig }, "red", "blue");
+      return [modernizeOldConfig(oConfig), ".repogen.js"];
+    } else {
+      // chosen = "passed .repogen.json style config";
+      // printMirror({ chosen }, "red", "yellow");
+      return [oConfig, ".repogen.json"];
+    }
   }
 }
 
@@ -90,7 +156,6 @@ TODO: Create a helper function to abstract the below
 
 export function parseConfig(oConfig) {
   let configDir = is.nullOrUndefined(oConfig.dir) ? "." : oConfig.dir;
-  printMirror({ configDir }, "red", "yellow");
   let rootDir = path.join(process.cwd(), configDir);
   process.env.rgRootDir = rootDir;
   let repoRootDir = path.join(rootDir, ".repositories");
@@ -105,19 +170,18 @@ export function parseConfig(oConfig) {
       })
     );
   })();
-  printMirror({ oConfig }, "cyan", "red");
   if (oConfig.hasOwnProperty("repos")) {
-    return oConfig.repos.map(oRepo => {
+    return oConfig.repos.map(oRepository => {
       if (Object.keys(oRepository).length > 1) {
         return parseNewRepoFormat(oRepository, rootDir);
       } else {
-        printMirror({ oRepository }, "cyan", "yellow");
+        // printMirror({ oRepository }, "cyan", "yellow");
         return parseOldRepoFormat("github.com", oRepository, rootDir);
       }
     });
   } else if (oConfig.hasOwnProperty("repositories")) {
     return oConfig.repositories.map(oRepository => {
-      printMirror({ oRepository }, "cyan", "green");
+      // printMirror({ oRepository }, "cyan", "green");
       return parseOldRepoFormat("github.com", oRepository, rootDir);
     });
   }
@@ -167,6 +231,12 @@ export function parseOldRepoFormat(
   );
 }
 
+export function printTransformedConfig(oConfig) {
+  const { repoRemoteUri, symPath, repoPath } = oConfig;
+  printMirror({ repoRemoteUri }, "magenta", "grey");
+  printMirror({ symPath }, "magenta", "grey");
+  printMirror({ repoPath }, "magenta", "grey");
+}
 export function getTransformedConfig(
   szPlatform = "github.com",
   szPlatformWorkspace,
