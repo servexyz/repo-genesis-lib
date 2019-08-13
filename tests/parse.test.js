@@ -8,6 +8,7 @@ import {
   parseConfig,
   parseTransformedConfig,
   parseOldRepoFormat,
+  parseNewRepoFormat,
   modernizeOldConfig
 } from "../src/parse";
 import path from "path";
@@ -81,7 +82,7 @@ test(`${chalk.cyan("getConfigToParse")} produces ${chalk.underline(
   testGetConfigToParseStrings(t, oCfg);
 });
 
-test.skip(`${chalk.cyan(
+test(`${chalk.cyan(
   "parseOldRepoFormat"
 )} produces three correct strings`, t => {
   const oCfg = parseOldRepoFormat(
@@ -94,8 +95,34 @@ test.skip(`${chalk.cyan(
 
 test(`${chalk.cyan(
   "parseOldRepoFormat"
-)} returns null if oRepoKV or szRootDirToCloneInto are undefined`, t => {
+)} returns null if oRepoKV or szRootDir are undefined`, t => {
   t.true(is.nullOrUndefined(parseOldRepoFormat()));
+});
+
+test(`${chalk.cyan(
+  "parseNewRepoFormat"
+)} produces three correct strings`, async t => {
+  const cFull = {
+    plat: "github.com",
+    space: "servexyz",
+    repo: "paths-exist",
+    dir: "modules",
+    sym: "gpp"
+  };
+  const cPartial = {
+    space: "servexyz",
+    repo: "tacker",
+    sym: "tkr"
+  };
+  const cOld = {
+    servexyz: "paths-exist"
+  };
+  const oCfgFull = parseNewRepoFormat(cFull);
+  const oCfgPartial = parseNewRepoFormat(cPartial);
+  const oCfgOld = parseNewRepoFormat(cOld);
+  // testGetConfigToParseStrings(t, oCfgFull);
+  // testGetConfigToParseStrings(t, oCfgPartial);
+  testGetConfigToParseStrings(t, oCfgOld);
 });
 // test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
 //   "repoRemoteUri"

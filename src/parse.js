@@ -253,23 +253,30 @@ export function parseNewRepoFormat(oRepository) {
   if (is.nullOrUndefined(oRepository)) {
     return null;
   }
-  const {
-    plat = "github.com",
-    space,
-    repo,
-    dir = "",
-    sym = repo
-  } = oRepository;
-  return getConfigToParse(plat, space, repo, dir, sym);
+  if (Object.keys(oRepository).length > 1) {
+    const {
+      plat = "github.com",
+      space,
+      repo,
+      dir = "",
+      sym = repo
+    } = oRepository;
+    if (is.nullOrUndefined(space) || is.nullOrUndefined(repo)) {
+      return null;
+    }
+    return getConfigToParse(plat, space, repo, dir, sym);
+  } else {
+    return parseOldRepoFormat("github.com", oRepository);
+  }
 }
 export function parseOldRepoFormat(
   szPlatform = "github.com",
   oRepoKV,
-  szRootDirToCloneInto,
+  szRootDir = process.cwd(),
   szSymlinkOptionalSubdir = "",
   oOptions = { ensureDir: true }
 ) {
-  if (is.nullOrUndefined(oRepoKV) || is.nullOrUndefined(szRootDirToCloneInto)) {
+  if (is.nullOrUndefined(oRepoKV) || is.nullOrUndefined(szRootDir)) {
     return null;
   }
   let space = Object.keys(oRepoKV);
@@ -278,7 +285,7 @@ export function parseOldRepoFormat(
     szPlatform,
     space,
     repo,
-    szRootDirToCloneInto,
+    szRootDir,
     szSymlinkOptionalSubdir,
     repo,
     oOptions
@@ -289,7 +296,7 @@ export function getConfigToParse(
   szPlatform = "github.com",
   szPlatformWorkspace,
   szRepositoryName,
-  szRootDirToCloneInto,
+  szRootDir,
   szSymlinkOptionalSubdir = "",
   szSymlinkName = szRepositoryName,
   oOptions = { ensureDir: true }
@@ -303,11 +310,11 @@ export function getConfigToParse(
   );
   let symPath = getSymlinkPath(
     szSymlinkName,
-    szRootDirToCloneInto,
+    szRootDir,
     szSymlinkOptionalSubdir,
     oOptions
   );
-  let repoPath = getRepositoryPath(szRootDirToCloneInto, szRepositoryName);
+  let repoPath = getRepositoryPath(szRootDir, szRepositoryName);
   return {
     repoRemoteUri,
     symPath,
