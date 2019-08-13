@@ -167,7 +167,6 @@ export function parseOldRepoFormat(
   );
 }
 
-//TODO: Create parseTransformedConfig function
 export function getTransformedConfig(
   szPlatform = "github.com",
   szPlatformWorkspace,

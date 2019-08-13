@@ -57,7 +57,7 @@ test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
   t.deepEqual(cNewRepos, cOldRepos);
 });
 
-const testgetTransformedConfigStrings = (t, oCfg) => {
+const testGetTransformedConfigStrings = (t, oCfg) => {
   const { repoRemoteUri, symPath, repoPath } = oCfg;
   // printMirror({ repoRemoteUri }, "magenta", "grey");
   // printMirror({ symPath }, "magenta", "grey");
@@ -82,7 +82,7 @@ test(`${chalk.cyan("getTransformedConfig")} produces ${chalk.underline(
     "paths-exist",
     sandboxDir
   );
-  testgetTransformedConfigStrings(t, oCfg);
+  testGetTransformedConfigStrings(t, oCfg);
 });
 
 test(`${chalk.cyan(
@@ -93,7 +93,7 @@ test(`${chalk.cyan(
     { servexyz: "paths-exist" },
     sandboxDir
   );
-  testgetTransformedConfigStrings(t, oCfg);
+  testGetTransformedConfigStrings(t, oCfg);
 });
 
 test(`${chalk.cyan(
@@ -121,8 +121,8 @@ test(`${chalk.cyan("parseNewRepoFormat")} produces ${chalk.underline(
   const oCfgPartial = parseNewRepoFormat(cPartial, sandboxDir);
   // printMirror({ oCfgFull }, "magenta", "grey");
   // printMirror({ oCfgPartial }, "magenta", "grey");
-  testgetTransformedConfigStrings(t, oCfgFull);
-  testgetTransformedConfigStrings(t, oCfgPartial);
+  testGetTransformedConfigStrings(t, oCfgFull);
+  testGetTransformedConfigStrings(t, oCfgPartial);
 });
 
 test(`${chalk.cyan("parseOldRepoFormat")} produces  ${chalk.underline(
@@ -133,7 +133,7 @@ test(`${chalk.cyan("parseOldRepoFormat")} produces  ${chalk.underline(
   };
   const oCfgOld = parseOldRepoFormat("github.com", cOld, sandboxDir);
   // printMirror({ oCfgOld }, "magenta", "grey");
-  testgetTransformedConfigStrings(t, oCfgOld);
+  testGetTransformedConfigStrings(t, oCfgOld);
 });
 
 // test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
