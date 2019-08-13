@@ -299,6 +299,26 @@ function getRemoteUri(szPlatform, szWorkspace, szRepository) {
     return repoUri;
   }
 }
+//TODO: Debug; currently not prepending sandbox from config.dir
+/*
+configFromParseConfig: [
+  {
+    "repoRemoteUri": "git@alechp:servexyz/get-pkg-prop",
+    "symPath": "/Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/modules/gpp",
+    "repoPath": "/Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/.repositories/get-pkg-prop"
+  },
+  {
+    "repoRemoteUri": "git@alechp:servexyz/tacker",
+    "symPath": "/Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/tkr",
+    "repoPath": "/Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/.repositories/tacker"
+  },
+  {
+    "repoRemoteUri": "git@alechp:servexyz/paths-exist",
+    "symPath": "/Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/paths-exist",
+    "repoPath": "/Users/alechp/Code/servexyz/genesis/.repositories/repo-genesis/.repositories/repo-genesis-lib/.repositories/paths-exist"
+  }
+]
+*/
 function getSymlinkPath(szNameOfSym, szRootDir, szOptionalSubdir = "") {
   if (is.nullOrUndefined(szNameOfSym)) return null;
   let symlinkRootDir = path.join(szRootDir, szOptionalSubdir);
@@ -314,6 +334,8 @@ function getSymlinkPath(szNameOfSym, szRootDir, szOptionalSubdir = "") {
   let joinedSymlinkPath = path.join(symlinkRootDir, szNameOfSym);
   return joinedSymlinkPath;
 }
+
+//TODO: Debug; currently not prepending sandbox from config.dir
 function getRepositoryPath(szRootDir, szNameOfRepo) {
   if (is.nullOrUndefined(szNameOfRepo)) return null;
   let repositoriesPath = path.join(szRootDir, ".repositories", szNameOfRepo);

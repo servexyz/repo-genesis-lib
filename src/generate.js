@@ -23,9 +23,14 @@ async function genAll(oWhatToGenerate) {
   try {
     for await (let what of oWhatToGenerate) {
       let { repoRemoteUri, symPath, repoPath } = what;
-      await genRepository(repoRemoteUri, repoPath);
-      await genSymlink(repoPath, symPath);
-      await genDependency(repoPath);
+      // await genRepository(repoRemoteUri);
+      // await genSymlink(repoPath, symPath);
+      // await genDependency(repoPath);
+      await Promise.all([
+        genRepository(repoRemoteUri),
+        genSymlink(repoPath, symPath),
+        genDependency(repoPath)
+      ]);
     }
     return true;
   } catch (e) {
@@ -47,23 +52,22 @@ function getStringAfterChar(szString, szCharacter) {
   );
 }
 export async function genSymlink(szRepoPath, szSymlinkPath) {
-  let name;
   if (is.nullOrUndefined(szSymlinkPath)) {
-    printLine("blue");
-    log(`null or undefined`);
-    printLine("blue");
-    name = getStringAfterChar(szRepoPath, "/");
-    printMirror({ name }, "yellow", "grey");
+    // printLine("blue");
+    // log(`null or undefined`);
+    // printLine("blue");
+    var name = getStringAfterChar(szRepoPath, "/");
+    // printMirror({ name }, "yellow", "grey");
   } else {
-    printMirror({ szSymlinkPath }, "yellow", "grey");
-    printLine("blue");
-    log(`else`);
-    printLine("blue");
+    // printMirror({ szSymlinkPath }, "yellow", "grey");
+    // printLine("blue");
+    // log(`else`);
+    // printLine("blue");
     name = getStringAfterChar(szSymlinkPath, "/");
-    printMirror({ name }, "yellow", "grey");
+    // printMirror({ name }, "yellow", "grey");
   }
-  printMirror({ name }, "red", "grey");
-  printMirror({ szSymlinkPath }, "red", "grey");
+  // printMirror({ name }, "red", "grey");
+  // printMirror({ szSymlinkPath }, "red", "grey");
   try {
     await execa("ln", ["-s", szRepoPath, szSymlinkPath]);
   } catch (e) {
@@ -80,9 +84,9 @@ export async function genDependency(szWhereToInstall) {
   }
 }
 
-// async function genRepositories(oWhatToGenerate) {}
-// async function genSymlinks(oWhatToGenerate) {}
-// async function genDependencies(oWhatToGenerate) {}
+//TODO: async function genRepositories(oWhatToGenerate) {}
+//TODO: async function genSymlinks(oWhatToGenerate) {}
+//TODO: async function genDependencies(oWhatToGenerate) {}
 
 async function cloneRepository(szURI) {
   return await execa("git", ["clone", szURI], {
