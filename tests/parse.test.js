@@ -106,23 +106,26 @@ test(`${chalk.cyan(
     plat: "github.com",
     space: "servexyz",
     repo: "paths-exist",
-    dir: "modules",
-    sym: "gpp"
+    dir: "",
+    sym: "paths-exist"
   };
   const cPartial = {
     space: "servexyz",
-    repo: "tacker",
-    sym: "tkr"
+    repo: "paths-exist",
+    sym: "paths-exist"
   };
   const cOld = {
     servexyz: "paths-exist"
   };
-  const oCfgFull = parseNewRepoFormat(cFull);
-  const oCfgPartial = parseNewRepoFormat(cPartial);
-  const oCfgOld = parseNewRepoFormat(cOld);
-  // testGetConfigToParseStrings(t, oCfgFull);
-  // testGetConfigToParseStrings(t, oCfgPartial);
-  testGetConfigToParseStrings(t, oCfgOld);
+  const oCfgFull = parseNewRepoFormat(cFull, sandboxDir);
+  const oCfgPartial = parseNewRepoFormat(cPartial, sandboxDir);
+  const oCfgOld = parseNewRepoFormat(cOld, sandboxDir);
+  // printMirror({ oCfgFull }, "magenta", "grey");
+  // printMirror({ oCfgPartial }, "magenta", "grey");
+  // printMirror({ oCfgOld }, "magenta", "grey");
+  testGetConfigToParseStrings(t, oCfgFull);
+  testGetConfigToParseStrings(t, oCfgPartial);
+  t.false(oCfgOld);
 });
 // test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
 //   "repoRemoteUri"

@@ -249,8 +249,8 @@ export function parseTransformedConfig(oTransformedConfig) {
   } else {
   }
 }
-export function parseNewRepoFormat(oRepository) {
-  if (is.nullOrUndefined(oRepository)) {
+export function parseNewRepoFormat(oRepository, szRootDir) {
+  if (is.nullOrUndefined(oRepository) || is.nullOrUndefined(szRootDir)) {
     return null;
   }
   if (Object.keys(oRepository).length > 1) {
@@ -264,15 +264,15 @@ export function parseNewRepoFormat(oRepository) {
     if (is.nullOrUndefined(space) || is.nullOrUndefined(repo)) {
       return null;
     }
-    return getConfigToParse(plat, space, repo, dir, sym);
+    return getConfigToParse(plat, space, repo, szRootDir, dir, sym);
   } else {
-    return parseOldRepoFormat("github.com", oRepository);
+    return false;
   }
 }
 export function parseOldRepoFormat(
   szPlatform = "github.com",
   oRepoKV,
-  szRootDir = process.cwd(),
+  szRootDir,
   szSymlinkOptionalSubdir = "",
   oOptions = { ensureDir: true }
 ) {
