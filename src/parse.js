@@ -243,10 +243,10 @@ TODO: Create a helper function to abstract the below
 *  let repositoryPath = getSymlinkPath(repo)
 */
 
-export function parseTransformedConfig(oTransformedConfig) {
+export function parseConfig(oConfig) {
   if (oTransformedConfig.hasOwnProperty("repos")) {
     // Modern
-  } else {
+  } else if{
   }
 }
 export function parseNewRepoFormat(oRepository, szRootDir) {
@@ -292,6 +292,9 @@ export function parseOldRepoFormat(
   );
 }
 
+//TODO: Create parseConfig function
+//TODO: Consider renaming to getTransformedConfig
+//TODO: Create parseTransformedConfig function
 export function getConfigToParse(
   szPlatform = "github.com",
   szPlatformWorkspace,
