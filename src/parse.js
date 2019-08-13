@@ -244,38 +244,68 @@ TODO: Create a helper function to abstract the below
 */
 
 export function parseConfig(oConfig) {
+  let configDir = is.nullOrUndefined(oConfig.dir) ? "." : oConfig.dir;
+  printMirror({ configDir }, "red", "yellow");
+  let rootDir = path.join(process.cwd(), configDir);
+  process.env.rgRootDir = rootDir;
+  let repoRootDir = path.join(rootDir, ".repositories");
+  process.env.rgRepoRootDir = repoRootDir;
+  //TODO: Move ensureDirectory to parseXRepoFormat
+  (async () => {
+    await fs.ensureDir(repoRootDir).catch(err =>
+      printError(true, {
+        fn: "parseConfig -> await fs.ensureDir",
+        err,
+        msg: "Directory could not be corrected"
+      })
+    );
+  })();
+  printMirror({ oConfig }, "cyan", "red");
   if (oConfig.hasOwnProperty("repos")) {
-    // Modern
+    return oConfig.repos.map(oRepo => {
+      if (Object.keys(oRepository).length > 1) {
+        return parseNewRepoFormat(oRepository, rootDir);
+      } else {
+        printMirror({ oRepository }, "cyan", "yellow");
+        return parseOldRepoFormat("github.com", oRepository, rootDir);
+      }
+    });
   } else if (oConfig.hasOwnProperty("repositories")) {
-    //Old
+    return oConfig.repositories.map(oRepository => {
+      printMirror({ oRepository }, "cyan", "green");
+      return parseOldRepoFormat("github.com", oRepository, rootDir);
+    });
   }
 }
 export function parseNewRepoFormat(oRepository, szRootDir) {
   if (is.nullOrUndefined(oRepository) || is.nullOrUndefined(szRootDir)) {
     return null;
   }
+  //TODO: Refactor test to address lack of Object.keys(oRepository).length > 1 check
+  const {
+    plat = "github.com",
+    space,
+    repo,
+    dir = "",
+    sym = repo
+  } = oRepository;
+  if (is.nullOrUndefined(space) || is.nullOrUndefined(repo)) {
+    return null;
+  }
   if (Object.keys(oRepository).length > 1) {
-    const {
-      plat = "github.com",
-      space,
-      repo,
-      dir = "",
-      sym = repo
-    } = oRepository;
-    if (is.nullOrUndefined(space) || is.nullOrUndefined(repo)) {
-      return null;
-    }
     return getConfigToParse(plat, space, repo, szRootDir, dir, sym);
   } else {
-    return false;
+    printError(true, {
+      fn: "parseNewRepoFormat",
+      msg: "parseNewRepoFormat was called against an old repo format"
+    });
   }
 }
 export function parseOldRepoFormat(
   szPlatform = "github.com",
   oRepoKV,
   szRootDir,
-  szSymlinkOptionalSubdir = "",
-  oOptions = { ensureDir: true }
+  szSymlinkOptionalSubdir = ""
 ) {
   if (is.nullOrUndefined(oRepoKV) || is.nullOrUndefined(szRootDir)) {
     return null;
@@ -288,8 +318,7 @@ export function parseOldRepoFormat(
     repo,
     szRootDir,
     szSymlinkOptionalSubdir,
-    repo,
-    oOptions
+    repo
   );
 }
 
@@ -302,8 +331,7 @@ export function getConfigToParse(
   szRepositoryName,
   szRootDir,
   szSymlinkOptionalSubdir = "",
-  szSymlinkName = szRepositoryName,
-  oOptions = { ensureDir: true }
+  szSymlinkName = szRepositoryName
 ) {
   //TODO: Add null params
   //TODO: Add null param test
@@ -315,8 +343,7 @@ export function getConfigToParse(
   let symPath = getSymlinkPath(
     szSymlinkName,
     szRootDir,
-    szSymlinkOptionalSubdir,
-    oOptions
+    szSymlinkOptionalSubdir
   );
   let repoPath = getRepositoryPath(szRootDir, szRepositoryName);
   return {
@@ -331,26 +358,31 @@ function getRemoteUri(szPlatform, szWorkspace, szRepository) {
     is.nullOrUndefined(szWorkspace) ||
     is.nullOrUndefined(szRepository)
   )
-    return null;
+    log(`process.env.rgAuthHost: ${chalk.red(process.env.rgAuthHost)}`);
   if (is.nullOrUndefined(process.env.rgAuthHost)) {
-    return `https://${szPlatform}/${szWorkspace}/${szRepository}`;
+    let repoUri = `https://${szPlatform}/${szWorkspace}/${szRepository}`;
+    printMirror({ repoUri }, "magenta", "blue");
+    return repoUri;
   } else {
-    return `git@${process.env.rgAuthHost}:${szWorkspace}/${szRepository}`;
+    let repoUri = `git@${
+      process.env.rgAuthHost
+    }:${szWorkspace}/${szRepository}`;
+    printMirror({ repoUri }, "magenta", "green");
+    return repoUri;
   }
 }
-function getSymlinkPath(
-  szNameOfSym,
-  szRootDir,
-  szOptionalSubdir = "",
-  oOptions = { ensureDir: true }
-) {
+function getSymlinkPath(szNameOfSym, szRootDir, szOptionalSubdir = "") {
   if (is.nullOrUndefined(szNameOfSym)) return null;
   let symlinkRootDir = path.join(szRootDir, szOptionalSubdir);
-  if (oOptions.ensureDir === true) {
-    (async () => {
-      await fs.ensureDir(symlinkRootDir);
-    })();
-  }
+  (async () => {
+    await fs.ensureDir(symlinkRootDir).catch(err =>
+      printError(true, {
+        fn: "getSymlinkPath -> await fs.ensureDir",
+        err,
+        msg: "Directory could not be created"
+      })
+    );
+  })();
   let joinedSymlinkPath = path.join(symlinkRootDir, szNameOfSym);
   return joinedSymlinkPath;
 }

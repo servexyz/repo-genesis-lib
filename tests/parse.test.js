@@ -59,6 +59,9 @@ test(`${chalk.cyan("readConfig")} reads both ${chalk.underline(
 
 const testGetConfigToParseStrings = (t, oCfg) => {
   const { repoRemoteUri, symPath, repoPath } = oCfg;
+  printMirror({ repoRemoteUri }, "magenta", "grey");
+  printMirror({ symPath }, "magenta", "grey");
+  printMirror({ repoPath }, "magenta", "grey");
   if (is.nullOrUndefined(process.env.rgAuthHost)) {
     t.true(repoRemoteUri === "https://github.com/servexyz/paths-exist");
   } else {
@@ -99,9 +102,9 @@ test(`${chalk.cyan(
   t.true(is.nullOrUndefined(parseOldRepoFormat()));
 });
 
-test(`${chalk.cyan(
-  "parseNewRepoFormat"
-)} produces three correct strings`, async t => {
+test(`${chalk.cyan("parseNewRepoFormat")} produces ${chalk.underline(
+  "2"
+)} correct strings`, t => {
   const cFull = {
     plat: "github.com",
     space: "servexyz",
@@ -114,19 +117,25 @@ test(`${chalk.cyan(
     repo: "paths-exist",
     sym: "paths-exist"
   };
+  const oCfgFull = parseNewRepoFormat(cFull, sandboxDir);
+  const oCfgPartial = parseNewRepoFormat(cPartial, sandboxDir);
+  printMirror({ oCfgFull }, "magenta", "grey");
+  printMirror({ oCfgPartial }, "magenta", "grey");
+  testGetConfigToParseStrings(t, oCfgFull);
+  testGetConfigToParseStrings(t, oCfgPartial);
+});
+
+test(`${chalk.cyan("parseOldRepoFormat")} produces  ${chalk.underline(
+  "1"
+)} correct string`, t => {
   const cOld = {
     servexyz: "paths-exist"
   };
-  const oCfgFull = parseNewRepoFormat(cFull, sandboxDir);
-  const oCfgPartial = parseNewRepoFormat(cPartial, sandboxDir);
-  const oCfgOld = parseNewRepoFormat(cOld, sandboxDir);
-  // printMirror({ oCfgFull }, "magenta", "grey");
-  // printMirror({ oCfgPartial }, "magenta", "grey");
-  // printMirror({ oCfgOld }, "magenta", "grey");
-  testGetConfigToParseStrings(t, oCfgFull);
-  testGetConfigToParseStrings(t, oCfgPartial);
-  t.false(oCfgOld);
+  const oCfgOld = parseOldRepoFormat("github.com", cOld, sandboxDir);
+  printMirror({ oCfgOld }, "magenta", "grey");
+  testGetConfigToParseStrings(t, oCfgOld);
 });
+
 // test(`${chalk.cyan("parseConfig")} produces three strings: ${chalk.underline(
 //   "repoRemoteUri"
 // )}, ${chalk.underline("symPath")}, ${chalk.underline("repoPath")}`, async t => {
