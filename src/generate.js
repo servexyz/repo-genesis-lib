@@ -38,7 +38,7 @@ async function genAll(oWhatToGenerate) {
   }
 }
 export async function genRepository(szRepoURIToClone) {
-  printMirror({ szRepoURIToClone }, "red", "grey");
+  // printMirror({ szRepoURIToClone }, "red", "grey");
   try {
     await cloneRepository(szRepoURIToClone);
   } catch (e) {
@@ -53,21 +53,10 @@ function getStringAfterChar(szString, szCharacter) {
 }
 export async function genSymlink(szRepoPath, szSymlinkPath) {
   if (is.nullOrUndefined(szSymlinkPath)) {
-    // printLine("blue");
-    // log(`null or undefined`);
-    // printLine("blue");
     var name = getStringAfterChar(szRepoPath, "/");
-    // printMirror({ name }, "yellow", "grey");
   } else {
-    // printMirror({ szSymlinkPath }, "yellow", "grey");
-    // printLine("blue");
-    // log(`else`);
-    // printLine("blue");
     name = getStringAfterChar(szSymlinkPath, "/");
-    // printMirror({ name }, "yellow", "grey");
   }
-  // printMirror({ name }, "red", "grey");
-  // printMirror({ szSymlinkPath }, "red", "grey");
   try {
     await execa("ln", ["-s", szRepoPath, szSymlinkPath]);
   } catch (e) {

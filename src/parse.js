@@ -162,18 +162,14 @@ export function parseConfig(oConfig) {
     return null;
   } else {
     if (oConfig.hasOwnProperty("dir")) {
-      configDir = oConfig.dir;
+      var configDir = oConfig.dir;
     } else {
       configDir = ".";
     }
   }
-  if (oConfig.hasOwnProperty === true) {
-    var configDir = oConfig.dir;
-  } else {
-    configDir = ".";
-  }
   let rootDir = path.join(process.cwd(), configDir);
   process.env.rgRootDir = rootDir;
+  // printMirror({ rootDir }, "magenta", "grey");
   let repoRootDir = path.join(rootDir, ".repositories");
   process.env.rgRepoRootDir = repoRootDir;
   //TODO: Move ensureDirectory to parseXRepoFormat

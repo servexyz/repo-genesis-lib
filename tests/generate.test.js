@@ -24,7 +24,8 @@ test.skip(`${chalk.blue("rgGen(")}${chalk.cyan("all")}${chalk.blue(
   let parsedConfig = await parseConfig(config);
   t.true(await rgGen(parsedConfig, "all"));
 });
-test.skip(`${chalk.blue("rgGen(")}${chalk.cyan("all")}${chalk.blue(
+
+test(`${chalk.blue("rgGen(")}${chalk.cyan("all")}${chalk.blue(
   ")"
 )} works with ${chalk.underline.grey("parse(null)")}`, async t => {
   let parsedConfig = await parse();
