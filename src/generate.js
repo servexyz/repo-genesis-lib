@@ -3,7 +3,7 @@ import execa from "execa";
 import { printMirror, printLine } from "tacker";
 import is from "@sindresorhus/is";
 
-export async function rgGen(oWhat, szHow) {
+export async function generate(oWhat, szHow) {
   try {
     switch (szHow) {
       case "all":
@@ -19,13 +19,10 @@ export async function rgGen(oWhat, szHow) {
     return new Error(e);
   }
 }
-async function genAll(oWhatToGenerate) {
+export async function genAll(oWhatToGenerate) {
   try {
     for await (let what of oWhatToGenerate) {
       let { repoRemoteUri, symPath, repoPath } = what;
-      // await genRepository(repoRemoteUri);
-      // await genSymlink(repoPath, symPath);
-      // await genDependency(repoPath);
       await Promise.all([
         genRepository(repoRemoteUri),
         genSymlink(repoPath, symPath),

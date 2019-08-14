@@ -7,7 +7,7 @@ export {
 } from "./parse";
 
 export {
-  rgGen,
+  generate,
   genAll,
   genRepository,
   genSymlink,
