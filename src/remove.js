@@ -1,7 +1,7 @@
 import execa from "execa";
 import * as nmr from "nommer";
 import * as tkr from "tacker";
-import execa from "execa";
+import trash from "trash";
 
 export async function remove(oWhat, szHow) {
   switch (szHow) {
@@ -16,11 +16,36 @@ export async function remove(oWhat, szHow) {
   }
 }
 
-export async function remAll(oWhatToRemove) {}
-export async function remRepository(szRepositoryPath) {}
-export async function remRepositories(arrRepositoriesPaths) {}
-export async function remSymlink(szSymlinkPath) {}
-export async function remSymlinks(arrSymlinksPaths) {}
+export async function remAll(oWhatToRemove) {
+  const {
+    arrRepositoriesPaths,
+    arrSymlinksPaths,
+    arrDependenciesPaths
+  } = oWhatToRemove;
+  try {
+    await remRepositories(arrRepositoriesPaths);
+    await remSymlinks(arrSymlinksPaths);
+    await remDependencies(arrDependenciesPaths);
+  } catch (err) {
+    return printError(true, { fn: "remAll", err });
+  }
+}
+export async function remRepositories(arrRepositoriesPaths) {
+  try {
+    await trash(arrRepositoriesPaths);
+    return true;
+  } catch (err) {
+    return printError(true, { fn: "remRepositories", err });
+  }
+}
+export async function remSymlinks(arrSymlinksPaths) {
+  try {
+    await trash(arrSymlinksPaths);
+    return true;
+  } catch (err) {
+    return printError(true, { fn: "remSymlinks", err });
+  }
+}
 export async function remDependency(szDependencyPath) {
   try {
     return await nmr.nmRemove(szDependencyPath);
