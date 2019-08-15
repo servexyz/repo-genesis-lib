@@ -2,6 +2,8 @@ const log = console.log;
 import execa from "execa";
 import { printMirror, printLine } from "tacker";
 import is from "@sindresorhus/is";
+//TODO: Use nmInstall for genDependency
+import { nmInstall } from "nommer";
 
 export async function generate(oWhat, szHow) {
   try {
@@ -49,6 +51,7 @@ function getStringAfterChar(szString, szCharacter) {
   );
 }
 export async function genSymlink(szRepoPath, szSymlinkPath) {
+  //TODO: What was I trying to do here? `name` is dead code. Symlinks are generating without this
   if (is.nullOrUndefined(szSymlinkPath)) {
     var name = getStringAfterChar(szRepoPath, "/");
   } else {
